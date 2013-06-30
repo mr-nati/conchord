@@ -1,7 +1,7 @@
 package com.conchord.android.network.rest;
 
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
@@ -12,16 +12,15 @@ import android.util.Log;
 import com.conchord.android.util.SafeAsyncTask;
 import com.conchord.android.util.Utils;
 
-public class BaseGetRequestAsyncTask<ResultT> extends SafeAsyncTask<ResultT> {
+public class BaseDeleteRequestAsyncTask extends SafeAsyncTask {
 
-	// TODO: Add base_url from app engine
 	static final String BASE_URL = "http://conchordapp.appspot.com";
 
 	protected String responseString = "";
 	private String uri = null;
 	private Context context;
 
-	protected BaseGetRequestAsyncTask(Context context, String uriSuffix) {
+	protected BaseDeleteRequestAsyncTask(Context context, String uriSuffix) {
 		super();
 		this.uri = BASE_URL + uriSuffix;
 		this.context = context;
@@ -29,39 +28,35 @@ public class BaseGetRequestAsyncTask<ResultT> extends SafeAsyncTask<ResultT> {
 	
 	@Override
 	protected void onPreExecute() {
-		// Verify Internet connectivity
+		// Verify there is an Internet connection
 		if (!Utils.isNetworkAvailable(context)) {
 			// If there is no Internet connection, then don't run the AsyncTask.
 			cancel(true);
 		}
 	}
-
+	
 	@Override
-	public ResultT call() throws Exception {
+	public Object call() throws Exception {
 
 		HttpClient client = new DefaultHttpClient();
-		HttpUriRequest getRequest = new HttpGet(uri);
-
-		Log.v("BaseGetRequestAsyncTask.call", "Sending GET request with URI: "
+		HttpUriRequest deleteRequest = new HttpDelete(uri);
+		
+		Log.v("BaseDeleteRequestAsyncTask", "Sending DELETE request with URI: "
 				+ uri);
-
-		// The actual network call
-		String responseString = EntityUtils.toString(client.execute(getRequest)
-				.getEntity());
+		String responseString = EntityUtils.toString(client
+				.execute(deleteRequest).getEntity());
 
 		if (responseString != null) {
-			Log.v("BaseGetRequestAsyncTask.call", "Got HTTP result: "
+			Log.v("BaseDeleteRequestAsyncTask", "Got HTTP result: "
 					+ responseString);
 		} else {
-			throw new Exception("GET request receieved null response string.");
+			throw new Exception("DELETE request receieved null response string.");
 		}
 
-		/*
-		 * Save the responseString internally, for inheriting classes to use (e.g.
-		 * most classes will parse this string).
-		 */
+		// Save the responseString internally, for inheriting classes to use
+		// (e.g. most classes will parse this string).
 		this.responseString = responseString;
-
+		
 		return null;
 	}
 	
