@@ -25,7 +25,7 @@ public class MainActivity extends Activity {
 
 		// set up MediaPlayer
 		mPlayer = MediaPlayer.create(getApplicationContext(),
-				MediaFiles.bulls_theme);
+				MediaFiles.power_trip);
 		mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 
 		buttonPlay = (Button) findViewById(R.id.button_play);
