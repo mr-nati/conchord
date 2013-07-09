@@ -9,10 +9,30 @@
     tools:context=".MainActivity" >
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/button_play"
+        android:layout_width="75dp"
+        android:layout_height="60dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:text="@string/hello_world" />
+        android:text="play"
+        android:textStyle="bold" />
+    
+    <Button
+        android:id="@+id/button_ffwd"
+        android:layout_width="75dp"
+        android:layout_height="60dp"
+        android:layout_toRightOf="@id/button_play"
+        android:layout_alignBottom="@id/button_play"
+        android:layout_marginLeft="10dp"
+        android:text="ffwd" />
+
+ <!--    <TextView
+        android:id="@+id/viewSeconds"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/button_play"
+        android:layout_centerHorizontal="true"
+        android:textSize="80dp"
+        android:text="000 secs" /> -->
 
 </RelativeLayout>
