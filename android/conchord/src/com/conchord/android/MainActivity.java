@@ -1,5 +1,7 @@
 package com.conchord.android;
 
+import com.conchord.android.util.MediaFiles;
+
 import android.app.Activity;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -23,7 +25,7 @@ public class MainActivity extends Activity {
 
 		// set up MediaPlayer
 		mPlayer = MediaPlayer.create(getApplicationContext(),
-				R.raw.the_alan_parsons_project_sirius);
+				MediaFiles.bulls_theme);
 		mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 
 		buttonPlay = (Button) findViewById(R.id.button_play);
