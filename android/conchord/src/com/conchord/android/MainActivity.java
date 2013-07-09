@@ -40,7 +40,7 @@ public class MainActivity extends Activity {
 	/*				Toast.makeText(getApplicationContext(), "already playing",
 							Toast.LENGTH_SHORT).show();*/
 					mPlayer.pause();
-					buttonPlay.setText("play");
+					buttonPlay.setText("resume");
 				} else {
 					mPlayer.start();
 					buttonPlay.setText("pause");
