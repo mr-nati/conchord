@@ -37,8 +37,10 @@ public class MainActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				if (mPlayer.isPlaying()) {
-					Toast.makeText(getApplicationContext(), "already playing",
-							Toast.LENGTH_SHORT).show();
+	/*				Toast.makeText(getApplicationContext(), "already playing",
+							Toast.LENGTH_SHORT).show();*/
+					mPlayer.pause();
+					buttonPlay.setText("play");
 				} else {
 					mPlayer.start();
 					buttonPlay.setText("pause");
