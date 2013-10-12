@@ -25,6 +25,15 @@
         android:layout_alignBottom="@id/button_play"
         android:layout_marginLeft="10dp"
         android:text="ffwd" />
+    
+    <Button
+        android:id="@+id/other_activity"
+        android:layout_width="100dp"
+        android:layout_height="75dp"
+        android:layout_below="@id/button_play"
+        android:layout_centerHorizontal="true"
+        android:text="other activity"
+        android:layout_marginTop="10dp" />
 
  <!--    <TextView
         android:id="@+id/viewSeconds"
