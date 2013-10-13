@@ -32,7 +32,7 @@ public class MainActivity extends Activity implements LocationListener {
 
 	static Button buttonPlay;
 	static Button buttonFfwd;
-	static MediaPlayer mPlayer;
+	public static MediaPlayer mPlayer;
 	static Button buttonOtherActivity;
 
 	static Button buttonGetNTPtime;
@@ -46,23 +46,58 @@ public class MainActivity extends Activity implements LocationListener {
 	private static final String TAG = "MainActivity";
 
 	private boolean haveALocation = false;
-	private long timeToPlayAtInMillis;
+	private long timeToPlayAtInMillis = 1381647880000L;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		initialize();
-		setupButtons();
+		// setupButtons();
+
+		// set up MediaPlayer
+		mPlayer = MediaPlayer.create(getApplicationContext(),
+				R.raw.lecrae_power_trip);
+		mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+		
+
+		textViewPlayTime = (TextView) findViewById(R.id.textViewPlayTime);
+		textViewPlayTime.setText(new Date(timeToPlayAtInMillis).toGMTString());
+		textViewNTPtime = (TextView) findViewById(R.id.textViewNTPtime);
+		buttonGetNTPtime = (Button) findViewById(R.id.button_getNTPtime);
+		buttonGetNTPtime.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				textViewNTPtime.setText(new Date(getNTPtime()).toGMTString());
+			}
+		});
+		buttonSetNewPlayTime = (Button) findViewById(R.id.button_setNewPlayTime);
+		buttonSetNewPlayTime.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				mPlayer.pause();
+				mPlayer.create(getApplicationContext(),
+						R.raw.lecrae_power_trip);
+				mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+				
+				timeToPlayAtInMillis += 20000;
+				textViewPlayTime.setText(new Date(timeToPlayAtInMillis)
+						.toGMTString());
+				// Reset alarm manager
+				alarmManager.set(AlarmManager.RTC_WAKEUP, timeToPlayAtInMillis,
+						pIntent);
+			}
+		});
 
 		// Subscribe to Location Updates
-//		locMngr.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10,
-//				this);
+		// locMngr.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10,
+		// this);
 
-//		makeSureGPSisEnabledOnDevice();
-		
+		// makeSureGPSisEnabledOnDevice();
+
 		// 1. GPS time to play sound at in milliseconds
-		timeToPlayAtInMillis = System.currentTimeMillis() + 25000;
+		/* timeToPlayAtInMillis = System.currentTimeMillis() + 25000; */
 
 		// 2. Get amount of milliseconds play time is from now
 		long currentTimeInMillis = getNTPtime();

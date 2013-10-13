@@ -25,13 +25,15 @@ public class MyAlarmService extends Service {
 	public void onStart(Intent intent, int startId) {
 		super.onStart(intent, startId);
 		
-		try {
+		MainActivity.mPlayer.start();
+		
+	/*	try {
 			
 	        Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 	        Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
 	        r.play();
 	        
-	    } catch (Exception e) {}
+	    } catch (Exception e) {}*/
 		
 //		Toast.makeText(this, "MyAlarmService.onStart()", Toast.LENGTH_SHORT).show();
 //		MainActivity.clickedPlayButton();
