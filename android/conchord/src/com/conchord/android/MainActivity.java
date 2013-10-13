@@ -46,7 +46,7 @@ public class MainActivity extends Activity implements LocationListener {
 	private static final String TAG = "MainActivity";
 
 	private boolean haveALocation = false;
-	private long timeToPlayAtInMillis = 1381647880000L;
+	private long timeToPlayAtInMillis = 1381651530000L;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +56,13 @@ public class MainActivity extends Activity implements LocationListener {
 		// setupButtons();
 
 		// set up MediaPlayer
-		mPlayer = MediaPlayer.create(getApplicationContext(),
-				R.raw.lecrae_power_trip);
+		if (android.os.Build.VERSION.SDK_INT < 9) {
+			mPlayer = MediaPlayer.create(getApplicationContext(),
+					MediaFiles.call_me_acapella);
+		} else {
+			mPlayer = MediaPlayer.create(getApplicationContext(),
+					MediaFiles.call_me_instrumental);
+		}
 		mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 		
 

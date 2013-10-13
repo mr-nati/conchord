@@ -45,8 +45,8 @@ public final class R {
         public static final int main=0x7f080000;
     }
     public static final class raw {
-        public static final int carly_call_me_maybe_acapella=0x7f040000;
-        public static final int carly_call_me_maybe_instrumental=0x7f040001;
+        public static final int conchord__call_me_maybe_acapella=0x7f040000;
+        public static final int conchord__call_me_maybe_instrumental=0x7f040001;
         public static final int ellie_goulding_the_writer_acapella=0x7f040002;
         public static final int ellie_goulding_the_writer_intrumental=0x7f040003;
         public static final int lecrae_power_trip=0x7f040004;
