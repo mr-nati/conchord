@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.SystemClock;
 import android.provider.Settings;
+import android.widget.Toast;
 
 public class Utils {
 
@@ -21,6 +23,18 @@ public class Utils {
 				.getActiveNetworkInfo();
 
 		return activeNetworkInfo != null;
+	}
+	
+	public static long getNTPtime(Context context) {
+		SntpClient client = new SntpClient();
+		if (client.requestTime(Utils.someCaliNtpServers[0], 10000)) {
+
+			return client.getNtpTime() + SystemClock.elapsedRealtime()
+					- client.getNtpTimeReference();
+		} else {
+			Toast.makeText(context, "NTP error", Toast.LENGTH_LONG).show();
+			return 0;
+		}
 	}
 
 	public static final String[] someCaliNtpServers = { 

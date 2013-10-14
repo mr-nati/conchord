@@ -25,24 +25,11 @@ public class MyAlarmService extends Service {
 	public void onStart(Intent intent, int startId) {
 		super.onStart(intent, startId);
 		
-		MainActivity.mPlayer.start();
-		
-	/*	try {
-			
-	        Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-	        Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
-	        r.play();
-	        
-	    } catch (Exception e) {}*/
-		
-//		Toast.makeText(this, "MyAlarmService.onStart()", Toast.LENGTH_SHORT).show();
-//		MainActivity.clickedPlayButton();
+		MainActivity.mPlayer.play();
 	}
 	
 	@Override
 	public boolean onUnbind(Intent intent) {
-		
-//		Toast.makeText(this, "MyAlarmService.onUnbind()", Toast.LENGTH_SHORT).show();
 
 		return super.onUnbind(intent);
 	}

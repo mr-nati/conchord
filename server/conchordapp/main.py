@@ -15,10 +15,14 @@
 # limitations under the License.
 #
 import webapp2
-
+import time
 class MainHandler(webapp2.RequestHandler):
     def get(self):
-        self.response.write('Hello world!')
+    #    self.response.write('Hello world!')
+    #    self.response.write(int(time.time())
+        self.response.write("hello")
+
+
 
 app = webapp2.WSGIApplication([
     ('/', MainHandler)

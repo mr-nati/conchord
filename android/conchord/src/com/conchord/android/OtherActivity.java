@@ -40,7 +40,6 @@ public class OtherActivity extends Activity {
 					// Write data to Firebase
 					Firebase myFirebase = new Firebase("https://conchord-app.firebaseio.com/");
 					myFirebase.setValue(editText.getText());
-					
 					Map<String, String> map = new HashMap<String, String>();
 					map.put("myName", "myValue");
 					myFirebase.setValue(map);
