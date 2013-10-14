@@ -20,90 +20,29 @@ import android.widget.Toast;
 
 import com.conchord.android.util.ConchordMediaPlayer;
 import com.conchord.android.util.MediaFiles;
+import com.conchord.android.util.Session;
 import com.conchord.android.util.SntpClient;
 import com.conchord.android.util.Utils;
+import com.firebase.client.Firebase;
 
 public class MainActivity extends Activity {
 
 	public static ConchordMediaPlayer mPlayer;
 
 	private static Button buttonGetNTPtime;
-	private static Button buttonSetNewPlayTime;
 	private static TextView textViewPlayTime;
 	private static TextView textViewNTPtime;
-	
+
 	private PendingIntent pIntent;
 	private AlarmManager alarmManager;
 	private static final String TAG = "MainActivity";
 
-	private long timeToPlayAtInMillis = 1381714145000L;
+	private long timeToPlayAtInMillis = 1381715350000L;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		initialize();
-
-		// set up MediaPlayer
-		if (android.os.Build.VERSION.SDK_INT < 9) {
-			mPlayer = new ConchordMediaPlayer(getApplicationContext(),
-					MediaFiles.call_me_acapella);
-		} else {
-			mPlayer = new ConchordMediaPlayer(getApplicationContext(),
-					MediaFiles.call_me_instrumental);
-		}
-		
-		textViewPlayTime = (TextView) findViewById(R.id.textViewPlayTime);
-		textViewPlayTime.setText(new Date(timeToPlayAtInMillis).toGMTString());
-		textViewNTPtime = (TextView) findViewById(R.id.textViewNTPtime);
-		buttonGetNTPtime = (Button) findViewById(R.id.button_getNTPtime);
-		buttonGetNTPtime.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				textViewNTPtime.setText(new Date(getNTPtime()).toGMTString());
-			}
-		});
-		
-		buttonSetNewPlayTime = (Button) findViewById(R.id.button_setNewPlayTime);
-		buttonSetNewPlayTime.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				mPlayer.pause();
-				
-				timeToPlayAtInMillis += 20000;
-				textViewPlayTime.setText(new Date(timeToPlayAtInMillis)
-						.toGMTString());
-				// Reset alarm manager
-				alarmManager.set(AlarmManager.RTC_WAKEUP, timeToPlayAtInMillis,
-						pIntent);
-			}
-		});
-
-		// 1. GPS time to play sound at in milliseconds
-		/* timeToPlayAtInMillis = System.currentTimeMillis() + 25000; */
-
-		// 2. Get amount of milliseconds play time is from now
-		long currentTimeInMillis = Utils.getNTPtime(this);
-		long millisLeft = timeToPlayAtInMillis - currentTimeInMillis;
-
-		// 3. Add "milliseconds away" to current system time
-		// setAlarmPlayTime(millisLeft);
-
-		Calendar cal = Calendar.getInstance();
-		cal.setTimeInMillis(System.currentTimeMillis() + millisLeft);
-		alarmManager.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pIntent);
-
-		Toast.makeText(getBaseContext(),
-				"play time is at " + cal.getTime().toGMTString(),
-				Toast.LENGTH_SHORT).show();
-
-		// 4. Set alarm for future time in millis
-
-	}
-
-	private void initialize() {
-		setContentView(R.layout.activity_main);
+		setContentView(R.layout.layout_main);
 
 		// Initialize the intent to start alarm service
 		Intent myIntent = new Intent(MainActivity.this, MyAlarmService.class);
@@ -114,11 +53,77 @@ public class MainActivity extends Activity {
 		// Initialize the alarmManager
 		alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 
+		setupButtons();
+		buildMediaPlayers();
+		connectToFirebase();
+
+		// 1. Create time to play sound at in milliseconds
+		startSession();
+
+		// 2. Get amount of milliseconds play time is from now
+		long currentTimeInMillis = getNTPtime();
+		long millisLeft = timeToPlayAtInMillis - currentTimeInMillis;
+
+		// 3. Add "milliseconds away" to current system time
+		// setAlarmPlayTime(millisLeft);
+
+		Calendar cal = Calendar.getInstance();
+		cal.setTimeInMillis(System.currentTimeMillis() + millisLeft);
+		setAlarmPlayTime(cal.getTimeInMillis());
+
+		makeLongToast("play time is at " + cal.getTime().toGMTString());
+
+		// 4. Set alarm for future time in millis
+		// setUpFirebase();
+
 	}
 
+	private void connectToFirebase() {
+		// Create a reference to a Firebase location
+		Firebase listRef = new Firebase(
+				"https://conchord-app.firebaseio.com/sessions");
 
-	
-	
+		// Generate a reference to a new location with push()
+		Firebase newPushRef = listRef.push();
+		makeLongToast(newPushRef.getName());
+		// Set some data to the generated location
+		newPushRef.setValue(new Session("hostId", "evenSomethingElse"));
+		
+	}
+
+	private void setupButtons() {
+		textViewPlayTime = (TextView) findViewById(R.id.textViewPlayTime);
+		textViewPlayTime.setText(new Date(timeToPlayAtInMillis).toGMTString());
+		textViewNTPtime = (TextView) findViewById(R.id.textViewNTPtime);
+		buttonGetNTPtime = (Button) findViewById(R.id.button_getNTPtime);
+		buttonGetNTPtime.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				textViewNTPtime.setText(new Date(getNTPtime()).toGMTString());
+			}
+		});
+	}
+
+	private void buildMediaPlayers() {
+		if (android.os.Build.VERSION.SDK_INT < 9) {
+			mPlayer = new ConchordMediaPlayer(getApplicationContext(),
+					MediaFiles.call_me_acapella);
+		} else {
+			mPlayer = new ConchordMediaPlayer(getApplicationContext(),
+					MediaFiles.call_me_instrumental);
+		}
+	}
+
+	private void createSession() {
+		// Create a new session on Firebase
+
+	}
+
+	private void startSession() {
+		// Set start time to 15 seconds from now
+		timeToPlayAtInMillis = getNTPtime() + 15000;
+	}
+
 	private void setAlarmPlayTime(long millisecondsTilPlayTime) {
 		alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()
 				+ millisecondsTilPlayTime, pIntent);
@@ -143,7 +148,7 @@ public class MainActivity extends Activity {
 	public void makeLongToast(String text) {
 		Toast.makeText(getBaseContext(), text, Toast.LENGTH_LONG).show();
 	}
-	
+
 	private long getNTPtime() {
 		SntpClient client = new SntpClient();
 		if (client.requestTime(Utils.someCaliNtpServers[0], 10000)) {

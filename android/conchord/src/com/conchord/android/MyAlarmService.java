@@ -6,6 +6,7 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.IBinder;
+import android.widget.Toast;
 
 public class MyAlarmService extends Service {
 	@Override
@@ -25,6 +26,7 @@ public class MyAlarmService extends Service {
 	public void onStart(Intent intent, int startId) {
 		super.onStart(intent, startId);
 		
+		Toast.makeText(getBaseContext(), "onStart()", Toast.LENGTH_LONG).show();
 		MainActivity.mPlayer.play();
 	}
 	

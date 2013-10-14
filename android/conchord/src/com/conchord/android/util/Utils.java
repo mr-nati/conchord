@@ -25,7 +25,7 @@ public class Utils {
 		return activeNetworkInfo != null;
 	}
 	
-	public static long getNTPtime(Context context) {
+/*	public static long getNTPtime(Context context) {
 		SntpClient client = new SntpClient();
 		if (client.requestTime(Utils.someCaliNtpServers[0], 10000)) {
 
@@ -35,7 +35,7 @@ public class Utils {
 			Toast.makeText(context, "NTP error", Toast.LENGTH_LONG).show();
 			return 0;
 		}
-	}
+	}*/
 
 	public static final String[] someCaliNtpServers = { 
 		"clock.isc.org",
