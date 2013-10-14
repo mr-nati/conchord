@@ -24,12 +24,13 @@ public final class R {
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
-        public static final int action_settings=0x7f09000c;
-        public static final int buttonCreateSession=0x7f09000b;
+        public static final int action_settings=0x7f09000d;
+        public static final int buttonCreateSession=0x7f09000c;
         public static final int button_ffwd=0x7f090007;
         public static final int button_getNTPtime=0x7f090001;
         public static final int button_play=0x7f090000;
         public static final int button_setNewPlayTime=0x7f090002;
+        public static final int editTextSessionName=0x7f09000b;
         public static final int other_activity=0x7f090008;
         public static final int submit_button=0x7f09000a;
         public static final int textViewNTPtime=0x7f090006;

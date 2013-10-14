@@ -11,16 +11,17 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.conchord.android.util.ConchordMediaPlayer;
 import com.conchord.android.util.MediaFiles;
-import com.conchord.android.util.Session;
 import com.conchord.android.util.SntpClient;
 import com.conchord.android.util.Utils;
 import com.firebase.client.Firebase;
@@ -32,6 +33,8 @@ public class MainActivity extends Activity {
 	private static Button buttonGetNTPtime;
 	private static TextView textViewPlayTime;
 	private static TextView textViewNTPtime;
+	private static Button buttonCreateSession;
+	private EditText editTextSessionName;
 
 	private PendingIntent pIntent;
 	private AlarmManager alarmManager;
@@ -45,33 +48,34 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.layout_main);
 
 		// Initialize the intent to start alarm service
-		Intent myIntent = new Intent(MainActivity.this, MyAlarmService.class);
+//		Intent myIntent = new Intent(MainActivity.this, MyAlarmService.class);
 
 		// Initialize the pendingIntent to start the Intent
-		pIntent = PendingIntent.getService(MainActivity.this, 0, myIntent, 0);
+//		pIntent = PendingIntent.getService(MainActivity.this, 0, myIntent, 0);
 
 		// Initialize the alarmManager
-		alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+//		alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 
+		inflateXML();
 		setupButtons();
-		buildMediaPlayers();
+//		buildMediaPlayers();
 		connectToFirebase();
 
 		// 1. Create time to play sound at in milliseconds
-		startSession();
+//		startSession();
 
 		// 2. Get amount of milliseconds play time is from now
-		long currentTimeInMillis = getNTPtime();
-		long millisLeft = timeToPlayAtInMillis - currentTimeInMillis;
+//		long currentTimeInMillis = getNTPtime();
+//		long millisLeft = timeToPlayAtInMillis - currentTimeInMillis;
 
 		// 3. Add "milliseconds away" to current system time
 		// setAlarmPlayTime(millisLeft);
 
-		Calendar cal = Calendar.getInstance();
-		cal.setTimeInMillis(System.currentTimeMillis() + millisLeft);
-		setAlarmPlayTime(cal.getTimeInMillis());
+//		Calendar cal = Calendar.getInstance();
+//		cal.setTimeInMillis(System.currentTimeMillis() + millisLeft);
+//		setAlarmPlayTime(cal.getTimeInMillis());
 
-		makeLongToast("play time is at " + cal.getTime().toGMTString());
+//		makeLongToast("play time is at " + cal.getTime().toGMTString());
 
 		// 4. Set alarm for future time in millis
 		// setUpFirebase();
@@ -80,28 +84,48 @@ public class MainActivity extends Activity {
 
 	private void connectToFirebase() {
 		// Create a reference to a Firebase location
-		Firebase listRef = new Firebase(
-				"https://conchord-app.firebaseio.com/sessions");
-
-		// Generate a reference to a new location with push()
-		Firebase newPushRef = listRef.push();
-		makeLongToast(newPushRef.getName());
-		// Set some data to the generated location
-		newPushRef.setValue(new Session("hostId", "evenSomethingElse"));
-		
+		Firebase listRef = new Firebase(Utils.firebaseUrl);
+		makeLongToast("connected to: " + Utils.firebaseUrl);
 	}
 
-	private void setupButtons() {
+	private void inflateXML() {
 		textViewPlayTime = (TextView) findViewById(R.id.textViewPlayTime);
 		textViewPlayTime.setText(new Date(timeToPlayAtInMillis).toGMTString());
 		textViewNTPtime = (TextView) findViewById(R.id.textViewNTPtime);
 		buttonGetNTPtime = (Button) findViewById(R.id.button_getNTPtime);
+
+		buttonCreateSession = (Button) findViewById(R.id.buttonCreateSession);
+		editTextSessionName = (EditText) findViewById(R.id.editTextSessionName);
+
+	}
+
+	private void setupButtons() {
 		buttonGetNTPtime.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				textViewNTPtime.setText(new Date(getNTPtime()).toGMTString());
 			}
 		});
+
+		buttonCreateSession.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				String name = editTextSessionName.getText().toString();
+				if (name.length() > 0) {
+					Date timeNow = Calendar.getInstance().getTime();
+					Utils.createSession(name, timeNow.getMinutes());
+					
+				//	Firebase newSession = new Firebase(Utils.sessionsUrl + name);
+				//	Log.i("onclick", "newSession.getName() = " + newSession.getName());
+				//	newSession.setValue("hello");
+				//	newSession.child("key").setValue("value");
+				} else {
+					makeLongToast("invalid session name");
+				}
+			}
+		});
+
 	}
 
 	private void buildMediaPlayers() {
@@ -112,11 +136,6 @@ public class MainActivity extends Activity {
 			mPlayer = new ConchordMediaPlayer(getApplicationContext(),
 					MediaFiles.call_me_instrumental);
 		}
-	}
-
-	private void createSession() {
-		// Create a new session on Firebase
-
 	}
 
 	private void startSession() {

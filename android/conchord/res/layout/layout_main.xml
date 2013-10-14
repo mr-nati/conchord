@@ -3,7 +3,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
+        <EditText 
+        android:id="@+id/editTextSessionName"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="5dp" />
     <Button
+        android:layout_below="@id/editTextSessionName"
+        
         android:id="@+id/buttonCreateSession"
         android:layout_width="200dp"
         android:layout_height="60dp"
@@ -11,6 +19,8 @@
         android:layout_margin="10dp"
         android:text="Create a session" />
 
+
+    
     <Button
         android:id="@+id/button_getNTPtime"
         android:layout_width="50dp"
