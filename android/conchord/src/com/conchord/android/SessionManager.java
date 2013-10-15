@@ -1,6 +1,6 @@
 package com.conchord.android;
 
-import com.conchord.android.util.Utils;
+import com.conchord.android.util.Constants;
 import com.firebase.client.Firebase;
 
 public class SessionManager {
@@ -18,7 +18,7 @@ public class SessionManager {
 	public void initialize(String sessionName, int songId) {
 		if (initialized) return;
 
-		this.devices = new Firebase(Utils.sessionsUrl + sessionName + "/devices");
+		this.devices = new Firebase(Constants.sessionsUrl + sessionName + "/devices");
 		this.sessionName = sessionName;
 		this.songId = songId;
 		initialized = true;

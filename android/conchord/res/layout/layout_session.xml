@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <Button
+        android:id="@+id/button_getNTPtime"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="15dp"
+        android:layout_marginLeft="5dp"
+        android:text="NTP"
+        android:textSize="10dp" />
+
+    <TextView
+        android:id="@+id/textViewNTPtimeTitle"
+        android:layout_width="70dp"
+        android:layout_height="23dp"
+        android:layout_alignTop="@id/button_getNTPtime"
+        android:layout_marginLeft="3dp"
+        android:layout_toRightOf="@id/button_getNTPtime"
+        android:text="NTP time: "
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textViewPlayTimeTitle"
+        android:layout_width="70dp"
+        android:layout_height="23dp"
+        android:layout_alignLeft="@id/textViewNTPtimeTitle"
+        android:layout_below="@id/textViewNTPtimeTitle"
+        android:layout_marginLeft="3dp"
+        android:text="play time: "
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textViewPlayTime"
+        android:layout_width="wrap_content"
+        android:layout_height="23dp"
+        android:layout_alignBottom="@id/textViewPlayTimeTitle"
+        android:layout_marginLeft="3dp"
+        android:layout_toRightOf="@id/textViewPlayTimeTitle"
+        android:text="00000000 GMT" />
+
+    <TextView
+        android:id="@+id/textViewNTPtime"
+        android:layout_width="wrap_content"
+        android:layout_height="23dp"
+        android:layout_above="@id/textViewPlayTime"
+        android:layout_alignBottom="@id/textViewNTPtimeTitle"
+        android:layout_toRightOf="@id/textViewNTPtimeTitle"
+        android:text="NTP time"
+        android:textStyle="italic" />
+
+</RelativeLayout>

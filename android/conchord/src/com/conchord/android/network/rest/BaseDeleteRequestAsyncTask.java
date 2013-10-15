@@ -9,7 +9,6 @@ import org.apache.http.util.EntityUtils;
 import android.content.Context;
 import android.util.Log;
 
-import com.conchord.android.util.SafeAsyncTask;
 import com.conchord.android.util.Utils;
 
 public class BaseDeleteRequestAsyncTask extends SafeAsyncTask {

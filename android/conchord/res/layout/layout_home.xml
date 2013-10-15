@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/LightSteelBlue" >
+
+    <Button
+        android:id="@+id/buttonCreateSession"
+        android:layout_width="230dp"
+        android:layout_height="40dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:background="@color/Azure"
+        android:text="Create Session"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/editTextSessionName"
+        android:layout_width="230dp"
+        android:layout_height="40dp"
+        android:layout_above="@id/buttonCreateSession"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="5dp"
+        android:background="#00FF0000"
+        android:gravity="center_horizontal|center_vertical"
+        android:hint="enter a unique session name"
+        android:textColor="@color/Black"
+        android:textSize="15dp" />
+
+</RelativeLayout>
