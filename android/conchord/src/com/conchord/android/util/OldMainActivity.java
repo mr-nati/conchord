@@ -16,7 +16,6 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -27,10 +26,7 @@ import android.widget.Toast;
 import com.conchord.android.MyAlarmService;
 import com.conchord.android.OtherActivity;
 import com.conchord.android.R;
-import com.conchord.android.R.id;
-import com.conchord.android.R.layout;
-import com.conchord.android.R.menu;
-import com.conchord.android.R.raw;
+import com.conchord.android.util.Utils.MediaFiles;
 
 public class OldMainActivity extends Activity implements LocationListener {
 

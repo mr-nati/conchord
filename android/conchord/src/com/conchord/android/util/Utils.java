@@ -5,6 +5,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
 
+import com.conchord.android.R;
 import com.firebase.client.Firebase;
 
 public class Utils {
@@ -34,6 +35,15 @@ public class Utils {
 			return 0;
 		}
 	}*/
+	
+	public class MediaFiles {
+
+
+		public static final int bulls_theme = R.raw.the_alan_parsons_project_sirius;
+		public static final int power_trip = R.raw.lecrae_power_trip;
+		public static final int call_me_instrumental = R.raw.conchord__call_me_maybe_instrumental;
+		public static final int call_me_acapella = R.raw.conchord__call_me_maybe_acapella;
+	}
 
 	public static final String[] someCaliNtpServers = { 
 		"clock.isc.org",
@@ -54,11 +64,6 @@ public class Utils {
 	public static Firebase createSession(String sessionName, int songId) {
 		// Reference to "sessions" Firebase
 		Firebase sessions = new Firebase(sessionsUrl);
-		Log.w("", "sessionsurl = " + sessionsUrl);
-		
-		Log.w("createSession()", "name = " + sessions.getName());
-		Log.w("createSession()", "parent = " + sessions.getParent().getName());
-		Log.w("createSession()", "path = " + sessions.getPath());
 		Session session = new Session(sessionsUrl + sessionName, sessionName, songId);
 		
 		// Url of Firebase for "session" being created

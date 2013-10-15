@@ -11,7 +11,6 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -21,9 +20,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.conchord.android.util.ConchordMediaPlayer;
-import com.conchord.android.util.MediaFiles;
 import com.conchord.android.util.SntpClient;
 import com.conchord.android.util.Utils;
+import com.conchord.android.util.Utils.MediaFiles;
 import com.firebase.client.Firebase;
 
 public class MainActivity extends Activity {
@@ -116,10 +115,6 @@ public class MainActivity extends Activity {
 					Date timeNow = Calendar.getInstance().getTime();
 					Utils.createSession(name, timeNow.getMinutes());
 					
-				//	Firebase newSession = new Firebase(Utils.sessionsUrl + name);
-				//	Log.i("onclick", "newSession.getName() = " + newSession.getName());
-				//	newSession.setValue("hello");
-				//	newSession.child("key").setValue("value");
 				} else {
 					makeLongToast("invalid session name");
 				}
