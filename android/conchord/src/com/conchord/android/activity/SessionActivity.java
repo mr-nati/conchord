@@ -21,6 +21,7 @@ import com.conchord.android.util.Constants;
 import com.conchord.android.util.SntpClient;
 import com.conchord.android.util.Utils;
 import com.conchord.android.util.Utils.MediaFiles;
+import com.firebase.client.Firebase;
 
 public class SessionActivity extends Activity {
 
@@ -77,7 +78,7 @@ public class SessionActivity extends Activity {
 
 	private void connectToFirebase() {
 		// Create a reference to a Firebase location
-		// Firebase listRef = new Firebase(Utils.firebaseUrl);
+		// Firebase listRef = new Firebase(Constants.firebaseUrl);
 		// makeLongToast("connected to: " + Utils.firebaseUrl);
 	}
 
