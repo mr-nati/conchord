@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -20,15 +21,18 @@ import com.firebase.client.ValueEventListener;
 
 public class HomeActivity extends Activity {
 
+	private static final String TAG = HomeActivity.class.getSimpleName();
 	private SharedPreferences prefs;
 
 	private Button buttonCreateSession;
 	private EditText editTextSessionName;
 
+	private Button buttonJoinSession;
+	private EditText editTextJoinSessionName;
+
 	private Button buttonCreateUserID;
 	private EditText editTextUserID;
 	public static TextView textViewUserID;
-	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +49,6 @@ public class HomeActivity extends Activity {
 			setUserID(android.os.Build.MODEL);
 		}
 	}
-	
-	private int numTimesSessionDataChanged = 0;
 
 	private void setupGUI() {
 		buttonCreateSession = (Button) findViewById(R.id.buttonCreateSession);
@@ -63,15 +65,14 @@ public class HomeActivity extends Activity {
 
 					// Make sure session to create has valid length
 					if (sessionName.length() > 0) {
-						
+
 						// Check to see if the session is unique.
-						final Firebase firebase = new Firebase(Constants.sessionsUrl
-								+ sessionName);
+						final Firebase firebase = new Firebase(
+								Constants.sessionsUrl + sessionName);
 
 						firebase.addValueEventListener(new ValueEventListener() {
 							@Override
 							public void onDataChange(DataSnapshot arg0) {
-								numTimesSessionDataChanged++;
 								Object value = arg0.getValue();
 
 								if (value == null) {
@@ -83,11 +84,12 @@ public class HomeActivity extends Activity {
 									intent.putExtra(Constants.sessionKey,
 											sessionName);
 									startActivity(intent);
-									// Because we're starting the activity, stop listening.
+									// Because we're starting the activity, stop
+									// listening.
 									firebase.removeEventListener(this);
 								} else {
 									Toast.makeText(getBaseContext(),
-											"data change #" + numTimesSessionDataChanged + ": session is not unique",
+											": session is not unique",
 											Toast.LENGTH_SHORT).show();
 								}
 							}
@@ -105,8 +107,7 @@ public class HomeActivity extends Activity {
 					}
 				} else {
 					// toast saying no id
-					Toast.makeText(getBaseContext(),
-							"Set your id first",
+					Toast.makeText(getBaseContext(), "Set your id first",
 							Toast.LENGTH_SHORT).show();
 				}
 			}
@@ -123,6 +124,61 @@ public class HomeActivity extends Activity {
 
 				if (userId.length() > 0) {
 					textViewUserID.setText(userId);
+				}
+
+			}
+		});
+
+		editTextJoinSessionName = (EditText) findViewById(R.id.editTextJoinSessionName);
+		buttonJoinSession = (Button) findViewById(R.id.buttonJoinSession);
+		buttonJoinSession.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Log.d(TAG, "click");
+
+				final String sessionName = editTextJoinSessionName.getText()
+						.toString();
+
+				// Make sure session to create has valid length
+				if (sessionName.length() > 0) {
+
+					// Create the Firebase
+					final Firebase firebase = new Firebase(
+							Constants.sessionsUrl + sessionName);
+
+					firebase.addValueEventListener(new ValueEventListener() {
+						@Override
+						public void onDataChange(DataSnapshot arg0) {
+							Object value = arg0.getValue();
+
+							if (value != null) {
+								editTextJoinSessionName.setText("");
+
+								// Join jam session
+								Intent intent = new Intent(
+										getApplicationContext(),
+										SessionActivity.class);
+								intent.putExtra(Constants.sessionKey,
+										sessionName);
+								startActivity(intent);
+								firebase.removeEventListener(this);
+							} else {
+								Toast.makeText(getApplicationContext(),
+										"Can't find this session",
+										Toast.LENGTH_SHORT).show();
+							}
+						}
+
+						@Override
+						public void onCancelled() {
+
+						}
+					});
+				} else {
+					Toast.makeText(getApplicationContext(),
+							"Enter something first!",
+							Toast.LENGTH_SHORT).show();
 				}
 
 			}
