@@ -12,6 +12,10 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.Settings;
 import android.view.Menu;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +35,9 @@ public class SessionActivity extends Activity {
 	private AlarmManager alarmManager;
 	private long timeToPlayAtInMillis = 1381715350000L;
 
+	private EditText editTextNewUserId;
+	private Button buttonNewUserId;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -38,7 +45,7 @@ public class SessionActivity extends Activity {
 
 		String name = getIntent().getStringExtra(Constants.sessionKey);
 		Date timeNow = Calendar.getInstance().getTime();
-		Utils.createSession(name, timeNow.getMinutes());
+		Firebase session = Utils.createSession(name, timeNow.getMinutes());
 
 		// Initialize the intent to start alarm service
 		// Intent myIntent = new Intent(SessionActivity.this,
@@ -86,6 +93,20 @@ public class SessionActivity extends Activity {
 	private void inflateXML() {
 		textViewPlayTime = (TextView) findViewById(R.id.textViewPlayTime);
 		textViewPlayTime.setText(new Date(timeToPlayAtInMillis).toGMTString());
+		
+		editTextNewUserId = (EditText) findViewById(R.id.editTextNewUserID);
+		buttonNewUserId = (Button) findViewById(R.id.buttonAddNewUser);
+		buttonNewUserId.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				final String newUserId = editTextNewUserId.getText().toString();
+				
+				if (newUserId.length() > 0) {
+					
+				}
+			}
+		});
 	}
 
 	private void buildMediaPlayers() {

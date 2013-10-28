@@ -5,11 +5,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.conchord.android.R;
@@ -25,6 +25,11 @@ public class HomeActivity extends Activity {
 	private Button buttonCreateSession;
 	private EditText editTextSessionName;
 
+	private Button buttonCreateUserID;
+	private EditText editTextUserID;
+	public static TextView textViewUserID;
+	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -38,8 +43,10 @@ public class HomeActivity extends Activity {
 		// Check if we have a user ID for the device **Isn't unique yet**
 		if (!userIdExists()) {
 			setUserID(android.os.Build.MODEL);
-		} 
+		}
 	}
+	
+	private int numTimesSessionDataChanged = 0;
 
 	private void setupGUI() {
 		buttonCreateSession = (Button) findViewById(R.id.buttonCreateSession);
@@ -51,38 +58,73 @@ public class HomeActivity extends Activity {
 				final String sessionName = editTextSessionName.getText()
 						.toString();
 
-				if (sessionName.length() > 0) {
-					// Check to see if the session is unique.
-					Firebase firebase = new Firebase(Constants.sessionsUrl
-							+ sessionName);
+				// Make sure user has an ID.
+				if (!textViewUserID.getText().equals("no id")) {
 
-					firebase.addValueEventListener(new ValueEventListener() {
-						@Override
-						public void onDataChange(DataSnapshot arg0) {
-							Object value = arg0.getValue();
+					// Make sure session to create has valid length
+					if (sessionName.length() > 0) {
+						
+						// Check to see if the session is unique.
+						final Firebase firebase = new Firebase(Constants.sessionsUrl
+								+ sessionName);
 
-							if (value == null) {
-								editTextSessionName.setText("");
+						firebase.addValueEventListener(new ValueEventListener() {
+							@Override
+							public void onDataChange(DataSnapshot arg0) {
+								numTimesSessionDataChanged++;
+								Object value = arg0.getValue();
 
-								Intent intent = new Intent(
-										getApplicationContext(),
-										SessionActivity.class);
-								intent.putExtra(Constants.sessionKey,
-										sessionName);
-								startActivity(intent);
-							} else {
-								Toast.makeText(getBaseContext(),
-										"session is not unique",
-										Toast.LENGTH_SHORT).show();
+								if (value == null) {
+									editTextSessionName.setText("");
+
+									Intent intent = new Intent(
+											getApplicationContext(),
+											SessionActivity.class);
+									intent.putExtra(Constants.sessionKey,
+											sessionName);
+									startActivity(intent);
+									// Because we're starting the activity, stop listening.
+									firebase.removeEventListener(this);
+								} else {
+									Toast.makeText(getBaseContext(),
+											"data change #" + numTimesSessionDataChanged + ": session is not unique",
+											Toast.LENGTH_SHORT).show();
+								}
 							}
-						}
 
-						@Override
-						public void onCancelled() {
+							@Override
+							public void onCancelled() {
 
-						}
-					});
+							}
+						});
+					} else {
+						// toast saying no length
+						Toast.makeText(getBaseContext(),
+								"Give a valid length session name",
+								Toast.LENGTH_SHORT).show();
+					}
+				} else {
+					// toast saying no id
+					Toast.makeText(getBaseContext(),
+							"Set your id first",
+							Toast.LENGTH_SHORT).show();
 				}
+			}
+		});
+
+		textViewUserID = (TextView) findViewById(R.id.textViewUserId);
+		editTextUserID = (EditText) findViewById(R.id.editTextCreateUserId);
+		buttonCreateUserID = (Button) findViewById(R.id.buttonCreateUserID);
+		buttonCreateUserID.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				final String userId = editTextUserID.getText().toString();
+
+				if (userId.length() > 0) {
+					textViewUserID.setText(userId);
+				}
+
 			}
 		});
 
