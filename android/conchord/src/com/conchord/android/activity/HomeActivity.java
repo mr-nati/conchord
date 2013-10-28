@@ -61,7 +61,7 @@ public class HomeActivity extends Activity {
 						.toString();
 
 				// Make sure user has an ID.
-				if (!textViewUserID.getText().equals("no id")) {
+		//		if (!textViewUserID.getText().equals("no id")) {
 
 					// Make sure session to create has valid length
 					if (sessionName.length() > 0) {
@@ -89,7 +89,7 @@ public class HomeActivity extends Activity {
 									firebase.removeEventListener(this);
 								} else {
 									Toast.makeText(getBaseContext(),
-											": session is not unique",
+											"session is not unique",
 											Toast.LENGTH_SHORT).show();
 								}
 							}
@@ -105,11 +105,12 @@ public class HomeActivity extends Activity {
 								"Give a valid length session name",
 								Toast.LENGTH_SHORT).show();
 					}
-				} else {
-					// toast saying no id
-					Toast.makeText(getBaseContext(), "Set your id first",
-							Toast.LENGTH_SHORT).show();
-				}
+					
+	//				} else {
+	//				// toast saying no id
+	//				Toast.makeText(getBaseContext(), "Set your id first",
+	//						Toast.LENGTH_SHORT).show();
+	//			}
 			}
 		});
 

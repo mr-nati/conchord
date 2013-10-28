@@ -13,6 +13,7 @@
         android:layout_marginBottom="10dp"
         android:background="@color/Azure"
         android:text="Create Session"
+        
         android:textStyle="bold" />
 
     <EditText
@@ -60,12 +61,14 @@
         android:layout_marginBottom="10dp"
         android:background="@color/WhiteSmoke"
         android:text="Set your id"
+        android:enabled="false"
         android:textStyle="bold" />
 
     <EditText
         android:id="@+id/editTextCreateUserId"
         android:layout_width="230dp"
         android:layout_height="40dp"
+        android:enabled="false"
         android:layout_above="@id/buttonCreateUserID"
         android:layout_centerHorizontal="true"
         android:layout_margin="5dp"
