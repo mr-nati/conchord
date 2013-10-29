@@ -81,7 +81,7 @@ public class HomeActivity extends Activity {
 									Intent intent = new Intent(
 											getApplicationContext(),
 											SessionActivity.class);
-									intent.putExtra(Constants.sessionKey,
+									intent.putExtra(Constants.KEY_SESSION,
 											sessionName);
 									intent.putExtra(Constants.isHostKey, true);
 									startActivity(intent);
@@ -162,7 +162,7 @@ public class HomeActivity extends Activity {
 								Intent intent = new Intent(
 										getApplicationContext(),
 										SessionActivity.class);
-								intent.putExtra(Constants.sessionKey,
+								intent.putExtra(Constants.KEY_SESSION,
 										sessionName);
 								intent.putExtra(Constants.isHostKey, false);
 								startActivity(intent);
