@@ -48,13 +48,13 @@ public class SessionActivity extends Activity {
 	private AlarmManager alarmManager;
 	private long timeToPlayAtInMillis = 1381715350000L;
 
-	/* My session id information */
-	private String mySessionId;
-	private static Firebase mySessionIdFirebase;
-
 	/* Session information */
 	private String sessionName;
 	private static Firebase sessionFirebase;
+
+	/* My session id information */
+	private String mySessionId;
+	private static Firebase mySessionIdFirebase;
 
 	private boolean isHost = false;
 
@@ -80,18 +80,44 @@ public class SessionActivity extends Activity {
 		if (isHost) {
 			Toast.makeText(getApplicationContext(), "you da host",
 					Toast.LENGTH_SHORT).show();
-			
+
 			// create the session
 			sessionFirebase = createSession(Calendar.getInstance().getTime()
 					.getMinutes());
 			
-			Log.d(TAG, "created the session named " + sessionFirebase.getName());
-			Log.d(TAG, "created session with url " + sessionFirebase.getPath().toString());
-			Log.d(TAG, "created session with parent name " + sessionFirebase.getParent().getName());
+			sessionFirebase = new Firebase(Constants.sessionsUrl + sessionName);
 
 			Log.d(TAG, "created the session named " + sessionFirebase.getName());
+			Log.d(TAG, "created session with url "
+					+ sessionFirebase.getPath().toString());
+			Log.d(TAG, "created session with parent name "
+					+ sessionFirebase.getParent().getName());
+
+			String x = Constants.sessionsUrl + sessionName;
+			Log.d(TAG, "x = " + x);
+			Log.d(TAG, "firebaseurl = " + Constants.firebaseUrl);
+			Log.d(TAG, "sessionsUrl = " + Constants.sessionsUrl);
+			Log.d(TAG, "sessionName = " + sessionName);
+
+			Firebase letsgitit = new Firebase(x);
+			Log.d(TAG, "letsgitit session named " + letsgitit.getName());
+			Log.d(TAG, "letsgitit with url " + letsgitit.getPath().toString());
+			Log.d(TAG, "letsgitit with parent name "
+					+ letsgitit.getParent().getName());
+			
+			letsgitit.child("yo").setValue("heeey");
 
 			// add your id to list of users
+			mySessionIdFirebase = sessionFirebase.child("hello").push();
+
+			Log.d(TAG,
+					"created MY session named " + mySessionIdFirebase.getName());
+			Log.d(TAG, "created MY with url "
+					+ mySessionIdFirebase.getPath().toString());
+			Log.d(TAG, "created MY session with parent name "
+					+ mySessionIdFirebase.getParent().getName());
+
+			mySessionIdFirebase.setValue("hello");
 
 			// make your id the "host id" field for the session
 
@@ -254,7 +280,6 @@ public class SessionActivity extends Activity {
 
 		Session session = new Session(sessionName, HomeActivity.textViewUserID
 				.getText().toString(), songId);
-		
 
 		// Url of Firebase for "session" being created
 		String url = Constants.sessionsUrl + session.getName();
@@ -262,15 +287,14 @@ public class SessionActivity extends Activity {
 		// Add the session to the Firebase
 		sessions.child(session.getName()).setValue(session);
 
-		
 		Firebase child_v1 = sessions.child(session.getName());
 		Log.e(TAG, "childv1 = " + child_v1.getName());
 		Firebase child_v2 = sessions.child(session.getName());
 		Log.e(TAG, "childv2 = " + child_v2.getName());
-		
-		
+
 		Log.d(TAG, "in createSession, sessions Name = " + sessions.getName());
-		Log.d(TAG, "in createSession, sessions.child.getNamesesh = " + sessions.child(session.getName()).getName());
+		Log.d(TAG, "in createSession, sessions.child.getNamesesh = "
+				+ sessions.child(session.getName()).getName());
 
 		// Return a reference to the Firebase of this new Session
 		return sessions.push();
@@ -287,7 +311,7 @@ public class SessionActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-//		connectToFirebase();
+		// connectToFirebase();
 	}
 
 }
