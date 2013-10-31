@@ -1,1 +1,3 @@
-get apps to play music simultaneously
+Get host app to keep track of guests in a session
+
+Get all apps to play a sound at the same time. (Can't do this on emulators)

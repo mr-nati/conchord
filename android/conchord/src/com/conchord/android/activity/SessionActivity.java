@@ -163,7 +163,10 @@ public class SessionActivity extends Activity {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			ActionBar ab = getActionBar();
 			ab.setTitle(sessionName);
-			ab.setSubtitle(sessionName);
+			ab.setSubtitle(sessionName);	
+		} else {
+			// Even set that little grey title bar up top
+			((TextView)findViewById(android.R.id.title)).setText(sessionName);
 		}
 	}
 
@@ -180,6 +183,59 @@ public class SessionActivity extends Activity {
 		return sessions.push();
 	}
 
+	ValueEventListener sessionListener = new ValueEventListener() {
+
+		@Override
+		public void onDataChange(DataSnapshot arg0) {
+			if (arg0.getValue() == null) {
+				makeLongToast("The host killed the jam session!");
+				finish();
+			}
+		}
+
+		@Override
+		public void onCancelled() {
+			// TODO Auto-generated method stub
+		}
+	};
+	
+	ValueEventListener sessionUsersListener = new ValueEventListener() {
+		
+		@Override
+		public void onDataChange(DataSnapshot arg0) {
+			if (arg0.getValue() == null) {
+				Log.e(TAG, "There appear to be NO users in this session...where's the host?");
+			} else {
+				
+				/*
+				 * GET BACK TO WORK RIGHT HERE,
+				 * TRYING TO FIGURE OUT IF I CAN
+				 * GET USER IDs FROM THE SNAPSHOT
+				 * AS PEOPLE ENTER/EXIT
+				 * */
+				for (DataSnapshot x : arg0.getChildren()) {
+					Log.d(TAG, "")
+				}
+				makeShortToast(arg0.getChildren() + " were just added.");
+				makeShortToast("There are " + arg0.getChildrenCount() + " users.");
+			}
+			
+		}
+		
+		@Override
+		public void onCancelled() {
+			// TODO Auto-generated method stub
+			
+		}
+	};
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		sessionFirebase.addValueEventListener(sessionListener);
+		sessionUsersFirebase.addValueEventListener(sessionUsersListener);
+	}
+	
 	@Override
 	protected void onPause() {
 		// disconnect from session
@@ -194,32 +250,10 @@ public class SessionActivity extends Activity {
 
 		// remove listeners
 		sessionFirebase.removeEventListener(sessionListener);
+		sessionUsersFirebase.addValueEventListener(sessionUsersListener);
 
 		super.onPause();
 	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-		sessionFirebase.addValueEventListener(sessionListener);
-	}
-
-	ValueEventListener sessionListener = new ValueEventListener() {
-
-		@Override
-		public void onDataChange(DataSnapshot arg0) {
-			if (arg0.getValue() == null) {
-				makeLongToast("The host killed the jam session!");
-				finish();
-			}
-		}
-
-		@Override
-		public void onCancelled() {
-			// TODO Auto-generated method stub
-
-		}
-	};
 
 	private void buildMediaPlayers() {
 		if (android.os.Build.VERSION.SDK_INT < 9) {
