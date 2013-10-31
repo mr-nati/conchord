@@ -163,7 +163,7 @@ public class SessionActivity extends Activity {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			ActionBar ab = getActionBar();
 			ab.setTitle(sessionName);
-			// ab.setSubtitle(subtitle);
+			ab.setSubtitle(sessionName);
 		}
 	}
 
