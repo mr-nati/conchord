@@ -77,46 +77,29 @@ public class SessionActivity extends Activity {
 			// create the session (no point returning it)
 			createSession(Calendar.getInstance().getTime().getMinutes());
 
-			String sessionFirebaseUrl = Constants.sessionsUrl + sessionName;
-			Log.d(TAG, "sessionFirebase URL = " + sessionFirebaseUrl);
-			sessionFirebase = new Firebase(sessionFirebaseUrl);
-
-			// add your id to list of users
-			/* good */sessionUsersFirebase = new Firebase(Constants.firebaseUrl
-					+ sessionFirebase.getPath().toString()
-					+ Constants.usersUrlSuffix);
-
-			mySessionUserFirebase = sessionFirebase.push();
-			mySessionId = mySessionUserFirebase.getName();
-			String myUserInSessionUrl = Constants.sessionsUrl + sessionName
-					+ Constants.usersUrlSuffix + mySessionId;
-			mySessionUserFirebase = new Firebase(myUserInSessionUrl);
-
-			mySessionUserFirebase.child("id").setValue(mySessionId);
-
-			// make your id the "host id" field for the session
-			sessionFirebase.child(Constants.KEY_HOST_ID).setValue(mySessionId);
-
 		} else {
 			Toast.makeText(getApplicationContext(), "you aint no host",
 					Toast.LENGTH_SHORT).show();
+		}
 
-			String sessionFirebaseUrl = Constants.sessionsUrl + sessionName;
-			Log.d(TAG, "sessionFirebase URL = " + sessionFirebaseUrl);
-			sessionFirebase = new Firebase(sessionFirebaseUrl);
+		String sessionFirebaseUrl = Constants.sessionsUrl + sessionName;
+		Log.d(TAG, "sessionFirebase URL = " + sessionFirebaseUrl);
+		sessionFirebase = new Firebase(sessionFirebaseUrl);
 
-			sessionUsersFirebase = new Firebase(Constants.firebaseUrl
-					+ sessionFirebase.getPath().toString()
-					+ Constants.usersUrlSuffix);
+		// add your id to list of users
+		/* good */sessionUsersFirebase = new Firebase(Constants.firebaseUrl
+				+ sessionFirebase.getPath().toString() + Constants.usersUrlSuffix);
 
-			mySessionUserFirebase = sessionFirebase.push();
-			mySessionId = mySessionUserFirebase.getName();
-			String myUserInSessionUrl = Constants.sessionsUrl + sessionName
-					+ Constants.usersUrlSuffix + mySessionId;
-			mySessionUserFirebase = new Firebase(myUserInSessionUrl);
+		mySessionUserFirebase = sessionFirebase.push();
+		mySessionId = mySessionUserFirebase.getName();
+		String myUserInSessionUrl = Constants.sessionsUrl + sessionName
+				+ Constants.usersUrlSuffix + mySessionId;
+		mySessionUserFirebase = new Firebase(myUserInSessionUrl);
 
-			mySessionUserFirebase.child("id").setValue(mySessionId);
+		mySessionUserFirebase.child("id").setValue(mySessionId);
 
+		if (isHost) {
+			sessionFirebase.child(Constants.KEY_HOST_ID).setValue(mySessionId);
 		}
 
 		// Once we have a Firebase session by string name,

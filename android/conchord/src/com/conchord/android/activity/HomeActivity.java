@@ -57,62 +57,50 @@ public class HomeActivity extends Activity {
 		buttonCreateSession.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				final String sessionName = editTextSessionName.getText()
-						.toString();
+				final String sessionName = editTextSessionName.getText().toString();
 
-				// Make sure user has an ID.
-		//		if (!textViewUserID.getText().equals("no id")) {
+				// Make sure session to create has valid length
+				if (sessionName.length() > 0) {
 
-					// Make sure session to create has valid length
-					if (sessionName.length() > 0) {
+					// Check to see if the session is unique.
+					final Firebase firebase = new Firebase(Constants.sessionsUrl
+							+ sessionName);
 
-						// Check to see if the session is unique.
-						final Firebase firebase = new Firebase(
-								Constants.sessionsUrl + sessionName);
+					firebase.addValueEventListener(new ValueEventListener() {
+						@Override
+						public void onDataChange(DataSnapshot arg0) {
+							Object value = arg0.getValue();
 
-						firebase.addValueEventListener(new ValueEventListener() {
-							@Override
-							public void onDataChange(DataSnapshot arg0) {
-								Object value = arg0.getValue();
+							if (value == null) {
+								editTextSessionName.setText("");
 
-								if (value == null) {
-									editTextSessionName.setText("");
-
-									Intent intent = new Intent(
-											getApplicationContext(),
-											SessionActivity.class);
-									intent.putExtra(Constants.KEY_SESSION,
-											sessionName);
-									intent.putExtra(Constants.isHostKey, true);
-									startActivity(intent);
-									// Because we're starting the activity, stop
-									// listening.
-									firebase.removeEventListener(this);
-								} else {
-									Toast.makeText(getBaseContext(),
-											"session is not unique",
-											Toast.LENGTH_SHORT).show();
-									firebase.removeEventListener(this);
-								}
+								Intent intent = new Intent(getApplicationContext(),
+										SessionActivity.class);
+								intent.putExtra(Constants.KEY_SESSION, sessionName);
+								intent.putExtra(Constants.isHostKey, true);
+								startActivity(intent);
+								// Because we're starting the activity, stop
+								// listening.
+								firebase.removeEventListener(this);
+							} else {
+								Toast.makeText(getBaseContext(),
+										"session is not unique", Toast.LENGTH_SHORT)
+										.show();
+								firebase.removeEventListener(this);
 							}
+						}
 
-							@Override
-							public void onCancelled() {
+						@Override
+						public void onCancelled() {
 
-							}
-						});
-					} else {
-						// toast saying no length
-						Toast.makeText(getBaseContext(),
-								"Give a valid length session name",
-								Toast.LENGTH_SHORT).show();
-					}
-					
-	//				} else {
-	//				// toast saying no id
-	//				Toast.makeText(getBaseContext(), "Set your id first",
-	//						Toast.LENGTH_SHORT).show();
-	//			}
+						}
+					});
+				} else {
+					// toast saying no length
+					Toast.makeText(getBaseContext(),
+							"Give a valid length session name", Toast.LENGTH_SHORT)
+							.show();
+				}
 			}
 		});
 
@@ -128,7 +116,6 @@ public class HomeActivity extends Activity {
 				if (userId.length() > 0) {
 					textViewUserID.setText(userId);
 				}
-
 			}
 		});
 
@@ -147,8 +134,8 @@ public class HomeActivity extends Activity {
 				if (sessionName.length() > 0) {
 
 					// Create the Firebase
-					final Firebase firebase = new Firebase(
-							Constants.sessionsUrl + sessionName);
+					final Firebase firebase = new Firebase(Constants.sessionsUrl
+							+ sessionName);
 
 					firebase.addValueEventListener(new ValueEventListener() {
 						@Override
@@ -159,18 +146,16 @@ public class HomeActivity extends Activity {
 								editTextJoinSessionName.setText("");
 
 								// Join jam session
-								Intent intent = new Intent(
-										getApplicationContext(),
+								Intent intent = new Intent(getApplicationContext(),
 										SessionActivity.class);
-								intent.putExtra(Constants.KEY_SESSION,
-										sessionName);
+								intent.putExtra(Constants.KEY_SESSION, sessionName);
 								intent.putExtra(Constants.isHostKey, false);
 								startActivity(intent);
 								firebase.removeEventListener(this);
 							} else {
 								Toast.makeText(getApplicationContext(),
-										"Can't find this session",
-										Toast.LENGTH_SHORT).show();
+										"Can't find this session", Toast.LENGTH_SHORT)
+										.show();
 								firebase.removeEventListener(this);
 							}
 						}
@@ -182,10 +167,8 @@ public class HomeActivity extends Activity {
 					});
 				} else {
 					Toast.makeText(getApplicationContext(),
-							"Enter something first!",
-							Toast.LENGTH_SHORT).show();
+							"Enter something first!", Toast.LENGTH_SHORT).show();
 				}
-
 			}
 		});
 
