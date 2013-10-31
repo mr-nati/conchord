@@ -183,7 +183,6 @@ public class SessionActivity extends Activity {
 
 	@Override
 	protected void onPause() {
-
 		// disconnect from session
 		if (isHost) {
 			makeLongToast("destroying jam session: "
