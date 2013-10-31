@@ -1,9 +1,7 @@
 package com.conchord.android.activity;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 import android.annotation.TargetApi;
 import android.app.ActionBar;
@@ -18,10 +16,6 @@ import android.os.SystemClock;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,8 +26,6 @@ import com.conchord.android.util.Session;
 import com.conchord.android.util.SntpClient;
 import com.conchord.android.util.Utils;
 import com.conchord.android.util.Utils.MediaFiles;
-import com.firebase.client.ChildEventListener;
-import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 
 public class SessionActivity extends Activity {

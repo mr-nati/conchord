@@ -171,6 +171,7 @@ public class HomeActivity extends Activity {
 								Toast.makeText(getApplicationContext(),
 										"Can't find this session",
 										Toast.LENGTH_SHORT).show();
+								firebase.removeEventListener(this);
 							}
 						}
 
