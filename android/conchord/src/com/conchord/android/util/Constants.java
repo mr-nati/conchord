@@ -7,6 +7,7 @@ public class Constants {
 	public static final String firebaseUrl = "https://conchord-app.firebaseio.com/";
 	public static final String sessionsUrl = firebaseUrl + "sessions/";
 	public static final String usersUrlSuffix = "/users/";
+	public static final String destroyFlagSuffix = "/destroy";
 	
 	public static final String KEY_SESSION = "session";
 	public static final String isHostKey = "ishost";

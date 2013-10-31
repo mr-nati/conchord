@@ -16,3 +16,7 @@ Handling host exits:
 
 	My solution (work around):
 		I need to have each of the users keep track of the users list for the session and see if the host leaves. If he/she does, they should destroy the session themselves, and then exit the SessionActivity. I'm not sure what will happen if multiple users try to destroy the same thing at the same time but I'd imagine it wouldn't be a problem. I need to make sure to destroy all listeners in my onPause().
+
+		NOPE. WONT WORK.
+
+		The users can't see when the host leaves!!!! I need to have a flag in the session that will serve the same purpose as the host telling the users that he has left. When they see it switched from 0 to 1, they'll know to shut down the session themselves. The flag will be raised by the onDisconnect() Firebase code I'm working on adding next.

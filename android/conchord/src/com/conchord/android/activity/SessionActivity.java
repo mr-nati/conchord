@@ -47,6 +47,7 @@ public class SessionActivity extends Activity {
 	private String sessionName;
 	private static Firebase sessionFirebase;
 	private static Firebase sessionUsersFirebase;
+	private static Firebase sessionSelfDestructFlagFirebase;
 	private ArrayList<DataSnapshot> sessionUsersDataSnapshots = new ArrayList<DataSnapshot>();
 
 	/* My session id information */
@@ -146,6 +147,13 @@ public class SessionActivity extends Activity {
 			sessionFirebase.child(Constants.KEY_HOST_ID).setValue(mySessionId);
 		}
 
+		// set up selfDestructFirebase value
+		String sessionSelfDestructFlagFirebaseUrl = sessionFirebaseUrl
+				+ Constants.destroyFlagSuffix;
+		
+		sessionSelfDestructFlagFirebase = new Firebase(sessionSelfDestructFlagFirebaseUrl);
+		sessionSelfDestructFlagFirebase.setValue(0);
+
 	}
 
 	@SuppressWarnings("deprecation")
@@ -236,16 +244,16 @@ public class SessionActivity extends Activity {
 		sessionFirebase.addValueEventListener(sessionListener);
 		sessionUsersFirebase.addValueEventListener(sessionUsersListener);
 	}
-	
+
 	@Override
 	protected void onStop() {
 		makeShortToast("onStop called");
 		super.onStop();
 	}
-	
+
 	@Override
 	protected void onDestroy() {
-		
+
 		makeShortToast("onDestroy called");
 		super.onDestroy();
 	}
@@ -277,6 +285,13 @@ public class SessionActivity extends Activity {
 			mPlayer = new ConchordMediaPlayer(getApplicationContext(),
 					MediaFiles.call_me_instrumental);
 		}
+	}
+
+	private void destroySession() {
+		Firebase presenceRef = new Firebase(
+				"https://SampleChat.firebaseIO-demo.com/disconnectmessage");
+		// Write a string when I lose my connection
+		presenceRef.onDisconnect().setValue("I was disconnected!");
 	}
 
 	private void startSession() {

@@ -5,6 +5,7 @@ public class Session {
 	private String name;
 	private String hostId;
 	private String playTime;
+	private int destroy = 0;
 	private int songId;
 
 	public Session(String sessionName, int songId) {
