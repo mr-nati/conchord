@@ -20,3 +20,7 @@ Handling host exits:
 		NOPE. WONT WORK.
 
 		The users can't see when the host leaves!!!! I need to have a flag in the session that will serve the same purpose as the host telling the users that he has left. When they see it switched from 0 to 1, they'll know to shut down the session themselves. The flag will be raised by the onDisconnect() Firebase code I'm working on adding next.
+
+		I'M SO STUPID.
+
+		If I'm able to use the onDisconnect() method to set a flag to tell the devices to delete the session....why don't I just use that method to let the host destroy the session himself? What's wrong with me? Sometimes Michael...sometimes. 

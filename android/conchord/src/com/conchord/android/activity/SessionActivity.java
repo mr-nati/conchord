@@ -47,7 +47,6 @@ public class SessionActivity extends Activity {
 	private String sessionName;
 	private static Firebase sessionFirebase;
 	private static Firebase sessionUsersFirebase;
-	private static Firebase sessionSelfDestructFlagFirebase;
 	private ArrayList<DataSnapshot> sessionUsersDataSnapshots = new ArrayList<DataSnapshot>();
 
 	/* My session id information */
@@ -127,6 +126,7 @@ public class SessionActivity extends Activity {
 
 		String sessionFirebaseUrl = Constants.sessionsUrl + sessionName;
 		sessionFirebase = new Firebase(sessionFirebaseUrl);
+		sessionFirebase.onDisconnect().removeValue();
 
 		// add your id to list of users
 		String sessionUsersFirebaseUrl = Constants.firebaseUrl
@@ -146,18 +146,11 @@ public class SessionActivity extends Activity {
 		if (isHost) {
 			sessionFirebase.child(Constants.KEY_HOST_ID).setValue(mySessionId);
 		}
-
-		// set up selfDestructFirebase value
-		String sessionSelfDestructFlagFirebaseUrl = sessionFirebaseUrl
-				+ Constants.destroyFlagSuffix;
-		
-		sessionSelfDestructFlagFirebase = new Firebase(sessionSelfDestructFlagFirebaseUrl);
-		sessionSelfDestructFlagFirebase.setValue(0);
-
 	}
 
 	@SuppressWarnings("deprecation")
 	private void inflateXML() {
+		
 		textViewPlayTime = (TextView) findViewById(R.id.textViewPlayTime);
 		textViewPlayTime.setText(new Date(timeToPlayAtInMillis).toGMTString());
 
@@ -272,7 +265,7 @@ public class SessionActivity extends Activity {
 
 		// remove listeners
 		sessionFirebase.removeEventListener(sessionListener);
-		sessionUsersFirebase.addValueEventListener(sessionUsersListener);
+		sessionUsersFirebase.removeEventListener(sessionUsersListener);
 
 		super.onPause();
 	}
@@ -285,13 +278,6 @@ public class SessionActivity extends Activity {
 			mPlayer = new ConchordMediaPlayer(getApplicationContext(),
 					MediaFiles.call_me_instrumental);
 		}
-	}
-
-	private void destroySession() {
-		Firebase presenceRef = new Firebase(
-				"https://SampleChat.firebaseIO-demo.com/disconnectmessage");
-		// Write a string when I lose my connection
-		presenceRef.onDisconnect().setValue("I was disconnected!");
 	}
 
 	private void startSession() {

@@ -12,4 +12,7 @@ public class Constants {
 	public static final String KEY_SESSION = "session";
 	public static final String isHostKey = "ishost";
 	
+	public static final int FLAG_DESTROY_SESSION_ON = 1;
+	public static final int FLAG_DESTROY_SESSION_OFF = 0;
+	
 }
