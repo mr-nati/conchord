@@ -109,6 +109,22 @@ public class SessionActivity extends Activity {
 			Toast.makeText(getApplicationContext(), "you aint no host",
 					Toast.LENGTH_SHORT).show();
 
+			String sessionFirebaseUrl = Constants.sessionsUrl + sessionName;
+			Log.d(TAG, "sessionFirebase URL = " + sessionFirebaseUrl);
+			sessionFirebase = new Firebase(sessionFirebaseUrl);
+
+			sessionUsersFirebase = new Firebase(Constants.firebaseUrl
+					+ sessionFirebase.getPath().toString()
+					+ Constants.usersUrlSuffix);
+
+			mySessionUserFirebase = sessionFirebase.push();
+			mySessionId = mySessionUserFirebase.getName();
+			String myUserInSessionUrl = Constants.sessionsUrl + sessionName
+					+ Constants.usersUrlSuffix + mySessionId;
+			mySessionUserFirebase = new Firebase(myUserInSessionUrl);
+
+			mySessionUserFirebase.child("id").setValue(mySessionId);
+
 		}
 
 		// Once we have a Firebase session by string name,
@@ -287,12 +303,18 @@ public class SessionActivity extends Activity {
 	@Override
 	protected void onPause() {
 		// disconnect from session
-		Toast.makeText(
-				getApplicationContext(),
-				"removing " + mySessionId + " from "
-						+ sessionUsersFirebase,
-				Toast.LENGTH_SHORT).show();
-		sessionUsersFirebase.child(mySessionId).removeValue();
+
+		if (isHost) {
+			Toast.makeText(getApplicationContext(),
+					"destroying jam session: " + sessionUsersFirebase.getName(),
+					Toast.LENGTH_SHORT).show();
+			sessionFirebase.getParent().child(sessionName).removeValue();
+		} else {
+			Toast.makeText(getApplicationContext(),
+					"exiting jam session: " + sessionUsersFirebase.getName(),
+					Toast.LENGTH_SHORT).show();
+			sessionUsersFirebase.child(mySessionId).removeValue();
+		}
 
 		super.onPause();
 	}
