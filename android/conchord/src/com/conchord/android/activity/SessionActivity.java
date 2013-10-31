@@ -1,5 +1,6 @@
 package com.conchord.android.activity;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -46,6 +47,7 @@ public class SessionActivity extends Activity {
 	private String sessionName;
 	private static Firebase sessionFirebase;
 	private static Firebase sessionUsersFirebase;
+	private ArrayList<DataSnapshot> sessionUsersDataSnapshots = new ArrayList<DataSnapshot>();
 
 	/* My session id information */
 	private String mySessionId;
@@ -163,10 +165,10 @@ public class SessionActivity extends Activity {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			ActionBar ab = getActionBar();
 			ab.setTitle(sessionName);
-			ab.setSubtitle(sessionName);	
+			ab.setSubtitle(sessionName);
 		} else {
 			// Even set that little grey title bar up top
-			((TextView)findViewById(android.R.id.title)).setText(sessionName);
+			((TextView) findViewById(android.R.id.title)).setText(sessionName);
 		}
 	}
 
@@ -198,37 +200,36 @@ public class SessionActivity extends Activity {
 			// TODO Auto-generated method stub
 		}
 	};
-	
+
 	ValueEventListener sessionUsersListener = new ValueEventListener() {
-		
+
 		@Override
 		public void onDataChange(DataSnapshot arg0) {
 			if (arg0.getValue() == null) {
-				Log.e(TAG, "There appear to be NO users in this session...where's the host?");
+				Log.e(TAG,
+						"There appear to be NO users in this session...where's the host?");
 			} else {
-				
+
 				/*
-				 * GET BACK TO WORK RIGHT HERE,
-				 * TRYING TO FIGURE OUT IF I CAN
-				 * GET USER IDs FROM THE SNAPSHOT
-				 * AS PEOPLE ENTER/EXIT
-				 * */
+				 * GET BACK TO WORK RIGHT HERE, TRYING TO FIGURE OUT IF I CAN
+				 * GET USER IDs FROM THE SNAPSHOT AS PEOPLE ENTER/EXIT
+				 */
 				for (DataSnapshot x : arg0.getChildren()) {
-					Log.d(TAG, "")
 				}
-				makeShortToast(arg0.getChildren() + " were just added.");
-				makeShortToast("There are " + arg0.getChildrenCount() + " users.");
+				// makeShortToast(arg0.getChildren() + " were just added.");
+				// makeShortToast("There are " + arg0.getChildrenCount() +
+				// " users.");
 			}
-			
+
 		}
-		
+
 		@Override
 		public void onCancelled() {
 			// TODO Auto-generated method stub
-			
+
 		}
 	};
-	
+
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -236,6 +237,19 @@ public class SessionActivity extends Activity {
 		sessionUsersFirebase.addValueEventListener(sessionUsersListener);
 	}
 	
+	@Override
+	protected void onStop() {
+		makeShortToast("onStop called");
+		super.onStop();
+	}
+	
+	@Override
+	protected void onDestroy() {
+		
+		makeShortToast("onDestroy called");
+		super.onDestroy();
+	}
+
 	@Override
 	protected void onPause() {
 		// disconnect from session

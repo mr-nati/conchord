@@ -1,3 +1,18 @@
 Get host app to keep track of guests in a session
 
 Get all apps to play a sound at the same time. (Can't do this on emulators)
+
+
+Notes:
+
+Handling host exits:
+
+	As of right now, I want have it so that if the host leaves the session in any way, the entire session will be shut down, users will be notified and their will be returned to the main screen.
+
+	If the host navigates away from the SessionActivity, onPause() will inevitably be called, so I have the host's onPause() destroy the entire session on Firebase. The other users each have a ValueEventListener that checks for the session to be null and will handle it in the way mentioned above.
+
+	The problem:
+		If the host device is in a session but has their device shut down improperly (battery disconnect, for example) onPause(), onStop() and onDestroy() will not be called at all! This means the device will be unable to destroy the session on Firebase, so the other devices will be unaware of the host's absence. 
+
+	My solution (work around):
+		I need to have each of the users keep track of the users list for the session and see if the host leaves. If he/she does, they should destroy the session themselves, and then exit the SessionActivity. I'm not sure what will happen if multiple users try to destroy the same thing at the same time but I'd imagine it wouldn't be a problem. I need to make sure to destroy all listeners in my onPause().
