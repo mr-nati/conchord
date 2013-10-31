@@ -171,8 +171,7 @@ public class SessionActivity extends Activity {
 		// Reference to "sessions" Firebase
 		Firebase sessions = new Firebase(Constants.sessionsUrl);
 
-		Session session = new Session(sessionName, HomeActivity.textViewUserID
-				.getText().toString(), songId);
+		Session session = new Session(sessionName, songId);
 
 		// Add the session to the Firebase
 		sessions.child(session.getName()).setValue(session);

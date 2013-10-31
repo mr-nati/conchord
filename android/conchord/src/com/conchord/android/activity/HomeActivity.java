@@ -30,10 +30,6 @@ public class HomeActivity extends Activity {
 	private Button buttonJoinSession;
 	private EditText editTextJoinSessionName;
 
-	private Button buttonCreateUserID;
-	private EditText editTextUserID;
-	public static TextView textViewUserID;
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -100,21 +96,6 @@ public class HomeActivity extends Activity {
 					Toast.makeText(getBaseContext(),
 							"Give a valid length session name", Toast.LENGTH_SHORT)
 							.show();
-				}
-			}
-		});
-
-		textViewUserID = (TextView) findViewById(R.id.textViewUserId);
-		editTextUserID = (EditText) findViewById(R.id.editTextCreateUserId);
-		buttonCreateUserID = (Button) findViewById(R.id.buttonCreateUserID);
-		buttonCreateUserID.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				final String userId = editTextUserID.getText().toString();
-
-				if (userId.length() > 0) {
-					textViewUserID.setText(userId);
 				}
 			}
 		});

@@ -52,43 +52,4 @@
         android:text="Join Session"
         android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/buttonCreateUserID"
-        android:layout_width="230dp"
-        android:layout_height="40dp"
-        android:layout_above="@id/editTextSessionName"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="10dp"
-        android:background="@color/WhiteSmoke"
-        android:text="Set your id"
-        android:enabled="false"
-        android:textStyle="bold" />
-
-    <EditText
-        android:id="@+id/editTextCreateUserId"
-        android:layout_width="230dp"
-        android:layout_height="40dp"
-        android:enabled="false"
-        android:layout_above="@id/buttonCreateUserID"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="5dp"
-        android:background="#00FF0000"
-        android:gravity="center_horizontal|center_vertical"
-        android:hint="set your id"
-        android:textColor="@color/Black"
-        android:textSize="15dp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/textViewUserId"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_margin="2dp"
-        android:text="no id"
-        android:textColor="@color/Black"
-        android:textSize="15dp"
-        android:textStyle="italic" />
-
 </RelativeLayout>

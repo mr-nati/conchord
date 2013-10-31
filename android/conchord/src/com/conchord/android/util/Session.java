@@ -7,9 +7,8 @@ public class Session {
 	private String playTime;
 	private int songId;
 
-	public Session(String sessionName, String hostId, int songId) {
+	public Session(String sessionName, int songId) {
 		this.name = sessionName;
-		this.hostId = hostId;
 		this.songId = songId;
 	}
 
