@@ -121,8 +121,7 @@ public class SessionActivity extends Activity {
 
 		// add your id to list of users
 		String sessionUsersFirebaseUrl = Constants.firebaseUrl
-				+ sessionFirebase.getPath().toString()
-				+ Constants.usersUrlSuffix;
+				+ sessionFirebase.getPath().toString() + Constants.usersUrlSuffix;
 		sessionUsersFirebase = new Firebase(sessionUsersFirebaseUrl);
 
 		mySessionUserFirebase = sessionFirebase.push();
@@ -141,7 +140,7 @@ public class SessionActivity extends Activity {
 
 	@SuppressWarnings("deprecation")
 	private void inflateXML() {
-		
+
 		textViewPlayTime = (TextView) findViewById(R.id.textViewPlayTime);
 		textViewPlayTime.setText(new Date(timeToPlayAtInMillis).toGMTString());
 
@@ -203,8 +202,8 @@ public class SessionActivity extends Activity {
 			} else {
 
 				/*
-				 * GET BACK TO WORK RIGHT HERE, TRYING TO FIGURE OUT IF I CAN
-				 * GET USER IDs FROM THE SNAPSHOT AS PEOPLE ENTER/EXIT
+				 * GET BACK TO WORK RIGHT HERE, TRYING TO FIGURE OUT IF I CAN GET
+				 * USER IDs FROM THE SNAPSHOT AS PEOPLE ENTER/EXIT
 				 */
 				for (DataSnapshot x : arg0.getChildren()) {
 				}
@@ -225,20 +224,63 @@ public class SessionActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+
+		// Make sure you're the host.
+		sessionFirebase.child(Constants.KEY_HOST_ID).addValueEventListener(
+				new ValueEventListener() {
+					@Override
+					public void onDataChange(DataSnapshot arg0) {
+
+						if (arg0.getValue() != null) {
+
+							String hostId = arg0.getValue().toString();
+
+							if (hostId != null) {
+
+								if (!hostId.equals(mySessionId)) {
+								/*	Log.e(TAG,
+											mySessionId.substring(mySessionId.length() - 4)
+													+ ": I am the Firebase host.");
+									makeShortToast(mySessionId.substring(mySessionId
+											.length() - 4) + ": I am the Firebase host.");
+								} else {
+									Log.e(TAG,
+											mySessionId.substring(mySessionId.length() - 4)
+													+ ": I am not the Firebase host!!!!!!");
+									makeShortToast(mySessionId.substring(mySessionId
+											.length() - 4)
+											+ ": I am not the Firebase host!!!!!!");
+									isHost = false;
+									*/makeShortToast("Oooh, someone just beat you to that name! Try another one.");
+									isHost = false;
+									finish();
+								}
+
+/*								if (isHost) {
+									makeShortToast("hostId = " + hostId);
+								}*/
+							}
+						}
+					}
+
+					@Override
+					public void onCancelled() {
+						// TODO Auto-generated method stub
+
+					}
+				});
+
 		sessionFirebase.addValueEventListener(sessionListener);
 		sessionUsersFirebase.addValueEventListener(sessionUsersListener);
 	}
 
 	@Override
 	protected void onStop() {
-		makeShortToast("onStop called");
 		super.onStop();
 	}
 
 	@Override
 	protected void onDestroy() {
-
-		makeShortToast("onDestroy called");
 		super.onDestroy();
 	}
 
@@ -246,11 +288,10 @@ public class SessionActivity extends Activity {
 	protected void onPause() {
 		// disconnect from session
 		if (isHost) {
-			makeLongToast("destroying jam session: "
-					+ sessionFirebase.getName());
+	//		makeShortToast("destroying jam session: " + sessionFirebase.getName());
 			sessionFirebase.getParent().child(sessionName).removeValue();
 		} else {
-			makeLongToast("exiting jam session: " + sessionFirebase.getName());
+	//		makeShortToast("exiting jam session: " + sessionFirebase.getName());
 			sessionUsersFirebase.child(mySessionId).removeValue();
 		}
 
