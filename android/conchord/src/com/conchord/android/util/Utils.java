@@ -38,23 +38,4 @@ public class Utils {
 			"usno.pa-x.dec.com", "nist1-la.WiTime.net",
 			"time.no-such-agency.net", "gps.layer42.net" };
 
-/*	public static Firebase createSession(String sessionName, int songId) {
-		// Reference to "sessions" Firebase
-		Firebase sessions = new Firebase(Constants.sessionsUrl);
-		
-		Session session = new Session(Constants.sessionsUrl + sessionName, sessionName,
-				HomeActivity.textViewUserID.getText().toString(), songId);
-
-		// Url of Firebase for "session" being created
-		String url = Constants.sessionsUrl + session.getName();
-
-		// Add the session to the Firebase
-		sessions.child(session.getName()).setValue(session);
-
-		sessions.child("hey");
-
-		// Return a reference to the Firebase of this new Session
-		return sessions.push();
-	}*/
-
 }

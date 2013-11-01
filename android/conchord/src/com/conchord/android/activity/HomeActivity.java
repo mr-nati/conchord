@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.conchord.android.R;
@@ -19,6 +18,11 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.ValueEventListener;
 
+/*
+ * TODO: I shouldn't force the vertical orientation in the app manifest but 
+ * should instead put all the data i want to persist through orientation 
+ * changes into a Fragment: http://goo.gl/X53ni0, http://goo.gl/VA7GH
+ */
 public class HomeActivity extends Activity {
 
 	private static final String TAG = HomeActivity.class.getSimpleName();

@@ -68,15 +68,6 @@ public class SessionActivity extends Activity {
 
 		setupFirebase();
 
-		// Once we have a Firebase session by string name,
-		// we should add the host user to /users and put
-		// his id as the host_id
-
-		/*
-		 * TODO: Need a way to close the activity if the firebase is somehow
-		 * destroyed
-		 */
-
 		// Initialize the intent to start alarm service
 		// Intent myIntent = new Intent(SessionActivity.this,
 		// MyAlarmService.class);
