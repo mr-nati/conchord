@@ -181,7 +181,8 @@ public class SessionActivity extends Activity {
 		@Override
 		public void onDataChange(DataSnapshot arg0) {
 			if (arg0.getValue() == null) {
-				makeLongToast("The host killed the jam session!");
+				if (!isHost)
+					makeLongToast("The host killed the jam session!");
 				finish();
 			}
 		}
@@ -238,27 +239,10 @@ public class SessionActivity extends Activity {
 							if (hostId != null) {
 
 								if (!hostId.equals(mySessionId)) {
-								/*	Log.e(TAG,
-											mySessionId.substring(mySessionId.length() - 4)
-													+ ": I am the Firebase host.");
-									makeShortToast(mySessionId.substring(mySessionId
-											.length() - 4) + ": I am the Firebase host.");
-								} else {
-									Log.e(TAG,
-											mySessionId.substring(mySessionId.length() - 4)
-													+ ": I am not the Firebase host!!!!!!");
-									makeShortToast(mySessionId.substring(mySessionId
-											.length() - 4)
-											+ ": I am not the Firebase host!!!!!!");
-									isHost = false;
-									*/makeShortToast("Oooh, someone just beat you to that name! Try another one.");
+									makeShortToast("Oooh, someone just beat you to that name! Try another one.");
 									isHost = false;
 									finish();
 								}
-
-/*								if (isHost) {
-									makeShortToast("hostId = " + hostId);
-								}*/
 							}
 						}
 					}
@@ -288,10 +272,11 @@ public class SessionActivity extends Activity {
 	protected void onPause() {
 		// disconnect from session
 		if (isHost) {
-	//		makeShortToast("destroying jam session: " + sessionFirebase.getName());
+			// makeShortToast("destroying jam session: " +
+			// sessionFirebase.getName());
 			sessionFirebase.getParent().child(sessionName).removeValue();
 		} else {
-	//		makeShortToast("exiting jam session: " + sessionFirebase.getName());
+			// makeShortToast("exiting jam session: " + sessionFirebase.getName());
 			sessionUsersFirebase.child(mySessionId).removeValue();
 		}
 
