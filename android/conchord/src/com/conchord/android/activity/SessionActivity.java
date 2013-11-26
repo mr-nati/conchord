@@ -143,10 +143,6 @@ public class SessionActivity extends Activity {
 
 	@SuppressWarnings("deprecation")
 	private void inflateXML() {
-
-		textViewPlayTime = (TextView) findViewById(R.id.textViewPlayTime);
-		textViewPlayTime.setText(new Date(timeToPlayAtInMillis).toGMTString());
-
 		textViewMySessionId = (TextView) findViewById(R.id.textViewMySessionID);
 	}
 
