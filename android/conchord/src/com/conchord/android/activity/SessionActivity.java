@@ -33,6 +33,9 @@ import com.firebase.client.ValueEventListener;
 
 public class SessionActivity extends Activity {
 
+	// TODO: Need to get connections to Firebases in onResume and need to
+	// disconnect all in onPause
+
 	public static final String TAG = SessionActivity.class.getSimpleName();
 	private TextView textViewMySessionId;
 
@@ -62,7 +65,7 @@ public class SessionActivity extends Activity {
 
 		// Get the session name and whether user is host or not
 		sessionName = getIntent().getStringExtra(Constants.KEY_SESSION);
-		isHost = getIntent().getBooleanExtra(Constants.isHostKey, false);
+		isHost = getIntent().getBooleanExtra(Constants.KEY_IS_HOST, false);
 
 		makeSure_isHost_WasPassedIn();
 
@@ -238,7 +241,7 @@ public class SessionActivity extends Activity {
 
 							if (hostId != null) {
 
-								if (!hostId.equals(mySessionId)) {
+								if (!hostId.equals(mySessionId) && isHost) {
 									makeShortToast("Oooh, someone just beat you to that name! Try another one.");
 									isHost = false;
 									finish();
@@ -346,7 +349,7 @@ public class SessionActivity extends Activity {
 	private void makeSure_isHost_WasPassedIn() {
 		// If the isHost bool was never passed in, kill the activity
 		if (isHost == false
-				&& getIntent().getBooleanExtra(Constants.isHostKey, true)) {
+				&& getIntent().getBooleanExtra(Constants.KEY_IS_HOST, true)) {
 			Log.e(TAG, "There's an issue with the \"isHost\" boolean flag.");
 			Toast.makeText(getApplicationContext(),
 					"Fatal error: \"isHost\" boolean was not passed in",

@@ -77,7 +77,8 @@ public class HomeActivity extends Activity {
 								Intent intent = new Intent(getApplicationContext(),
 										SessionActivity.class);
 								intent.putExtra(Constants.KEY_SESSION, sessionName);
-								intent.putExtra(Constants.isHostKey, true);
+								intent.putExtra(Constants.KEY_IS_HOST, true);
+		//						intent.putExtra(Constants.KEY_CREATOR, true);
 								startActivity(intent);
 								// Because we're starting the activity, stop
 								// listening.
@@ -134,7 +135,8 @@ public class HomeActivity extends Activity {
 								Intent intent = new Intent(getApplicationContext(),
 										SessionActivity.class);
 								intent.putExtra(Constants.KEY_SESSION, sessionName);
-								intent.putExtra(Constants.isHostKey, false);
+								intent.putExtra(Constants.KEY_IS_HOST, false);
+					//			intent.putExtra(Constants.KEY_CREATOR, false);
 								startActivity(intent);
 								firebase.removeEventListener(this);
 							} else {
