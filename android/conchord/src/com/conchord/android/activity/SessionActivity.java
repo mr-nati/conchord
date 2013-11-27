@@ -205,7 +205,11 @@ public class SessionActivity extends Activity {
 				 * GET BACK TO WORK RIGHT HERE, TRYING TO FIGURE OUT IF I CAN GET
 				 * USER IDs FROM THE SNAPSHOT AS PEOPLE ENTER/EXIT
 				 */
+				
+				makeShortToast("There are " + arg0.getChildrenCount() + " users.");
+				
 				for (DataSnapshot x : arg0.getChildren()) {
+					makeShortToast(x.getValue().toString());
 				}
 				// makeShortToast(arg0.getChildren() + " were just added.");
 				// makeShortToast("There are " + arg0.getChildrenCount() +
