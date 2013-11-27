@@ -96,6 +96,9 @@ public class HomeActivity extends Activity {
 
 						}
 					});
+					
+					buttonCreateSession.setEnabled(false);
+					
 				} else {
 					// toast saying no length
 					Toast.makeText(getBaseContext(),
@@ -174,6 +177,7 @@ public class HomeActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		buttonCreateSession.setEnabled(true);
 	}
 
 	@Override

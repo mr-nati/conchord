@@ -163,12 +163,15 @@ public final class R {
         public static final int activity_vertical_margin=0x7f060001;
     }
     public static final class drawable {
-        public static final int ic_launcher=0x7f020000;
+        public static final int change_dot_org_logo=0x7f020000;
+        public static final int conchord_logo=0x7f020001;
+        public static final int ic_launcher=0x7f020002;
     }
     public static final class id {
-        public static final int action_settings=0x7f0a0005;
+        public static final int action_settings=0x7f0a0006;
         public static final int buttonCreateSession=0x7f0a0000;
         public static final int buttonJoinSession=0x7f0a0003;
+        public static final int buttonPlay=0x7f0a0005;
         public static final int editTextJoinSessionName=0x7f0a0002;
         public static final int editTextSessionName=0x7f0a0001;
         public static final int textViewMySessionID=0x7f0a0004;
@@ -176,6 +179,7 @@ public final class R {
     public static final class layout {
         public static final int layout_home=0x7f030000;
         public static final int layout_session=0x7f030001;
+        public static final int layout_session_host=0x7f030002;
     }
     public static final class menu {
         public static final int main=0x7f090000;

@@ -13,7 +13,6 @@
         android:layout_marginBottom="10dp"
         android:background="@color/Azure"
         android:text="Create Session"
-        
         android:textStyle="bold" />
 
     <EditText

@@ -36,7 +36,7 @@ public class SessionActivity extends Activity {
 	// TODO: Need to get connections to Firebases in onResume and need to
 	// disconnect all in onPause
 
-	public static final String TAG = SessionActivity.class.getSimpleName();
+	public static final String TAG = "R2D2:  ";
 	private TextView textViewMySessionId;
 
 	// Stuff to play music
@@ -61,12 +61,17 @@ public class SessionActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.layout_session);
 
 		// Get the session name and whether user is host or not
 		sessionName = getIntent().getStringExtra(Constants.KEY_SESSION);
 		isHost = getIntent().getBooleanExtra(Constants.KEY_IS_HOST, false);
 
+		if (isHost) {
+			setContentView(R.layout.layout_session_host);
+		} else {
+			setContentView(R.layout.layout_session);
+		}
+		
 		makeSure_isHost_WasPassedIn();
 
 		setupFirebase();
@@ -242,7 +247,11 @@ public class SessionActivity extends Activity {
 							if (hostId != null) {
 
 								if (!hostId.equals(mySessionId) && isHost) {
+									
 									makeShortToast("Oooh, someone just beat you to that name! Try another one.");
+									Log.d(TAG, TAG + "sessionFirebase.child(Constants.KEY_HOST_ID) value changed");
+									Log.d(TAG, TAG + "arg0.getName() = " + arg0.getName());
+									Log.d(TAG, TAG + "hostId = " + hostId + ", mySessionId = " + mySessionId);
 									isHost = false;
 									finish();
 								}
@@ -350,7 +359,7 @@ public class SessionActivity extends Activity {
 		// If the isHost bool was never passed in, kill the activity
 		if (isHost == false
 				&& getIntent().getBooleanExtra(Constants.KEY_IS_HOST, true)) {
-			Log.e(TAG, "There's an issue with the \"isHost\" boolean flag.");
+			Log.e(TAG, TAG + "There's an issue with the \"isHost\" boolean flag.");
 			Toast.makeText(getApplicationContext(),
 					"Fatal error: \"isHost\" boolean was not passed in",
 					Toast.LENGTH_LONG).show();
