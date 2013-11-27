@@ -28,8 +28,12 @@ public class Session {
 		this.hostId = hostId;
 	}
 
-	public String playTime() {
+	public String getPlayTime() {
 		return playTime;
+	}
+	
+	public void setPlayTime() {
+		this.playTime = playTime;
 	}
 
 	public int getSongId() {

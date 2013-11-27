@@ -2,7 +2,6 @@ package com.conchord.android.activity;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 import android.annotation.TargetApi;
 import android.app.ActionBar;
@@ -17,6 +16,9 @@ import android.os.SystemClock;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,6 +40,7 @@ public class SessionActivity extends Activity {
 
 	public static final String TAG = "R2D2:  ";
 	private TextView textViewMySessionId;
+	private Button buttonPlay;
 
 	// Stuff to play music
 	public static ConchordMediaPlayer mPlayer;
@@ -51,6 +54,7 @@ public class SessionActivity extends Activity {
 	private static Firebase sessionFirebase;
 	private static Firebase sessionUsersFirebase;
 	private ArrayList<DataSnapshot> sessionUsersDataSnapshots = new ArrayList<DataSnapshot>();
+	private static Firebase sessionPlayTimeFirebase;
 
 	/* My session id information */
 	private String mySessionId;
@@ -71,7 +75,7 @@ public class SessionActivity extends Activity {
 		} else {
 			setContentView(R.layout.layout_session);
 		}
-		
+
 		makeSure_isHost_WasPassedIn();
 
 		setupFirebase();
@@ -127,18 +131,24 @@ public class SessionActivity extends Activity {
 		sessionFirebase = new Firebase(sessionFirebaseUrl);
 		sessionFirebase.onDisconnect().removeValue();
 
+		// access play time
+		String sessionPlayTimeUrl = Constants.sessionsUrl + sessionName
+				+ "/" + Constants.KEY_PLAY_TIME;
+		String sessionPlayTime = "1385543604L";
+		sessionPlayTimeFirebase = new Firebase(sessionPlayTimeUrl);
+		sessionPlayTimeFirebase.setValue(sessionPlayTime);
+
 		// add your id to list of users
 		String sessionUsersFirebaseUrl = Constants.firebaseUrl
 				+ sessionFirebase.getPath().toString() + Constants.usersUrlSuffix;
 		sessionUsersFirebase = new Firebase(sessionUsersFirebaseUrl);
-
 		mySessionUserFirebase = sessionFirebase.push();
 		mySessionId = mySessionUserFirebase.getName();
 		String myUserInSessionUrl = Constants.sessionsUrl + sessionName
 				+ Constants.usersUrlSuffix + mySessionId;
 		mySessionUserFirebase = new Firebase(myUserInSessionUrl);
 
-		mySessionUserFirebase.child("id").setValue(mySessionId);
+		mySessionUserFirebase.child(Constants.KEY_ID).setValue(mySessionId);
 
 		// If this is the host, assign their id to the host_id for the session
 		if (isHost) {
@@ -149,6 +159,10 @@ public class SessionActivity extends Activity {
 	@SuppressWarnings("deprecation")
 	private void inflateXML() {
 		textViewMySessionId = (TextView) findViewById(R.id.textViewMySessionID);
+
+		if (isHost) {
+			buttonPlay = (Button) findViewById(R.id.buttonPlay);
+		}
 	}
 
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -165,6 +179,17 @@ public class SessionActivity extends Activity {
 			// Even set that little grey title bar up top
 			((TextView) findViewById(android.R.id.title)).setText(sessionName);
 		}
+
+		if (isHost) {
+			buttonPlay.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					makeShortToast("button play");
+
+				}
+			});
+		}
+
 	}
 
 	public Firebase createSession(int songId) {
@@ -210,11 +235,12 @@ public class SessionActivity extends Activity {
 				 * GET BACK TO WORK RIGHT HERE, TRYING TO FIGURE OUT IF I CAN GET
 				 * USER IDs FROM THE SNAPSHOT AS PEOPLE ENTER/EXIT
 				 */
-				
-				makeShortToast("There are " + arg0.getChildrenCount() + " users.");
-				
+
+				Log.d(TAG, TAG + "There are " + arg0.getChildrenCount() + " users.");
+
 				for (DataSnapshot x : arg0.getChildren()) {
-					makeShortToast(x.getValue().toString());
+					Log.d(TAG, TAG + "users child value = "
+							+ x.getValue().toString());
 				}
 				// makeShortToast(arg0.getChildren() + " were just added.");
 				// makeShortToast("There are " + arg0.getChildrenCount() +
@@ -247,11 +273,15 @@ public class SessionActivity extends Activity {
 							if (hostId != null) {
 
 								if (!hostId.equals(mySessionId) && isHost) {
-									
+
 									makeShortToast("Oooh, someone just beat you to that name! Try another one.");
-									Log.d(TAG, TAG + "sessionFirebase.child(Constants.KEY_HOST_ID) value changed");
-									Log.d(TAG, TAG + "arg0.getName() = " + arg0.getName());
-									Log.d(TAG, TAG + "hostId = " + hostId + ", mySessionId = " + mySessionId);
+									Log.d(TAG,
+											TAG
+													+ "sessionFirebase.child(Constants.KEY_HOST_ID) value changed");
+									Log.d(TAG,
+											TAG + "arg0.getName() = " + arg0.getName());
+									Log.d(TAG, TAG + "hostId = " + hostId
+											+ ", mySessionId = " + mySessionId);
 									isHost = false;
 									finish();
 								}
