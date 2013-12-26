@@ -28,6 +28,7 @@ import com.conchord.android.R;
 import com.conchord.android.network.rest.SafeAsyncTask;
 import com.conchord.android.util.ConchordMediaPlayer;
 import com.conchord.android.util.Constants;
+import com.conchord.android.util.MyAlarmService;
 import com.conchord.android.util.Session;
 import com.conchord.android.util.SntpClient;
 import com.conchord.android.util.Utils;
@@ -54,10 +55,10 @@ public class SessionActivity extends Activity {
 	private static TextView textViewPlayTime;
 	private PendingIntent pIntent;
 	private AlarmManager alarmManager;
-	private long timeToPlayAtInMillis = 1381715350000L;
+	private long timeToPlayAtInMillis = 0;
 
 	/* Session information */
-	private String sessionName;
+	private static String sessionName;
 	private static Firebase sessionFirebase;
 	private static Firebase sessionUsersFirebase;
 	private ArrayList<DataSnapshot> sessionUsersDataSnapshots = new ArrayList<DataSnapshot>();
@@ -88,16 +89,13 @@ public class SessionActivity extends Activity {
 		setupFirebase();
 
 		// Initialize the intent to start alarm service
-		// Intent myIntent = new Intent(SessionActivity.this,
-		// MyAlarmService.class);
+		Intent myIntent = new Intent(SessionActivity.this, MyAlarmService.class);
 
 		// Initialize the pendingIntent to start the Intent
-		// pIntent = PendingIntent.getService(SessionActivity.this, 0,
-		// myIntent,
-		// 0);
+		pIntent = PendingIntent.getService(SessionActivity.this, 0, myIntent, 0);
 
 		// Initialize the alarmManager
-		// alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+		alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 
 		inflateXML();
 
@@ -106,7 +104,7 @@ public class SessionActivity extends Activity {
 		pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
 		wl = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "My Tag");
 
-		// buildMediaPlayers();
+		buildMediaPlayers();
 
 		// 1. Create time to play sound at in milliseconds
 		// startSession();
@@ -144,9 +142,8 @@ public class SessionActivity extends Activity {
 		// access play time
 		String sessionPlayTimeUrl = Constants.sessionsUrl + sessionName + "/"
 				+ Constants.KEY_PLAY_TIME;
-		String sessionPlayTime = "1385543604L";
 		sessionPlayTimeFirebase = new Firebase(sessionPlayTimeUrl);
-		sessionPlayTimeFirebase.setValue(sessionPlayTime);
+		sessionPlayTimeFirebase.addValueEventListener(sessionPlayTimeListener);
 
 		// add your id to list of users
 		String sessionUsersFirebaseUrl = Constants.firebaseUrl
@@ -164,6 +161,13 @@ public class SessionActivity extends Activity {
 		if (isHost) {
 			sessionFirebase.child(Constants.KEY_HOST_ID).setValue(mySessionId);
 		}
+	}
+
+	private static void setFirebasePlayTime(String playTime) {
+		String sessionPlayTimeUrl = Constants.sessionsUrl + sessionName + "/"
+				+ Constants.KEY_PLAY_TIME;
+		sessionPlayTimeFirebase = new Firebase(sessionPlayTimeUrl);
+		sessionPlayTimeFirebase.setValue(playTime);
 	}
 
 	@SuppressWarnings("deprecation")
@@ -267,6 +271,30 @@ public class SessionActivity extends Activity {
 		}
 	};
 
+	ValueEventListener sessionPlayTimeListener = new ValueEventListener() {
+
+		@Override
+		public void onDataChange(DataSnapshot arg0) {
+			if (arg0.getValue() == null)
+				return;
+
+			makeShortToast(arg0.getValue().toString());
+
+			// make sure you're not the host
+			// verify that it's a legit play time
+			// get ready to play
+			
+			timeToPlayAtInMillis = Long.valueOf(arg0.getValue().toString());
+			setAlarm(timeToPlayAtInMillis);
+		}
+
+		@Override
+		public void onCancelled() {
+			// TODO Auto-generated method stub
+
+		}
+	};
+
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -313,63 +341,34 @@ public class SessionActivity extends Activity {
 		sessionUsersFirebase.addValueEventListener(sessionUsersListener);
 	}
 
-	@Override
-	protected void onStop() {
-		super.onStop();
-		wl.release();
-	}
-
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-	}
-
-	@Override
-	protected void onPause() {
-		// disconnect from session
-		if (isHost) {
-			// makeShortToast("destroying jam session: " +
-			// sessionFirebase.getName());
-			sessionFirebase.getParent().child(sessionName).removeValue();
-		} else {
-			// makeShortToast("exiting jam session: " + sessionFirebase.getName());
-			sessionUsersFirebase.child(mySessionId).removeValue();
-		}
-
-		// remove listeners
-		sessionFirebase.removeEventListener(sessionListener);
-		sessionUsersFirebase.removeEventListener(sessionUsersListener);
-
-		super.onPause();
-	}
-
 	private void buildMediaPlayers() {
-		if (android.os.Build.VERSION.SDK_INT < 9) {
-			mPlayer = new ConchordMediaPlayer(getApplicationContext(),
-					MediaFiles.call_me_acapella);
-		} else {
-			mPlayer = new ConchordMediaPlayer(getApplicationContext(),
-					MediaFiles.call_me_instrumental);
-		}
+		// if (android.os.Build.VERSION.SDK_INT < 9) {
+		// mPlayer = new ConchordMediaPlayer(getApplicationContext(),
+		// MediaFiles.call_me_acapella);
+		// } else {
+		// mPlayer = new ConchordMediaPlayer(getApplicationContext(),
+		// MediaFiles.call_me_instrumental);
+		// }
+
+		mPlayer = new ConchordMediaPlayer(getApplicationContext(),
+				MediaFiles.call_me_acapella);
+
 	}
 
 	private void startSession() {
 		// Set start time to 15 seconds from now
-//		timeToPlayAtInMillis = getNTPtime() + 15000;
+		// timeToPlayAtInMillis = getNTPtime() + 15000;
 	}
 
 	private void setAlarmPlayTime(long millisecondsTilPlayTime) {
 		alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()
 				+ millisecondsTilPlayTime, pIntent);
 	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
+	
+	private void setAlarm(long time) {
+		alarmManager.set(AlarmManager.RTC_WAKEUP, timeToPlayAtInMillis, pIntent);
 	}
-
+	
 	private void makeSureGPSisEnabledOnDevice() {
 		LocationManager locMngr = (LocationManager) getSystemService(LOCATION_SERVICE);
 		boolean enabled = locMngr.isProviderEnabled(locMngr.GPS_PROVIDER);
@@ -391,17 +390,17 @@ public class SessionActivity extends Activity {
 		new GetNTPTimeAsyncTask().execute();
 	}
 
-	class GetNTPTimeAsyncTask extends SafeAsyncTask<String> {
+	class GetNTPTimeAsyncTask extends SafeAsyncTask<Long> {
 
 		@Override
-		public String call() throws Exception {
+		public Long call() throws Exception {
 			// TODO Auto-generated method stub
 			SntpClient client = new SntpClient();
 			if (client.requestTime(Utils.someCaliNtpServers[0], 10000)) {
 
-				long time = client.getNtpTime() + SystemClock.elapsedRealtime()
+				Long time = client.getNtpTime() + SystemClock.elapsedRealtime()
 						- client.getNtpTimeReference();
-				return String.valueOf(time);
+				return time;
 			} else {
 				makeLongToast("NTP error");
 				return null;
@@ -414,9 +413,13 @@ public class SessionActivity extends Activity {
 		}
 
 		@Override
-		protected void onSuccess(String x) throws Exception {
+		protected void onSuccess(Long x) throws Exception {
 			Toast.makeText(getApplicationContext(), "NTP time is " + x,
 					Toast.LENGTH_SHORT).show();
+
+			// adding 5 seconds
+			long timeIn5Sec = x + 5000;
+			setFirebasePlayTime(String.valueOf(timeIn5Sec));
 		}
 
 	}
@@ -431,6 +434,45 @@ public class SessionActivity extends Activity {
 					Toast.LENGTH_LONG).show();
 			finish();
 		}
+	}
+
+	@Override
+	protected void onPause() {
+		// disconnect from session
+		if (isHost) {
+			// makeShortToast("destroying jam session: " +
+			// sessionFirebase.getName());
+			sessionFirebase.getParent().child(sessionName).removeValue();
+		} else {
+			// makeShortToast("exiting jam session: " + sessionFirebase.getName());
+			sessionUsersFirebase.child(mySessionId).removeValue();
+		}
+
+		// remove listeners
+		sessionFirebase.removeEventListener(sessionListener);
+		sessionUsersFirebase.removeEventListener(sessionUsersListener);
+
+		mPlayer.stop();
+		
+		super.onPause();
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+		wl.release();
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.main, menu);
+		return true;
 	}
 
 }
