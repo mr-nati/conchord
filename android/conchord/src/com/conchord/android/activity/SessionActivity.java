@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.conchord.android.R;
+import com.conchord.android.network.rest.SafeAsyncTask;
 import com.conchord.android.util.ConchordMediaPlayer;
 import com.conchord.android.util.Constants;
 import com.conchord.android.util.Session;
@@ -43,7 +44,7 @@ public class SessionActivity extends Activity {
 	public static final String TAG = "R2D2:  ";
 	private TextView textViewMySessionId;
 	private Button buttonPlay;
-	
+
 	// Controls screen sleep/wake
 	PowerManager pm;
 	PowerManager.WakeLock wl;
@@ -101,10 +102,9 @@ public class SessionActivity extends Activity {
 		inflateXML();
 
 		setupGUI();
-		
+
 		pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-		wl = pm.newWakeLock(
-				PowerManager.SCREEN_DIM_WAKE_LOCK, "My Tag");
+		wl = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "My Tag");
 
 		// buildMediaPlayers();
 
@@ -194,7 +194,8 @@ public class SessionActivity extends Activity {
 			buttonPlay.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					makeShortToast("button play");
+					// makeShortToast("button play");
+					getNTPtime();
 
 				}
 			});
@@ -354,7 +355,7 @@ public class SessionActivity extends Activity {
 
 	private void startSession() {
 		// Set start time to 15 seconds from now
-		timeToPlayAtInMillis = getNTPtime() + 15000;
+//		timeToPlayAtInMillis = getNTPtime() + 15000;
 	}
 
 	private void setAlarmPlayTime(long millisecondsTilPlayTime) {
@@ -386,16 +387,38 @@ public class SessionActivity extends Activity {
 		Toast.makeText(getBaseContext(), text, Toast.LENGTH_SHORT).show();
 	}
 
-	private long getNTPtime() {
-		SntpClient client = new SntpClient();
-		if (client.requestTime(Utils.someCaliNtpServers[0], 10000)) {
+	private void getNTPtime() {
+		new GetNTPTimeAsyncTask().execute();
+	}
 
-			return client.getNtpTime() + SystemClock.elapsedRealtime()
-					- client.getNtpTimeReference();
-		} else {
-			makeLongToast("NTP error");
-			return 0;
+	class GetNTPTimeAsyncTask extends SafeAsyncTask<String> {
+
+		@Override
+		public String call() throws Exception {
+			// TODO Auto-generated method stub
+			SntpClient client = new SntpClient();
+			if (client.requestTime(Utils.someCaliNtpServers[0], 10000)) {
+
+				long time = client.getNtpTime() + SystemClock.elapsedRealtime()
+						- client.getNtpTimeReference();
+				return String.valueOf(time);
+			} else {
+				makeLongToast("NTP error");
+				return null;
+			}
 		}
+
+		@Override
+		protected void onException(Exception e) throws RuntimeException {
+			super.onException(e);
+		}
+
+		@Override
+		protected void onSuccess(String x) throws Exception {
+			Toast.makeText(getApplicationContext(), "NTP time is " + x,
+					Toast.LENGTH_SHORT).show();
+		}
+
 	}
 
 	private void makeSure_isHost_WasPassedIn() {
