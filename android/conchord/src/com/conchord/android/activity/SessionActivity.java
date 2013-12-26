@@ -8,10 +8,12 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.os.SystemClock;
 import android.provider.Settings;
 import android.util.Log;
@@ -41,6 +43,10 @@ public class SessionActivity extends Activity {
 	public static final String TAG = "R2D2:  ";
 	private TextView textViewMySessionId;
 	private Button buttonPlay;
+	
+	// Controls screen sleep/wake
+	PowerManager pm;
+	PowerManager.WakeLock wl;
 
 	// Stuff to play music
 	public static ConchordMediaPlayer mPlayer;
@@ -95,6 +101,10 @@ public class SessionActivity extends Activity {
 		inflateXML();
 
 		setupGUI();
+		
+		pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+		wl = pm.newWakeLock(
+				PowerManager.SCREEN_DIM_WAKE_LOCK, "My Tag");
 
 		// buildMediaPlayers();
 
@@ -132,8 +142,8 @@ public class SessionActivity extends Activity {
 		sessionFirebase.onDisconnect().removeValue();
 
 		// access play time
-		String sessionPlayTimeUrl = Constants.sessionsUrl + sessionName
-				+ "/" + Constants.KEY_PLAY_TIME;
+		String sessionPlayTimeUrl = Constants.sessionsUrl + sessionName + "/"
+				+ Constants.KEY_PLAY_TIME;
 		String sessionPlayTime = "1385543604L";
 		sessionPlayTimeFirebase = new Firebase(sessionPlayTimeUrl);
 		sessionPlayTimeFirebase.setValue(sessionPlayTime);
@@ -260,6 +270,8 @@ public class SessionActivity extends Activity {
 	protected void onResume() {
 		super.onResume();
 
+		wl.acquire();
+
 		// Make sure you're the host.
 		sessionFirebase.child(Constants.KEY_HOST_ID).addValueEventListener(
 				new ValueEventListener() {
@@ -303,6 +315,7 @@ public class SessionActivity extends Activity {
 	@Override
 	protected void onStop() {
 		super.onStop();
+		wl.release();
 	}
 
 	@Override
