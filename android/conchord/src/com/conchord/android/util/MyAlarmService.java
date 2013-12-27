@@ -28,7 +28,7 @@ public class MyAlarmService extends Service {
 	public void onStart(Intent intent, int startId) {
 		super.onStart(intent, startId);
 		
-		Toast.makeText(getBaseContext(), "onStart()", Toast.LENGTH_LONG).show();
+		Toast.makeText(getBaseContext(), "onStart() @ " + System.currentTimeMillis() , Toast.LENGTH_LONG).show();
 		SessionActivity.mPlayer.play();
 	}
 	

@@ -45,6 +45,8 @@ public class SessionActivity extends Activity {
 	public static final String TAG = "R2D2:  ";
 	private TextView textViewMySessionId;
 	private Button buttonPlay;
+	
+	private TextView textViewStartTime;
 
 	// Controls screen sleep/wake
 	PowerManager pm;
@@ -56,6 +58,7 @@ public class SessionActivity extends Activity {
 	private PendingIntent pIntent;
 	private AlarmManager alarmManager;
 	private long timeToPlayAtInMillis = 0;
+	private long ntpTime = 0;
 
 	/* Session information */
 	private static String sessionName;
@@ -69,6 +72,13 @@ public class SessionActivity extends Activity {
 	private Firebase mySessionUserFirebase;
 
 	private boolean isHost = false;
+	/*
+	 * After each ntp query we check if the host is trying to set the play time
+	 * for the session
+	 */
+	private boolean needToSetFirebasePlayTime = false;
+
+	private boolean receivingPlayTime = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -177,6 +187,8 @@ public class SessionActivity extends Activity {
 		if (isHost) {
 			buttonPlay = (Button) findViewById(R.id.buttonPlay);
 		}
+		
+		textViewStartTime = (TextView) findViewById(R.id.textViewStartTimeInMillis);
 	}
 
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -198,9 +210,12 @@ public class SessionActivity extends Activity {
 			buttonPlay.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					// makeShortToast("button play");
+					// tell the getNTPTime method that we need to post to Firebase
+					needToSetFirebasePlayTime = true;
 					getNTPtime();
-
+					
+					
+					v.setEnabled(false);
 				}
 			});
 		}
@@ -275,17 +290,23 @@ public class SessionActivity extends Activity {
 
 		@Override
 		public void onDataChange(DataSnapshot arg0) {
+			if (isHost)
+				return;
 			if (arg0.getValue() == null)
 				return;
 
-			makeShortToast(arg0.getValue().toString());
+			// makeShortToast(arg0.getValue().toString());
 
 			// make sure you're not the host
 			// verify that it's a legit play time
 			// get ready to play
-			
+
 			timeToPlayAtInMillis = Long.valueOf(arg0.getValue().toString());
-			setAlarm(timeToPlayAtInMillis);
+
+			// tell getNTPtime we are going to be receiving a play time
+			receivingPlayTime = true;
+			getNTPtime();
+
 		}
 
 		@Override
@@ -364,11 +385,12 @@ public class SessionActivity extends Activity {
 		alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()
 				+ millisecondsTilPlayTime, pIntent);
 	}
-	
+
 	private void setAlarm(long time) {
-		alarmManager.set(AlarmManager.RTC_WAKEUP, timeToPlayAtInMillis, pIntent);
+		textViewStartTime.setText("start @ " + time);
+		alarmManager.set(AlarmManager.RTC_WAKEUP, time, pIntent);
 	}
-	
+
 	private void makeSureGPSisEnabledOnDevice() {
 		LocationManager locMngr = (LocationManager) getSystemService(LOCATION_SERVICE);
 		boolean enabled = locMngr.isProviderEnabled(locMngr.GPS_PROVIDER);
@@ -410,16 +432,34 @@ public class SessionActivity extends Activity {
 		@Override
 		protected void onException(Exception e) throws RuntimeException {
 			super.onException(e);
+			Log.e(TAG, e.getMessage());
 		}
 
 		@Override
 		protected void onSuccess(Long x) throws Exception {
-			Toast.makeText(getApplicationContext(), "NTP time is " + x,
-					Toast.LENGTH_SHORT).show();
+			ntpTime = x;
 
-			// adding 5 seconds
-			long timeIn5Sec = x + 5000;
-			setFirebasePlayTime(String.valueOf(timeIn5Sec));
+			if (isHost && needToSetFirebasePlayTime) {
+				long startTime = ntpTime + Constants.START_TIME_DELAY;
+
+				// edit Firebase server
+				setFirebasePlayTime(String.valueOf(startTime));
+
+				setAlarm(startTime);
+				
+				// reset this flag
+				needToSetFirebasePlayTime = false;
+
+			} else if (!isHost && receivingPlayTime) {
+
+				long diff = timeToPlayAtInMillis - ntpTime;
+				makeLongToast(diff + " millis b/c isHost == " + isHost);
+
+				setAlarm(System.currentTimeMillis() + diff);
+
+				// reset this flag
+				receivingPlayTime = false;
+			}
 		}
 
 	}
@@ -453,7 +493,7 @@ public class SessionActivity extends Activity {
 		sessionUsersFirebase.removeEventListener(sessionUsersListener);
 
 		mPlayer.stop();
-		
+
 		super.onPause();
 	}
 
@@ -461,6 +501,7 @@ public class SessionActivity extends Activity {
 	protected void onStop() {
 		super.onStop();
 		wl.release();
+		finish();
 	}
 
 	@Override

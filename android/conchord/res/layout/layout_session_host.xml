@@ -14,18 +14,29 @@
         android:textColor="@color/Black"
         android:textSize="25dp"
         android:textStyle="bold" />
-    
+
+    <TextView
+        android:id="@+id/textViewStartTimeInMillis"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewMySessionID"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:hint="start time"
+        android:textColor="@color/Black"
+        android:textSize="23dp" />
+
     <Button
         android:id="@+id/buttonPlay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
+        android:layout_margin="5dp"
+        android:background="@color/Wheat"
         android:padding="16dp"
         android:text="Play"
         android:textSize="20dp"
-        android:textStyle="bold"
-        android:background="@color/Wheat"
-        android:layout_margin="5dp"
-        android:layout_alignParentBottom="true" />
+        android:textStyle="bold" />
 
 </RelativeLayout>

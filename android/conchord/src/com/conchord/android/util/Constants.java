@@ -17,4 +17,6 @@ public class Constants {
 	public static final int FLAG_DESTROY_SESSION_ON = 1;
 	public static final int FLAG_DESTROY_SESSION_OFF = 0;
 	
+	public static final int START_TIME_DELAY = 5000;
+	
 }

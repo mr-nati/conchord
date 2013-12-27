@@ -39,5 +39,9 @@ public class ConchordMediaPlayer {
 	public boolean isPlaying() {
 		return mPlayer.isPlaying();
 	}
+	
+	public int getCurrentPosition() {
+		return mPlayer.getCurrentPosition();
+	}
 
 }
