@@ -14,6 +14,9 @@ public class Constants {
 	public static final String KEY_ID = "id";
 	public static final String KEY_PLAY_TIME = "playTime";
 	
+	public static final String KEY_NTP_TIME = "ntpTime";
+	public static final String KEY_SONG_TIME = "songTime";
+	
 	public static final int FLAG_DESTROY_SESSION_ON = 1;
 	public static final int FLAG_DESTROY_SESSION_OFF = 0;
 	

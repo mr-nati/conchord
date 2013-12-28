@@ -2,6 +2,8 @@ package com.conchord.android.activity;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 import android.annotation.TargetApi;
 import android.app.ActionBar;
@@ -10,12 +12,10 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.SystemClock;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -45,7 +45,7 @@ public class SessionActivity extends Activity {
 	public static final String TAG = "R2D2:  ";
 	private TextView textViewMySessionId;
 	private Button buttonPlay;
-	
+
 	private TextView textViewStartTime;
 
 	// Controls screen sleep/wake
@@ -59,6 +59,9 @@ public class SessionActivity extends Activity {
 	private AlarmManager alarmManager;
 	private long timeToPlayAtInMillis = 0;
 	private long ntpTime = 0;
+	
+	private long hostCalibrationSongTime = 0;
+	private long hostCalibrationNtpTime = 0;
 
 	/* Session information */
 	private static String sessionName;
@@ -67,6 +70,10 @@ public class SessionActivity extends Activity {
 	private ArrayList<DataSnapshot> sessionUsersDataSnapshots = new ArrayList<DataSnapshot>();
 	private static Firebase sessionPlayTimeFirebase;
 
+	private static Firebase sessionCalibrateFirebase;
+	private static Firebase sessionCalibrateNtpTimeFirebase;
+	private static Firebase sessionCalibrateSongTimeFirebase;
+	
 	/* My session id information */
 	private String mySessionId;
 	private Firebase mySessionUserFirebase;
@@ -79,6 +86,8 @@ public class SessionActivity extends Activity {
 	private boolean needToSetFirebasePlayTime = false;
 
 	private boolean receivingPlayTime = false;
+	private boolean needToSetFirebaseCalibration = false;
+	private boolean needToCalibrate = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -171,6 +180,12 @@ public class SessionActivity extends Activity {
 		if (isHost) {
 			sessionFirebase.child(Constants.KEY_HOST_ID).setValue(mySessionId);
 		}
+
+		// this Firebase is for syncing
+		String sessionCalibrateUrl = Constants.sessionsUrl + sessionName + "/"
+				+ "calibrate";
+		sessionCalibrateFirebase = new Firebase(sessionCalibrateUrl);
+		sessionCalibrateFirebase.addValueEventListener(sessionCalibrationListener);
 	}
 
 	private static void setFirebasePlayTime(String playTime) {
@@ -180,14 +195,13 @@ public class SessionActivity extends Activity {
 		sessionPlayTimeFirebase.setValue(playTime);
 	}
 
-	@SuppressWarnings("deprecation")
 	private void inflateXML() {
 		textViewMySessionId = (TextView) findViewById(R.id.textViewMySessionID);
 
 		if (isHost) {
 			buttonPlay = (Button) findViewById(R.id.buttonPlay);
 		}
-		
+
 		textViewStartTime = (TextView) findViewById(R.id.textViewStartTimeInMillis);
 	}
 
@@ -195,6 +209,14 @@ public class SessionActivity extends Activity {
 	private void setupGUI() {
 		// Display my session id
 		textViewMySessionId.setText(mySessionId);
+		textViewMySessionId.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				needToSetFirebaseCalibration = true;
+				getNTPtime();
+			}
+		});
 
 		// Sets the Action Bar for new Android versions
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
@@ -213,13 +235,14 @@ public class SessionActivity extends Activity {
 					// tell the getNTPTime method that we need to post to Firebase
 					needToSetFirebasePlayTime = true;
 					getNTPtime();
-					
-					
+
+					// set Alarm for 3 seconds after firebase play time to do the
+					// calibration thing
+
 					v.setEnabled(false);
 				}
 			});
 		}
-
 	}
 
 	public Firebase createSession(int songId) {
@@ -268,6 +291,8 @@ public class SessionActivity extends Activity {
 
 				Log.d(TAG, TAG + "There are " + arg0.getChildrenCount() + " users.");
 
+
+				
 				for (DataSnapshot x : arg0.getChildren()) {
 					Log.d(TAG, TAG + "users child value = "
 							+ x.getValue().toString());
@@ -290,9 +315,7 @@ public class SessionActivity extends Activity {
 
 		@Override
 		public void onDataChange(DataSnapshot arg0) {
-			if (isHost)
-				return;
-			if (arg0.getValue() == null)
+			if (isHost || arg0.getValue() == null)
 				return;
 
 			// makeShortToast(arg0.getValue().toString());
@@ -316,6 +339,27 @@ public class SessionActivity extends Activity {
 		}
 	};
 
+	ValueEventListener sessionCalibrationListener = new ValueEventListener() {
+
+		@Override
+		public void onDataChange(DataSnapshot arg0) {
+			if (isHost || arg0.getValue() == null) return;
+
+			hostCalibrationNtpTime = Long.valueOf(arg0.child(Constants.KEY_NTP_TIME).getValue().toString());
+			hostCalibrationSongTime = Long.valueOf(arg0.child(Constants.KEY_SONG_TIME).getValue().toString());
+			
+			needToCalibrate = true;
+			getNTPtime();	
+		}
+		
+		@Override
+		public void onCancelled() {
+			// TODO Auto-generated method stub
+			
+		}
+
+	};
+	
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -363,27 +407,23 @@ public class SessionActivity extends Activity {
 	}
 
 	private void buildMediaPlayers() {
-		// if (android.os.Build.VERSION.SDK_INT < 9) {
-		// mPlayer = new ConchordMediaPlayer(getApplicationContext(),
-		// MediaFiles.call_me_acapella);
-		// } else {
-		// mPlayer = new ConchordMediaPlayer(getApplicationContext(),
-		// MediaFiles.call_me_instrumental);
-		// }
+		
+		// device should get assignment before building media players
+		
+		// if sail:
+			// host = synth keys
+		
+		 if (android.os.Build.VERSION.SDK_INT < 9) {
+		 mPlayer = new ConchordMediaPlayer(getApplicationContext(),
+		 MediaFiles.call_me_acapella);
+		 } else {
+		 mPlayer = new ConchordMediaPlayer(getApplicationContext(),
+		 MediaFiles.call_me_instrumental);
+		 }
 
-		mPlayer = new ConchordMediaPlayer(getApplicationContext(),
-				MediaFiles.call_me_acapella);
+//		mPlayer = new ConchordMediaPlayer(getApplicationContext(),
+//				MediaFiles.call_me_acapella);
 
-	}
-
-	private void startSession() {
-		// Set start time to 15 seconds from now
-		// timeToPlayAtInMillis = getNTPtime() + 15000;
-	}
-
-	private void setAlarmPlayTime(long millisecondsTilPlayTime) {
-		alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()
-				+ millisecondsTilPlayTime, pIntent);
 	}
 
 	private void setAlarm(long time) {
@@ -391,22 +431,13 @@ public class SessionActivity extends Activity {
 		alarmManager.set(AlarmManager.RTC_WAKEUP, time, pIntent);
 	}
 
-	private void makeSureGPSisEnabledOnDevice() {
-		LocationManager locMngr = (LocationManager) getSystemService(LOCATION_SERVICE);
-		boolean enabled = locMngr.isProviderEnabled(locMngr.GPS_PROVIDER);
-		if (!enabled) {
-			Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-			startActivity(intent);
-		}
-	}
-
-	public void makeLongToast(String text) {
-		Toast.makeText(getBaseContext(), text, Toast.LENGTH_LONG).show();
-	}
-
-	public void makeShortToast(String text) {
-		Toast.makeText(getBaseContext(), text, Toast.LENGTH_SHORT).show();
-	}
+	/*
+	 * private void makeSureGPSisEnabledOnDevice() { LocationManager locMngr =
+	 * (LocationManager) getSystemService(LOCATION_SERVICE); boolean enabled =
+	 * locMngr.isProviderEnabled(locMngr.GPS_PROVIDER); if (!enabled) { Intent
+	 * intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+	 * startActivity(intent); } }
+	 */
 
 	private void getNTPtime() {
 		new GetNTPTimeAsyncTask().execute();
@@ -446,7 +477,7 @@ public class SessionActivity extends Activity {
 				setFirebasePlayTime(String.valueOf(startTime));
 
 				setAlarm(startTime);
-				
+
 				// reset this flag
 				needToSetFirebasePlayTime = false;
 
@@ -459,11 +490,43 @@ public class SessionActivity extends Activity {
 
 				// reset this flag
 				receivingPlayTime = false;
+				
+			} else if (isHost && needToSetFirebaseCalibration) {
+				if (!mPlayer.isPlaying()) {
+					makeShortToast("the player isn't playing yet");
+				}
+				long pos = mPlayer.getCurrentPosition();
+
+				// need to set these values at once
+				Map<String, String> toSet = new HashMap<String, String>();
+				toSet.put(Constants.KEY_NTP_TIME, "" + ntpTime);
+				toSet.put(Constants.KEY_SONG_TIME, "" + pos);
+				sessionCalibrateFirebase.setValue(toSet);
+				
+				// reset this flag
+				needToSetFirebaseCalibration = false;
+			} else if (!isHost && needToCalibrate) {
+				
+		//		int currentSongTime = mPlayer.getCurrentPosition();
+				
+				// subtract old ntp time from new one.
+		//		long ntpDiff = ntpTime - hostCalibrationNtpTime;
+				
+				// add that to the old song time
+		//		long newSongTime = hostCalibrationSongTime + ntpDiff;
+				int offsetForProcessingTime = 100;
+				
+				// should be there so skip to it
+				mPlayer.seekTo((int)(hostCalibrationSongTime + ntpTime - hostCalibrationNtpTime + offsetForProcessingTime));
+				
+				makeShortToast("calibrated");
+				
+				needToCalibrate = false;
 			}
 		}
 
 	}
-
+	
 	private void makeSure_isHost_WasPassedIn() {
 		// If the isHost bool was never passed in, kill the activity
 		if (isHost == false
@@ -504,9 +567,12 @@ public class SessionActivity extends Activity {
 		finish();
 	}
 
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
+	public void makeLongToast(String text) {
+		Toast.makeText(getBaseContext(), text, Toast.LENGTH_LONG).show();
+	}
+
+	public void makeShortToast(String text) {
+		Toast.makeText(getBaseContext(), text, Toast.LENGTH_SHORT).show();
 	}
 
 	@Override

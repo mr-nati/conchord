@@ -23,6 +23,10 @@ public class ConchordMediaPlayer {
 		mPlayer.start();
 	}
 	
+	public void seekTo(int millis) {
+		mPlayer.seekTo(millis);
+	}
+	
 	public void seekPaused(int numMillis) {
 		mPlayer.pause();
 		mPlayer.seekTo(mPlayer.getCurrentPosition() + numMillis);
