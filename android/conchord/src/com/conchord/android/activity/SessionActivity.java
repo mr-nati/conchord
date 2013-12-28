@@ -74,6 +74,8 @@ public class SessionActivity extends Activity {
 	private static Firebase sessionCalibrateNtpTimeFirebase;
 	private static Firebase sessionCalibrateSongTimeFirebase;
 	
+	private static Firebase sessionClosedFirebase;
+
 	/* My session id information */
 	private String mySessionId;
 	private Firebase mySessionUserFirebase;
@@ -186,6 +188,12 @@ public class SessionActivity extends Activity {
 				+ "calibrate";
 		sessionCalibrateFirebase = new Firebase(sessionCalibrateUrl);
 		sessionCalibrateFirebase.addValueEventListener(sessionCalibrationListener);
+		
+		// this flag says whether the session is open or closed
+		String sessionClosedFirebaseUrl = Constants.sessionsUrl + sessionName + "/";
+		sessionClosedFirebase = new Firebase(sessionClosedFirebaseUrl);
+		sessionClosedFirebase.setValue(false);
+		
 	}
 
 	private static void setFirebasePlayTime(String playTime) {
@@ -239,6 +247,8 @@ public class SessionActivity extends Activity {
 					// set Alarm for 3 seconds after firebase play time to do the
 					// calibration thing
 
+					sessionClosedFirebase.setValue(true);
+					
 					v.setEnabled(false);
 				}
 			});
