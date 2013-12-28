@@ -12,6 +12,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
@@ -423,9 +424,6 @@ public class SessionActivity extends Activity {
 
 		// device should get assignment before building media players
 
-		// if sail:
-		// host = synth keys
-
 		if (android.os.Build.VERSION.SDK_INT < 9) {
 			mPlayer = new ConchordMediaPlayer(getApplicationContext(),
 					MediaFiles.call_me_acapella);
@@ -453,14 +451,18 @@ public class SessionActivity extends Activity {
 	 */
 
 	private void getNTPtime() {
-		new GetNTPTimeAsyncTask().execute();
+		// new GetNTPTimeAsyncTask().execute();
+		new NtpAsyncTask().execute();
+
 	}
 
-	class GetNTPTimeAsyncTask extends SafeAsyncTask<Long> {
+	// TODO Make multiple AsyncTasks instead of all these flags. Perhaps this
+	// will help with synchronization...
 
-		
+	class NtpAsyncTask extends AsyncTask<String, Void, Long> {
+
 		@Override
-		public Long call() throws Exception {
+		protected Long doInBackground(String... arg0) {
 			// TODO Auto-generated method stub
 			SntpClient client = new SntpClient();
 			if (client.requestTime(Utils.someCaliNtpServers[0], 10000)) {
@@ -475,15 +477,10 @@ public class SessionActivity extends Activity {
 		}
 
 		@Override
-		protected void onException(Exception e) throws RuntimeException {
-			super.onException(e);
-			Log.e(TAG, e.getMessage());
-		}
-
-		@Override
-		protected void onSuccess(Long x) throws Exception {
+		protected void onPostExecute(Long x) {
+			super.onPostExecute(x);
 			ntpTime = x;
-	//		long localTime = System.currentTimeMillis();
+			// long localTime = System.currentTimeMillis();
 			long pos = mPlayer.getCurrentPosition();
 
 			if (isHost && needToSetFirebasePlayTime) {
@@ -535,7 +532,93 @@ public class SessionActivity extends Activity {
 				mPlayer.seekTo((int) (hostCalibrationSongTime + ntpTime
 						- hostCalibrationNtpTime + offsetForProcessingTime));
 
-				makeShortToast("calibrated");
+				makeShortToast("calibrated. isHost = " + isHost);
+
+				needToCalibrate = false;
+			}
+		}
+
+	}
+
+	class GetNTPTimeAsyncTask extends SafeAsyncTask<Long> {
+
+		@Override
+		public Long call() throws Exception {
+			// TODO Auto-generated method stub
+			SntpClient client = new SntpClient();
+			if (client.requestTime(Utils.someCaliNtpServers[0], 10000)) {
+
+				Long time = client.getNtpTime() + SystemClock.elapsedRealtime()
+						- client.getNtpTimeReference();
+				return time;
+			} else {
+				makeLongToast("NTP error");
+				return null;
+			}
+		}
+
+		@Override
+		protected void onException(Exception e) throws RuntimeException {
+			super.onException(e);
+			Log.e(TAG, e.getMessage());
+		}
+
+		@Override
+		protected void onSuccess(Long x) throws Exception {
+			ntpTime = x;
+			// long localTime = System.currentTimeMillis();
+			long pos = mPlayer.getCurrentPosition();
+
+			if (isHost && needToSetFirebasePlayTime) {
+				long startTime = ntpTime + Constants.START_TIME_DELAY;
+
+				// edit Firebase server
+				setFirebasePlayTime(String.valueOf(startTime));
+
+				setAlarm(startTime);
+
+				// reset this flag
+				needToSetFirebasePlayTime = false;
+
+			} else if (!isHost && receivingPlayTime) {
+
+				long diff = timeToPlayAtInMillis - ntpTime;
+				makeLongToast(diff + " millis b/c isHost == " + isHost);
+
+				setAlarm(System.currentTimeMillis() + diff);
+
+				// reset this flag
+				receivingPlayTime = false;
+
+			} else if (isHost && needToSetFirebaseCalibration) {
+				if (!mPlayer.isPlaying()) {
+					makeShortToast("the player isn't playing yet");
+				}
+
+				// need to set these values at once
+				Map<String, String> toSet = new HashMap<String, String>();
+				toSet.put(Constants.KEY_NTP_TIME, "" + ntpTime);
+				toSet.put(Constants.KEY_SONG_TIME, "" + pos);
+				sessionCalibrateFirebase.setValue(toSet);
+
+				// reset this flag
+				needToSetFirebaseCalibration = false;
+			} else if (!isHost && needToCalibrate) {
+
+				// int currentSongTime = mPlayer.getCurrentPosition();
+
+				// subtract old ntp time from new one.
+				// long ntpDiff = ntpTime - hostCalibrationNtpTime;
+
+				// add that to the old song time
+				// long newSongTime = hostCalibrationSongTime + ntpDiff;
+				int offsetForProcessingTime = 100;
+
+				// should be there so skip to it
+				mPlayer.seekTo((int) (hostCalibrationSongTime + ntpTime
+						- hostCalibrationNtpTime + offsetForProcessingTime));
+
+				makeShortToast("calibrated. isHost = " + isHost);
 
 				needToCalibrate = false;
 			}
@@ -570,6 +653,9 @@ public class SessionActivity extends Activity {
 		// remove listeners
 		sessionFirebase.removeEventListener(sessionListener);
 		sessionUsersFirebase.removeEventListener(sessionUsersListener);
+
+		// TODO make sure all eventlisteners are added and removed in pause and
+		// resume
 
 		mPlayer.stop();
 
