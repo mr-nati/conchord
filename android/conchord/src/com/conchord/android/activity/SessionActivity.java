@@ -59,7 +59,7 @@ public class SessionActivity extends Activity {
 	private AlarmManager alarmManager;
 	private long timeToPlayAtInMillis = 0;
 	private long ntpTime = 0;
-	
+
 	private long hostCalibrationSongTime = 0;
 	private long hostCalibrationNtpTime = 0;
 
@@ -73,7 +73,7 @@ public class SessionActivity extends Activity {
 	private static Firebase sessionCalibrateFirebase;
 	private static Firebase sessionCalibrateNtpTimeFirebase;
 	private static Firebase sessionCalibrateSongTimeFirebase;
-	
+
 	private static Firebase sessionClosedFirebase;
 
 	/* My session id information */
@@ -187,13 +187,15 @@ public class SessionActivity extends Activity {
 		String sessionCalibrateUrl = Constants.sessionsUrl + sessionName + "/"
 				+ "calibrate";
 		sessionCalibrateFirebase = new Firebase(sessionCalibrateUrl);
-		sessionCalibrateFirebase.addValueEventListener(sessionCalibrationListener);
-		
+		sessionCalibrateFirebase
+				.addValueEventListener(sessionCalibrationListener);
+
 		// this flag says whether the session is open or closed
-		String sessionClosedFirebaseUrl = Constants.sessionsUrl + sessionName + "/";
+		String sessionClosedFirebaseUrl = Constants.sessionsUrl + sessionName
+				+ "/" + Constants.KEY_SESSION_CLOSED;
 		sessionClosedFirebase = new Firebase(sessionClosedFirebaseUrl);
 		sessionClosedFirebase.setValue(false);
-		
+
 	}
 
 	private static void setFirebasePlayTime(String playTime) {
@@ -248,7 +250,7 @@ public class SessionActivity extends Activity {
 					// calibration thing
 
 					sessionClosedFirebase.setValue(true);
-					
+
 					v.setEnabled(false);
 				}
 			});
@@ -301,8 +303,6 @@ public class SessionActivity extends Activity {
 
 				Log.d(TAG, TAG + "There are " + arg0.getChildrenCount() + " users.");
 
-
-				
 				for (DataSnapshot x : arg0.getChildren()) {
 					Log.d(TAG, TAG + "users child value = "
 							+ x.getValue().toString());
@@ -353,23 +353,26 @@ public class SessionActivity extends Activity {
 
 		@Override
 		public void onDataChange(DataSnapshot arg0) {
-			if (isHost || arg0.getValue() == null) return;
+			if (isHost || arg0.getValue() == null)
+				return;
 
-			hostCalibrationNtpTime = Long.valueOf(arg0.child(Constants.KEY_NTP_TIME).getValue().toString());
-			hostCalibrationSongTime = Long.valueOf(arg0.child(Constants.KEY_SONG_TIME).getValue().toString());
-			
+			hostCalibrationNtpTime = Long.valueOf(arg0
+					.child(Constants.KEY_NTP_TIME).getValue().toString());
+			hostCalibrationSongTime = Long.valueOf(arg0
+					.child(Constants.KEY_SONG_TIME).getValue().toString());
+
 			needToCalibrate = true;
-			getNTPtime();	
+			getNTPtime();
 		}
-		
+
 		@Override
 		public void onCancelled() {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 	};
-	
+
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -417,22 +420,22 @@ public class SessionActivity extends Activity {
 	}
 
 	private void buildMediaPlayers() {
-		
-		// device should get assignment before building media players
-		
-		// if sail:
-			// host = synth keys
-		
-		 if (android.os.Build.VERSION.SDK_INT < 9) {
-		 mPlayer = new ConchordMediaPlayer(getApplicationContext(),
-		 MediaFiles.call_me_acapella);
-		 } else {
-		 mPlayer = new ConchordMediaPlayer(getApplicationContext(),
-		 MediaFiles.call_me_instrumental);
-		 }
 
-//		mPlayer = new ConchordMediaPlayer(getApplicationContext(),
-//				MediaFiles.call_me_acapella);
+		// device should get assignment before building media players
+
+		// if sail:
+		// host = synth keys
+
+		if (android.os.Build.VERSION.SDK_INT < 9) {
+			mPlayer = new ConchordMediaPlayer(getApplicationContext(),
+					MediaFiles.call_me_acapella);
+		} else {
+			mPlayer = new ConchordMediaPlayer(getApplicationContext(),
+					MediaFiles.call_me_instrumental);
+		}
+
+		// mPlayer = new ConchordMediaPlayer(getApplicationContext(),
+		// MediaFiles.call_me_acapella);
 
 	}
 
@@ -455,6 +458,7 @@ public class SessionActivity extends Activity {
 
 	class GetNTPTimeAsyncTask extends SafeAsyncTask<Long> {
 
+		
 		@Override
 		public Long call() throws Exception {
 			// TODO Auto-generated method stub
@@ -479,6 +483,8 @@ public class SessionActivity extends Activity {
 		@Override
 		protected void onSuccess(Long x) throws Exception {
 			ntpTime = x;
+	//		long localTime = System.currentTimeMillis();
+			long pos = mPlayer.getCurrentPosition();
 
 			if (isHost && needToSetFirebasePlayTime) {
 				long startTime = ntpTime + Constants.START_TIME_DELAY;
@@ -500,43 +506,43 @@ public class SessionActivity extends Activity {
 
 				// reset this flag
 				receivingPlayTime = false;
-				
+
 			} else if (isHost && needToSetFirebaseCalibration) {
 				if (!mPlayer.isPlaying()) {
 					makeShortToast("the player isn't playing yet");
 				}
-				long pos = mPlayer.getCurrentPosition();
 
 				// need to set these values at once
 				Map<String, String> toSet = new HashMap<String, String>();
 				toSet.put(Constants.KEY_NTP_TIME, "" + ntpTime);
 				toSet.put(Constants.KEY_SONG_TIME, "" + pos);
 				sessionCalibrateFirebase.setValue(toSet);
-				
+
 				// reset this flag
 				needToSetFirebaseCalibration = false;
 			} else if (!isHost && needToCalibrate) {
-				
-		//		int currentSongTime = mPlayer.getCurrentPosition();
-				
+
+				// int currentSongTime = mPlayer.getCurrentPosition();
+
 				// subtract old ntp time from new one.
-		//		long ntpDiff = ntpTime - hostCalibrationNtpTime;
-				
+				// long ntpDiff = ntpTime - hostCalibrationNtpTime;
+
 				// add that to the old song time
-		//		long newSongTime = hostCalibrationSongTime + ntpDiff;
+				// long newSongTime = hostCalibrationSongTime + ntpDiff;
 				int offsetForProcessingTime = 100;
-				
+
 				// should be there so skip to it
-				mPlayer.seekTo((int)(hostCalibrationSongTime + ntpTime - hostCalibrationNtpTime + offsetForProcessingTime));
-				
+				mPlayer.seekTo((int) (hostCalibrationSongTime + ntpTime
+						- hostCalibrationNtpTime + offsetForProcessingTime));
+
 				makeShortToast("calibrated");
-				
+
 				needToCalibrate = false;
 			}
 		}
 
 	}
-	
+
 	private void makeSure_isHost_WasPassedIn() {
 		// If the isHost bool was never passed in, kill the activity
 		if (isHost == false

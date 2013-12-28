@@ -13,6 +13,7 @@ public class Constants {
 	public static final String KEY_HOST_ID = "hostId";
 	public static final String KEY_ID = "id";
 	public static final String KEY_PLAY_TIME = "playTime";
+	public static final String KEY_SESSION_CLOSED = "closed";
 	
 	public static final String KEY_NTP_TIME = "ntpTime";
 	public static final String KEY_SONG_TIME = "songTime";

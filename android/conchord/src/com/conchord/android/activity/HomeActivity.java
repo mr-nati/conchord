@@ -78,7 +78,7 @@ public class HomeActivity extends Activity {
 										SessionActivity.class);
 								intent.putExtra(Constants.KEY_SESSION, sessionName);
 								intent.putExtra(Constants.KEY_IS_HOST, true);
-		//						intent.putExtra(Constants.KEY_CREATOR, true);
+								// intent.putExtra(Constants.KEY_CREATOR, true);
 								startActivity(intent);
 								// Because we're starting the activity, stop
 								// listening.
@@ -96,9 +96,9 @@ public class HomeActivity extends Activity {
 
 						}
 					});
-					
+
 					buttonCreateSession.setEnabled(false);
-					
+
 				} else {
 					// toast saying no length
 					Toast.makeText(getBaseContext(),
@@ -131,7 +131,19 @@ public class HomeActivity extends Activity {
 						public void onDataChange(DataSnapshot arg0) {
 							Object value = arg0.getValue();
 
+							Log.e(TAG, arg0.child(Constants.KEY_SESSION_CLOSED)
+									.getValue().toString());
+
 							if (value != null) {
+								
+								if (!arg0.child(Constants.KEY_SESSION_CLOSED)
+										.getValue().equals(false)) {
+									Toast.makeText(getApplicationContext(),
+											"This session is closed.", Toast.LENGTH_SHORT)
+											.show();
+									firebase.removeEventListener(this);
+									return;
+								}
 								editTextJoinSessionName.setText("");
 
 								// Join jam session
@@ -139,7 +151,7 @@ public class HomeActivity extends Activity {
 										SessionActivity.class);
 								intent.putExtra(Constants.KEY_SESSION, sessionName);
 								intent.putExtra(Constants.KEY_IS_HOST, false);
-					//			intent.putExtra(Constants.KEY_CREATOR, false);
+								// intent.putExtra(Constants.KEY_CREATOR, false);
 								startActivity(intent);
 								firebase.removeEventListener(this);
 							} else {
