@@ -188,17 +188,6 @@ public final class R {
     public static final class raw {
         public static final int conchord__call_me_maybe_acapella=0x7f040000;
         public static final int conchord__call_me_maybe_instrumental=0x7f040001;
-        public static final int conchord__sail__bass=0x7f040002;
-        public static final int conchord__sail__bridge_piano=0x7f040003;
-        public static final int conchord__sail__drums=0x7f040004;
-        public static final int conchord__sail__electric_solo=0x7f040005;
-        public static final int conchord__sail__synth=0x7f040006;
-        public static final int conchord__sail__synth_keys=0x7f040007;
-        public static final int conchord__sail__vocals=0x7f040008;
-        public static final int ellie_goulding_the_writer_acapella=0x7f040009;
-        public static final int ellie_goulding_the_writer_intrumental=0x7f04000a;
-        public static final int lecrae_power_trip=0x7f04000b;
-        public static final int the_alan_parsons_project_sirius=0x7f04000c;
     }
     public static final class string {
         public static final int action_settings=0x7f070001;

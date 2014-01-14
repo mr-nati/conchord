@@ -104,6 +104,9 @@ public class SntpClient {
 
 			socket.send(request);
 
+			Log.e(TAG, "R2D2, receive time = " + System.currentTimeMillis());
+
+			
 			// read the response
 			DatagramPacket response = new DatagramPacket(buffer, buffer.length);
 			socket.receive(response);
@@ -135,6 +138,7 @@ public class SntpClient {
 			mNtpTime = responseTime + clockOffset;
 			mNtpTimeReference = responseTicks;
 			mRoundTripTime = roundTripTime;
+			Log.e(TAG, "R2D2 roundTripTime = " + mRoundTripTime);
 		} catch (Exception e) {
 			if (false)
 				Log.d(TAG, "request time failed: " + e);

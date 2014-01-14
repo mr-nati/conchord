@@ -39,4 +39,42 @@
         android:textSize="20dp"
         android:textStyle="bold" />
 
+  <!--   <TextView
+        android:id="@+id/textViewNtp1"
+        android:layout_width="150dp"
+        android:layout_height="30dp"
+        android:layout_below="@id/textViewStartTimeInMillis"
+        android:layout_margin="1dp"
+        android:background="@color/White"
+        android:text="f" />
+
+    <TextView
+        android:id="@+id/textViewTimer1"
+        android:layout_width="150dp"
+        android:layout_height="30dp"
+        android:layout_alignBottom="@id/textViewNtp1"
+        android:layout_margin="1dp"
+        android:layout_toRightOf="@id/textViewNtp1"
+        android:background="@color/White"
+        android:text="f" />
+
+    <TextView
+        android:id="@+id/textViewNtp2"
+        android:layout_width="150dp"
+        android:layout_height="30dp"
+        android:layout_below="@id/textViewNtp1"
+        android:layout_margin="1dp"
+        android:background="@color/White"
+        android:text="f" />
+
+    <TextView
+        android:id="@+id/textViewTimer2"
+        android:layout_width="150dp"
+        android:layout_height="30dp"
+        android:layout_alignLeft="@id/textViewTimer1"
+        android:layout_below="@id/textViewTimer1"
+        android:layout_margin="1dp"
+        android:background="@color/White"
+        android:text="f" /> -->
+
 </RelativeLayout>

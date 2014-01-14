@@ -146,6 +146,18 @@ public class SessionActivity extends Activity {
 
 		// 4. Set alarm for future time in millis
 		// setUpFirebase();
+		
+		
+		// REMOVE THIS @TODO
+		
+		textViewStartTime.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				getNTPtime();
+			}
+		});
 
 	}
 
@@ -377,7 +389,7 @@ public class SessionActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-
+		
 		wl.acquire();
 
 		// Make sure you're the host.
@@ -453,7 +465,6 @@ public class SessionActivity extends Activity {
 	private void getNTPtime() {
 		// new GetNTPTimeAsyncTask().execute();
 		new NtpAsyncTask().execute();
-
 	}
 
 	// TODO Make multiple AsyncTasks instead of all these flags. Perhaps this
@@ -465,10 +476,17 @@ public class SessionActivity extends Activity {
 		protected Long doInBackground(String... arg0) {
 			// TODO Auto-generated method stub
 			SntpClient client = new SntpClient();
-			if (client.requestTime(Utils.someCaliNtpServers[0], 10000)) {
-
+			Log.e(TAG, "R2D2, send time = " + System.currentTimeMillis());
+			Log.e(TAG, "R2D2; current thread time: " + SystemClock.currentThreadTimeMillis());
+			if (client.requestTime(Utils.someCaliNtpServers[0], 1000)) {
+				Log.e(TAG, "R2D2, receive time = " + System.currentTimeMillis());
 				Long time = client.getNtpTime() + SystemClock.elapsedRealtime()
 						- client.getNtpTimeReference();
+				Log.e("", "R2D2: " + "ntpTime = " + ntpTime);
+				Log.e("", "R2D2: " + "cttmillis = " + SystemClock.currentThreadTimeMillis());
+				Log.e("", "R2D2: " + " elapsed real time " + SystemClock.elapsedRealtime());
+				if (mPlayer.isPlaying()) Log.e("R2D2: ", "R2D2: " + "songTime = " + mPlayer.getCurrentPosition());
+				
 				return time;
 			} else {
 				makeLongToast("NTP error");
@@ -480,6 +498,22 @@ public class SessionActivity extends Activity {
 		protected void onPostExecute(Long x) {
 			super.onPostExecute(x);
 			ntpTime = x;
+			
+			Log.e(TAG, "R2D2:  " + System.currentTimeMillis());
+			Log.e(TAG, "R2D2:  " + System.currentTimeMillis());
+			Log.e(TAG, "R2D2:  " + System.currentTimeMillis());
+			Log.e(TAG, "R2D2:  " + System.currentTimeMillis());
+			Log.e(TAG, "R2D2:  " + System.currentTimeMillis());
+			Log.e(TAG, "R2D2:  " + System.currentTimeMillis());
+			Log.e(TAG, "R2D2:  " + System.currentTimeMillis());
+			Log.e(TAG, "R2D2:  " + System.currentTimeMillis());
+			Log.e(TAG, "R2D2:  " + System.currentTimeMillis());
+			Log.e(TAG, "R2D2:  " + System.currentTimeMillis());
+
+			
+			
+	//		Log.e(TAG, TAG + "ntpTime = " + ntpTime);
+	//		if (mPlayer.isPlaying()) Log.e(TAG, TAG + "songTime = " + mPlayer.getCurrentPosition());
 			// long localTime = System.currentTimeMillis();
 			long pos = mPlayer.getCurrentPosition();
 
