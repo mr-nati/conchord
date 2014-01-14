@@ -72,6 +72,8 @@ public class SntpClient {
 
 	// round trip time in milliseconds
 	private long mRoundTripTime;
+	
+	public long localTimeWhenNtpWasReceived;
 
 	/**
 	 * Sends an SNTP request to the given host and processes the response.
@@ -102,10 +104,8 @@ public class SntpClient {
 			long requestTicks = SystemClock.elapsedRealtime();
 			writeTimeStamp(buffer, TRANSMIT_TIME_OFFSET, requestTime);
 
+			Log.e(TAG, "R2D2...ntp sent at " + System.currentTimeMillis());
 			socket.send(request);
-
-			Log.e(TAG, "R2D2, receive time = " + System.currentTimeMillis());
-
 			
 			// read the response
 			DatagramPacket response = new DatagramPacket(buffer, buffer.length);
@@ -113,6 +113,9 @@ public class SntpClient {
 			long responseTicks = SystemClock.elapsedRealtime();
 			long responseTime = requestTime + (responseTicks - requestTicks);
 
+			localTimeWhenNtpWasReceived = System.currentTimeMillis();
+			Log.e(TAG, "R2D2...ntp received at " + localTimeWhenNtpWasReceived);
+			
 			// extract the results
 			long originateTime = readTimeStamp(buffer, ORIGINATE_TIME_OFFSET);
 			long receiveTime = readTimeStamp(buffer, RECEIVE_TIME_OFFSET);

@@ -88,7 +88,7 @@ public class SessionActivity extends Activity {
 	 */
 	private boolean needToSetFirebasePlayTime = false;
 
-	private boolean receivingPlayTime = false;
+	private boolean receivingRelativePlayTime = false;
 	private boolean needToSetFirebaseCalibration = false;
 	private boolean needToCalibrate = false;
 
@@ -146,12 +146,11 @@ public class SessionActivity extends Activity {
 
 		// 4. Set alarm for future time in millis
 		// setUpFirebase();
-		
-		
+
 		// REMOVE THIS @TODO
-		
+
 		textViewStartTime.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
@@ -316,10 +315,10 @@ public class SessionActivity extends Activity {
 
 				Log.d(TAG, TAG + "There are " + arg0.getChildrenCount() + " users.");
 
-				for (DataSnapshot x : arg0.getChildren()) {
+		/*		for (DataSnapshot x : arg0.getChildren()) {
 					Log.d(TAG, TAG + "users child value = "
 							+ x.getValue().toString());
-				}
+				}*/
 				// makeShortToast(arg0.getChildren() + " were just added.");
 				// makeShortToast("There are " + arg0.getChildrenCount() +
 				// " users.");
@@ -348,9 +347,11 @@ public class SessionActivity extends Activity {
 			// get ready to play
 
 			timeToPlayAtInMillis = Long.valueOf(arg0.getValue().toString());
+	//		makeShortToast(timeToPlayAtInMillis + "");
+			Log.e(TAG, "R2D2...received play time of " + timeToPlayAtInMillis);
 
-			// tell getNTPtime we are going to be receiving a play time
-			receivingPlayTime = true;
+			// tell getNTPtime we are going to be receiving a local time
+			receivingRelativePlayTime = true;
 			getNTPtime();
 
 		}
@@ -389,7 +390,7 @@ public class SessionActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		
+
 		wl.acquire();
 
 		// Make sure you're the host.
@@ -436,16 +437,16 @@ public class SessionActivity extends Activity {
 
 		// device should get assignment before building media players
 
-		if (android.os.Build.VERSION.SDK_INT < 9) {
-			mPlayer = new ConchordMediaPlayer(getApplicationContext(),
-					MediaFiles.call_me_acapella);
-		} else {
-			mPlayer = new ConchordMediaPlayer(getApplicationContext(),
-					MediaFiles.call_me_instrumental);
-		}
-
+		// if (android.os.Build.VERSION.SDK_INT < 9) {
 		// mPlayer = new ConchordMediaPlayer(getApplicationContext(),
 		// MediaFiles.call_me_acapella);
+		// } else {
+		// mPlayer = new ConchordMediaPlayer(getApplicationContext(),
+		// MediaFiles.call_me_instrumental);
+		// }
+		// TODO: remove
+		mPlayer = new ConchordMediaPlayer(getApplicationContext(),
+				MediaFiles.facebook_pop);
 
 	}
 
@@ -471,22 +472,30 @@ public class SessionActivity extends Activity {
 	// will help with synchronization...
 
 	class NtpAsyncTask extends AsyncTask<String, Void, Long> {
-
+		SntpClient client;
 		@Override
 		protected Long doInBackground(String... arg0) {
 			// TODO Auto-generated method stub
-			SntpClient client = new SntpClient();
-			Log.e(TAG, "R2D2, send time = " + System.currentTimeMillis());
-			Log.e(TAG, "R2D2; current thread time: " + SystemClock.currentThreadTimeMillis());
+			client = new SntpClient();
+		/*	Log.e(TAG, "R2D2, send time = " + System.currentTimeMillis());
+			Log.e(TAG,
+					"R2D2; current thread time: "
+							+ SystemClock.currentThreadTimeMillis());*/
 			if (client.requestTime(Utils.someCaliNtpServers[0], 1000)) {
-				Log.e(TAG, "R2D2, receive time = " + System.currentTimeMillis());
+				// Log.e(TAG, "R2D2, receive time = " + System.currentTimeMillis());
 				Long time = client.getNtpTime() + SystemClock.elapsedRealtime()
 						- client.getNtpTimeReference();
-				Log.e("", "R2D2: " + "ntpTime = " + ntpTime);
-				Log.e("", "R2D2: " + "cttmillis = " + SystemClock.currentThreadTimeMillis());
-				Log.e("", "R2D2: " + " elapsed real time " + SystemClock.elapsedRealtime());
-				if (mPlayer.isPlaying()) Log.e("R2D2: ", "R2D2: " + "songTime = " + mPlayer.getCurrentPosition());
+				Log.e(TAG, "R2D2...ntp time is " + time);
+	//			Log.e(TAG, "R2D2 : time = " + System.currentTimeMillis());
 				
+				// Log.e("", "R2D2: " + "ntpTime = " + ntpTime);
+				// Log.e("", "R2D2: " + "cttmillis = " +
+				// SystemClock.currentThreadTimeMillis());
+				// Log.e("", "R2D2: " + " elapsed real time " +
+				// SystemClock.elapsedRealtime());
+				// if (mPlayer.isPlaying()) Log.e("R2D2: ", "R2D2: " + "songTime = "
+				// + mPlayer.getCurrentPosition());
+
 				return time;
 			} else {
 				makeLongToast("NTP error");
@@ -499,21 +508,11 @@ public class SessionActivity extends Activity {
 			super.onPostExecute(x);
 			ntpTime = x;
 			
-			Log.e(TAG, "R2D2:  " + System.currentTimeMillis());
-			Log.e(TAG, "R2D2:  " + System.currentTimeMillis());
-			Log.e(TAG, "R2D2:  " + System.currentTimeMillis());
-			Log.e(TAG, "R2D2:  " + System.currentTimeMillis());
-			Log.e(TAG, "R2D2:  " + System.currentTimeMillis());
-			Log.e(TAG, "R2D2:  " + System.currentTimeMillis());
-			Log.e(TAG, "R2D2:  " + System.currentTimeMillis());
-			Log.e(TAG, "R2D2:  " + System.currentTimeMillis());
-			Log.e(TAG, "R2D2:  " + System.currentTimeMillis());
-			Log.e(TAG, "R2D2:  " + System.currentTimeMillis());
-
 			
 			
-	//		Log.e(TAG, TAG + "ntpTime = " + ntpTime);
-	//		if (mPlayer.isPlaying()) Log.e(TAG, TAG + "songTime = " + mPlayer.getCurrentPosition());
+			// Log.e(TAG, TAG + "ntpTime = " + ntpTime);
+			// if (mPlayer.isPlaying()) Log.e(TAG, TAG + "songTime = " +
+			// mPlayer.getCurrentPosition());
 			// long localTime = System.currentTimeMillis();
 			long pos = mPlayer.getCurrentPosition();
 
@@ -528,15 +527,19 @@ public class SessionActivity extends Activity {
 				// reset this flag
 				needToSetFirebasePlayTime = false;
 
-			} else if (!isHost && receivingPlayTime) {
+			} else if (!isHost && receivingRelativePlayTime) {
 
 				long diff = timeToPlayAtInMillis - ntpTime;
-				makeLongToast(diff + " millis b/c isHost == " + isHost);
+	//			makeLongToast(diff + " millis b/c isHost == " + isHost);
+				
+				Log.e(TAG, "R2D2...millis btw ntptime and play time = " + diff);
+				
+				setAlarm(client.localTimeWhenNtpWasReceived + diff);
 
-				setAlarm(System.currentTimeMillis() + diff);
-
+				Log.e(TAG, "R2D2...setting alarm for " + (client.localTimeWhenNtpWasReceived + diff));
+				
 				// reset this flag
-				receivingPlayTime = false;
+				receivingRelativePlayTime = false;
 
 			} else if (isHost && needToSetFirebaseCalibration) {
 				if (!mPlayer.isPlaying()) {
@@ -570,6 +573,8 @@ public class SessionActivity extends Activity {
 
 				needToCalibrate = false;
 			}
+			
+			
 		}
 
 	}
@@ -614,7 +619,7 @@ public class SessionActivity extends Activity {
 				// reset this flag
 				needToSetFirebasePlayTime = false;
 
-			} else if (!isHost && receivingPlayTime) {
+			} else if (!isHost && receivingRelativePlayTime) {
 
 				long diff = timeToPlayAtInMillis - ntpTime;
 				makeLongToast(diff + " millis b/c isHost == " + isHost);
@@ -622,7 +627,7 @@ public class SessionActivity extends Activity {
 				setAlarm(System.currentTimeMillis() + diff);
 
 				// reset this flag
-				receivingPlayTime = false;
+				receivingRelativePlayTime = false;
 
 			} else if (isHost && needToSetFirebaseCalibration) {
 				if (!mPlayer.isPlaying()) {
