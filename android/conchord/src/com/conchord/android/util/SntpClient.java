@@ -104,7 +104,7 @@ public class SntpClient {
 			long requestTicks = SystemClock.elapsedRealtime();
 			writeTimeStamp(buffer, TRANSMIT_TIME_OFFSET, requestTime);
 
-			Log.e(TAG, "R2D2...ntp sent at " + System.currentTimeMillis());
+			Log.e(TAG, "R2D2...ntp sent at local time " + System.currentTimeMillis());
 			socket.send(request);
 			
 			// read the response
@@ -113,8 +113,7 @@ public class SntpClient {
 			long responseTicks = SystemClock.elapsedRealtime();
 			long responseTime = requestTime + (responseTicks - requestTicks);
 
-			localTimeWhenNtpWasReceived = System.currentTimeMillis();
-			Log.e(TAG, "R2D2...ntp received at " + localTimeWhenNtpWasReceived);
+			Log.e(TAG, "R2D2...ntp appears to be received at " + System.currentTimeMillis());
 			
 			// extract the results
 			long originateTime = readTimeStamp(buffer, ORIGINATE_TIME_OFFSET);
@@ -139,9 +138,13 @@ public class SntpClient {
 			// save our results - use the times on this side of the network latency
 			// (response rather than request time)
 			mNtpTime = responseTime + clockOffset;
+			
+			localTimeWhenNtpWasReceived = requestTime + (mRoundTripTime/2);
+			Log.e(TAG, "R2D2...ntp calculated 1/2 thru roundtrip is " + localTimeWhenNtpWasReceived);
+			
 			mNtpTimeReference = responseTicks;
 			mRoundTripTime = roundTripTime;
-			Log.e(TAG, "R2D2 roundTripTime = " + mRoundTripTime);
+			Log.e(TAG, "R2D2 roundTripTime official = " + mRoundTripTime);
 		} catch (Exception e) {
 			if (false)
 				Log.d(TAG, "request time failed: " + e);

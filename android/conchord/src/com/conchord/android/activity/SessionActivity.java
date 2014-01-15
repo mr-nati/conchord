@@ -315,10 +315,10 @@ public class SessionActivity extends Activity {
 
 				Log.d(TAG, TAG + "There are " + arg0.getChildrenCount() + " users.");
 
-		/*		for (DataSnapshot x : arg0.getChildren()) {
-					Log.d(TAG, TAG + "users child value = "
-							+ x.getValue().toString());
-				}*/
+				/*
+				 * for (DataSnapshot x : arg0.getChildren()) { Log.d(TAG, TAG +
+				 * "users child value = " + x.getValue().toString()); }
+				 */
 				// makeShortToast(arg0.getChildren() + " were just added.");
 				// makeShortToast("There are " + arg0.getChildrenCount() +
 				// " users.");
@@ -347,7 +347,7 @@ public class SessionActivity extends Activity {
 			// get ready to play
 
 			timeToPlayAtInMillis = Long.valueOf(arg0.getValue().toString());
-	//		makeShortToast(timeToPlayAtInMillis + "");
+			// makeShortToast(timeToPlayAtInMillis + "");
 			Log.e(TAG, "R2D2...received play time of " + timeToPlayAtInMillis);
 
 			// tell getNTPtime we are going to be receiving a local time
@@ -445,8 +445,11 @@ public class SessionActivity extends Activity {
 		// MediaFiles.call_me_instrumental);
 		// }
 		// TODO: remove
+
+		// mPlayer = new ConchordMediaPlayer(getApplicationContext(),
+		// MediaFiles.facebook_pop);
 		mPlayer = new ConchordMediaPlayer(getApplicationContext(),
-				MediaFiles.facebook_pop);
+				MediaFiles.call_me_acapella);
 
 	}
 
@@ -473,21 +476,23 @@ public class SessionActivity extends Activity {
 
 	class NtpAsyncTask extends AsyncTask<String, Void, Long> {
 		SntpClient client;
+
 		@Override
 		protected Long doInBackground(String... arg0) {
 			// TODO Auto-generated method stub
 			client = new SntpClient();
-		/*	Log.e(TAG, "R2D2, send time = " + System.currentTimeMillis());
-			Log.e(TAG,
-					"R2D2; current thread time: "
-							+ SystemClock.currentThreadTimeMillis());*/
+			/*
+			 * Log.e(TAG, "R2D2, send time = " + System.currentTimeMillis());
+			 * Log.e(TAG, "R2D2; current thread time: " +
+			 * SystemClock.currentThreadTimeMillis());
+			 */
 			if (client.requestTime(Utils.someCaliNtpServers[0], 1000)) {
 				// Log.e(TAG, "R2D2, receive time = " + System.currentTimeMillis());
 				Long time = client.getNtpTime() + SystemClock.elapsedRealtime()
 						- client.getNtpTimeReference();
 				Log.e(TAG, "R2D2...ntp time is " + time);
-	//			Log.e(TAG, "R2D2 : time = " + System.currentTimeMillis());
-				
+				// Log.e(TAG, "R2D2 : time = " + System.currentTimeMillis());
+
 				// Log.e("", "R2D2: " + "ntpTime = " + ntpTime);
 				// Log.e("", "R2D2: " + "cttmillis = " +
 				// SystemClock.currentThreadTimeMillis());
@@ -507,9 +512,7 @@ public class SessionActivity extends Activity {
 		protected void onPostExecute(Long x) {
 			super.onPostExecute(x);
 			ntpTime = x;
-			
-			
-			
+
 			// Log.e(TAG, TAG + "ntpTime = " + ntpTime);
 			// if (mPlayer.isPlaying()) Log.e(TAG, TAG + "songTime = " +
 			// mPlayer.getCurrentPosition());
@@ -522,7 +525,13 @@ public class SessionActivity extends Activity {
 				// edit Firebase server
 				setFirebasePlayTime(String.valueOf(startTime));
 
-				setAlarm(startTime);
+				/*
+				 * 
+				 * setAlarm(startTime);
+				 */
+
+				setAlarm(client.localTimeWhenNtpWasReceived
+						+ Constants.START_TIME_DELAY);
 
 				// reset this flag
 				needToSetFirebasePlayTime = false;
@@ -530,14 +539,15 @@ public class SessionActivity extends Activity {
 			} else if (!isHost && receivingRelativePlayTime) {
 
 				long diff = timeToPlayAtInMillis - ntpTime;
-	//			makeLongToast(diff + " millis b/c isHost == " + isHost);
-				
+				// makeLongToast(diff + " millis b/c isHost == " + isHost);
+
 				Log.e(TAG, "R2D2...millis btw ntptime and play time = " + diff);
-				
+
 				setAlarm(client.localTimeWhenNtpWasReceived + diff);
 
-				Log.e(TAG, "R2D2...setting alarm for " + (client.localTimeWhenNtpWasReceived + diff));
-				
+				Log.e(TAG, "R2D2...setting alarm for "
+						+ (client.localTimeWhenNtpWasReceived + diff));
+
 				// reset this flag
 				receivingRelativePlayTime = false;
 
@@ -573,8 +583,7 @@ public class SessionActivity extends Activity {
 
 				needToCalibrate = false;
 			}
-			
-			
+
 		}
 
 	}
