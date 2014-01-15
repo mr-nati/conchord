@@ -94,6 +94,7 @@ public class SessionActivity extends Activity {
 
 	private TextView textViewNtpPlayTime;
 	private TextView textViewSnapshotNtp;
+	private TextView textViewRequestTime;
 	private TextView textViewRoundtripTime;
 	private TextView textViewSnapshotLocal;
 	private TextView textViewTimeRemainingFromNtp;
@@ -234,6 +235,7 @@ public class SessionActivity extends Activity {
 
 		textViewNtpPlayTime = (TextView) findViewById(R.id.textViewNTPplayTime);
 		textViewSnapshotNtp = (TextView) findViewById(R.id.textViewSnapshotNTPtime);
+		textViewRequestTime = (TextView) findViewById(R.id.textViewRequesttime);
 		textViewRoundtripTime = (TextView) findViewById(R.id.textViewRoundtripTime);
 		textViewSnapshotLocal = (TextView) findViewById(R.id.textViewSnapshotLocalTime);
 		textViewTimeRemainingFromNtp = (TextView) findViewById(R.id.textViewRemainingLocalTime);
@@ -568,9 +570,10 @@ public class SessionActivity extends Activity {
 				// reset this flag
 				needToSetFirebasePlayTime = false;
 
-				textViewNtpPlayTime.setText("NTP play time: "
-						+ (startTime % 1000000));
+				textViewNtpPlayTime.setText("NTP play time: " + (startTime % 1000));
 				textViewSnapshotNtp.setText("Snapshot NTP: " + (x % 1000000));
+				textViewRequestTime.setText("Request time: "
+						+ (client.myRequestTime % 1000000));
 				textViewRoundtripTime.setText("Roundtrip time: "
 						+ (client.myRoundtripTime % 1000000));
 				textViewSnapshotLocal.setText("Snapshot Local (GUESS): "
@@ -596,6 +599,8 @@ public class SessionActivity extends Activity {
 				textViewNtpPlayTime.setText("NTP play time: "
 						+ (timeToPlayAtInMillis % 1000000));
 				textViewSnapshotNtp.setText("Snapshot NTP: " + (x % 1000000));
+				textViewRequestTime.setText("Request time: "
+						+ (client.myRequestTime % 1000000));
 				textViewRoundtripTime.setText("Roundtrip time: "
 						+ (client.myRoundtripTime % 1000000));
 				textViewSnapshotLocal.setText("Snapshot Local (GUESS): "
@@ -637,7 +642,6 @@ public class SessionActivity extends Activity {
 			}
 
 		}
-
 	}
 
 	class GetNTPTimeAsyncTask extends SafeAsyncTask<Long> {

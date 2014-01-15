@@ -38,10 +38,21 @@
         android:textSize="15dp" />
     
     <TextView
-        android:id="@+id/textViewRoundtripTime"
+        android:id="@+id/textViewRequesttime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/textViewSnapshotNTPtime"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:hint="request time"
+        android:textColor="@color/Black"
+        android:textSize="15dp" />
+    
+    <TextView
+        android:id="@+id/textViewRoundtripTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewRequesttime"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
         android:hint="roundtrip time"

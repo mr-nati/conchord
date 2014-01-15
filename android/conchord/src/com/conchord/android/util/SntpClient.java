@@ -75,6 +75,7 @@ public class SntpClient {
 	
 	public long localESTIMATEDntpTime;
 	public long myRoundtripTime;
+	public long myRequestTime;
 
 	/**
 	 * Sends an SNTP request to the given host and processes the response.
@@ -105,7 +106,7 @@ public class SntpClient {
 			long requestTicks = SystemClock.elapsedRealtime();
 			writeTimeStamp(buffer, TRANSMIT_TIME_OFFSET, requestTime);
 
-			Log.e(TAG, "R2D2...ntp sent at local time " + System.currentTimeMillis());
+	//			Log.e(TAG, "R2D2...ntp sent at local time " + System.currentTimeMillis());
 			socket.send(request);
 			
 			// read the response
@@ -114,7 +115,6 @@ public class SntpClient {
 			long responseTicks = SystemClock.elapsedRealtime();
 			long responseTime = requestTime + (responseTicks - requestTicks);
 
-			Log.e(TAG, "R2D2...ntp appears to be received at " + System.currentTimeMillis());
 			
 			// extract the results
 			long originateTime = readTimeStamp(buffer, ORIGINATE_TIME_OFFSET);
@@ -139,12 +139,16 @@ public class SntpClient {
 			// save our results - use the times on this side of the network latency
 			// (response rather than request time)
 			mNtpTime = responseTime + clockOffset;
+
+			Log.e(TAG, "R2D2...ntp appears to be received at:  " + receiveTime);
+
 			
-			localESTIMATEDntpTime = requestTime + (mRoundTripTime/2);
+			/* my stuff */
+			localESTIMATEDntpTime = requestTime + (roundTripTime/2);
 			myRoundtripTime = roundTripTime;
 			Log.e(TAG, "R2D2...ntp calculated 1/2 thru roundtrip is " + localESTIMATEDntpTime);
-			
-			
+			myRequestTime = requestTime;
+			/* end */			
 			
 			mNtpTimeReference = responseTicks;
 			mRoundTripTime = roundTripTime;
