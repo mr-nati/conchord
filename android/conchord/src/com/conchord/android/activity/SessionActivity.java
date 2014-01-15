@@ -92,6 +92,12 @@ public class SessionActivity extends Activity {
 	private boolean needToSetFirebaseCalibration = false;
 	private boolean needToCalibrate = false;
 
+	private TextView textViewNtpPlayTime;
+	private TextView textViewSnapshotNtp;
+	private TextView textViewRoundtripTime;
+	private TextView textViewSnapshotLocal;
+	private TextView textViewTimeRemainingFromNtp;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -225,6 +231,13 @@ public class SessionActivity extends Activity {
 		}
 
 		textViewStartTime = (TextView) findViewById(R.id.textViewStartTimeInMillis);
+
+		textViewNtpPlayTime = (TextView) findViewById(R.id.textViewNTPplayTime);
+		textViewSnapshotNtp = (TextView) findViewById(R.id.textViewSnapshotNTPtime);
+		textViewRoundtripTime = (TextView) findViewById(R.id.textViewRoundtripTime);
+		textViewSnapshotLocal = (TextView) findViewById(R.id.textViewSnapshotLocalTime);
+		textViewTimeRemainingFromNtp = (TextView) findViewById(R.id.textViewRemainingLocalTime);
+
 	}
 
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -449,8 +462,10 @@ public class SessionActivity extends Activity {
 		mPlayer = new ConchordMediaPlayer(getApplicationContext(),
 				MediaFiles.facebook_pop);
 
-/*		mPlayer = new ConchordMediaPlayer(getApplicationContext(),
-				MediaFiles.call_me_acapella);*/
+		/*
+		 * mPlayer = new ConchordMediaPlayer(getApplicationContext(),
+		 * MediaFiles.call_me_acapella);
+		 */
 
 	}
 
@@ -482,14 +497,12 @@ public class SessionActivity extends Activity {
 		protected Long doInBackground(String... arg0) {
 			// TODO Auto-generated method stub
 			client = new SntpClient();
-			
-			
-			
-			while (!client.requestTime(Utils.someCaliNtpServers[0], 20)) {
+
+			while (!client.requestTime(Utils.someCaliNtpServers[0], 50)) {
 				Log.e(TAG, "R2D2...client.requestTime failed");
 				client = new SntpClient();
 			}
-			
+
 			Long time = client.getNtpTime() + SystemClock.elapsedRealtime()
 					- client.getNtpTimeReference();
 			Log.e(TAG, "R2D2...ntp time is " + time);
@@ -504,32 +517,29 @@ public class SessionActivity extends Activity {
 			// + mPlayer.getCurrentPosition());
 
 			return time;
-			
+
 			/*
 			 * Log.e(TAG, "R2D2, send time = " + System.currentTimeMillis());
 			 * Log.e(TAG, "R2D2; current thread time: " +
 			 * SystemClock.currentThreadTimeMillis());
 			 */
-		/*	if (client.requestTime(Utils.someCaliNtpServers[0], 100)) {
-				// Log.e(TAG, "R2D2, receive time = " + System.currentTimeMillis());
-				Long time = client.getNtpTime() + SystemClock.elapsedRealtime()
-						- client.getNtpTimeReference();
-				Log.e(TAG, "R2D2...ntp time is " + time);
-				// Log.e(TAG, "R2D2 : time = " + System.currentTimeMillis());
-
-				// Log.e("", "R2D2: " + "ntpTime = " + ntpTime);
-				// Log.e("", "R2D2: " + "cttmillis = " +
-				// SystemClock.currentThreadTimeMillis());
-				// Log.e("", "R2D2: " + " elapsed real time " +
-				// SystemClock.elapsedRealtime());
-				// if (mPlayer.isPlaying()) Log.e("R2D2: ", "R2D2: " + "songTime = "
-				// + mPlayer.getCurrentPosition());
-
-				return time;
-			} else {
-				Log.e(TAG, "R2D2...client.requestTime failed");
-				return null;
-			}*/
+			/*
+			 * if (client.requestTime(Utils.someCaliNtpServers[0], 100)) { //
+			 * Log.e(TAG, "R2D2, receive time = " + System.currentTimeMillis());
+			 * Long time = client.getNtpTime() + SystemClock.elapsedRealtime() -
+			 * client.getNtpTimeReference(); Log.e(TAG, "R2D2...ntp time is " +
+			 * time); // Log.e(TAG, "R2D2 : time = " + System.currentTimeMillis());
+			 * 
+			 * // Log.e("", "R2D2: " + "ntpTime = " + ntpTime); // Log.e("",
+			 * "R2D2: " + "cttmillis = " + //
+			 * SystemClock.currentThreadTimeMillis()); // Log.e("", "R2D2: " +
+			 * " elapsed real time " + // SystemClock.elapsedRealtime()); // if
+			 * (mPlayer.isPlaying()) Log.e("R2D2: ", "R2D2: " + "songTime = " // +
+			 * mPlayer.getCurrentPosition());
+			 * 
+			 * return time; } else { Log.e(TAG,
+			 * "R2D2...client.requestTime failed"); return null; }
+			 */
 		}
 
 		@Override
@@ -550,15 +560,23 @@ public class SessionActivity extends Activity {
 				setFirebasePlayTime(String.valueOf(startTime));
 
 				/*
-				 * 
 				 * setAlarm(startTime);
 				 */
 
-				setAlarm(client.localTimeWhenNtpWasReceived
-						+ Constants.START_TIME_DELAY);
+				setAlarm(client.localESTIMATEDntpTime + Constants.START_TIME_DELAY);
 
 				// reset this flag
 				needToSetFirebasePlayTime = false;
+
+				textViewNtpPlayTime.setText("NTP play time: "
+						+ (startTime % 1000000));
+				textViewSnapshotNtp.setText("Snapshot NTP: " + (x % 1000000));
+				textViewRoundtripTime.setText("Roundtrip time: "
+						+ (client.myRoundtripTime % 1000000));
+				textViewSnapshotLocal.setText("Snapshot Local (GUESS): "
+						+ (client.localESTIMATEDntpTime % 1000000));
+				textViewTimeRemainingFromNtp.setText("Remaining local time: "
+						+ Constants.START_TIME_DELAY);
 
 			} else if (!isHost && receivingRelativePlayTime) {
 
@@ -567,13 +585,23 @@ public class SessionActivity extends Activity {
 
 				Log.e(TAG, "R2D2...millis btw ntptime and play time = " + diff);
 
-				setAlarm(client.localTimeWhenNtpWasReceived + diff);
+				setAlarm(client.localESTIMATEDntpTime + diff);
 
 				Log.e(TAG, "R2D2...setting alarm for "
-						+ (client.localTimeWhenNtpWasReceived + diff));
+						+ (client.localESTIMATEDntpTime + diff));
 
 				// reset this flag
 				receivingRelativePlayTime = false;
+
+				textViewNtpPlayTime.setText("NTP play time: "
+						+ (timeToPlayAtInMillis % 1000000));
+				textViewSnapshotNtp.setText("Snapshot NTP: " + (x % 1000000));
+				textViewRoundtripTime.setText("Roundtrip time: "
+						+ (client.myRoundtripTime % 1000000));
+				textViewSnapshotLocal.setText("Snapshot Local (GUESS): "
+						+ (client.localESTIMATEDntpTime % 1000000));
+				textViewTimeRemainingFromNtp.setText("Remaining local time: "
+						+ diff);
 
 			} else if (isHost && needToSetFirebaseCalibration) {
 				if (!mPlayer.isPlaying()) {

@@ -73,7 +73,8 @@ public class SntpClient {
 	// round trip time in milliseconds
 	private long mRoundTripTime;
 	
-	public long localTimeWhenNtpWasReceived;
+	public long localESTIMATEDntpTime;
+	public long myRoundtripTime;
 
 	/**
 	 * Sends an SNTP request to the given host and processes the response.
@@ -139,8 +140,11 @@ public class SntpClient {
 			// (response rather than request time)
 			mNtpTime = responseTime + clockOffset;
 			
-			localTimeWhenNtpWasReceived = requestTime + (mRoundTripTime/2);
-			Log.e(TAG, "R2D2...ntp calculated 1/2 thru roundtrip is " + localTimeWhenNtpWasReceived);
+			localESTIMATEDntpTime = requestTime + (mRoundTripTime/2);
+			myRoundtripTime = roundTripTime;
+			Log.e(TAG, "R2D2...ntp calculated 1/2 thru roundtrip is " + localESTIMATEDntpTime);
+			
+			
 			
 			mNtpTimeReference = responseTicks;
 			mRoundTripTime = roundTripTime;

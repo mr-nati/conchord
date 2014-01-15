@@ -15,17 +15,72 @@
         android:textSize="25dp"
         android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/textViewStartTimeInMillis"
+     <TextView
+        android:id="@+id/textViewNTPplayTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/textViewMySessionID"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
+        android:hint="ntp play time"
+        android:textColor="@color/Black"
+        android:textSize="15dp" />
+    
+    <TextView
+        android:id="@+id/textViewSnapshotNTPtime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewNTPplayTime"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:hint="snapshot ntp"
+        android:textColor="@color/Black"
+        android:textSize="15dp" />
+    
+    <TextView
+        android:id="@+id/textViewRoundtripTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewSnapshotNTPtime"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:hint="roundtrip time"
+        android:textColor="@color/Black"
+        android:textSize="15dp" />
+
+    <TextView
+        android:id="@+id/textViewSnapshotLocalTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewRoundtripTime"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:hint="snapshot local guess : "
+        android:textColor="@color/Black"
+        android:textSize="15dp" />
+
+    <TextView
+        android:id="@+id/textViewRemainingLocalTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewSnapshotLocalTime"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:hint="remaining local time"
+        android:textColor="@color/Black"
+        android:textSize="15dp" />
+    
+    <TextView
+        android:id="@+id/textViewStartTimeInMillis"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewRemainingLocalTime"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
         android:hint="start time"
         android:textColor="@color/Black"
-        android:textSize="23dp" />
-
+        android:textSize="15dp" />
+    
     <Button
         android:id="@+id/buttonPlay"
         android:layout_width="match_parent"
