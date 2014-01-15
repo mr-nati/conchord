@@ -16,10 +16,10 @@ package com.conchord.android.util;
  * limitations under the License.
  */
 
+import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.util.Date;
 
 import android.os.SystemClock;
 import android.util.Log;
@@ -106,7 +106,6 @@ public class SntpClient {
 			long requestTicks = SystemClock.elapsedRealtime();
 			writeTimeStamp(buffer, TRANSMIT_TIME_OFFSET, requestTime);
 
-	//			Log.e(TAG, "R2D2...ntp sent at local time " + System.currentTimeMillis());
 			socket.send(request);
 			
 			// read the response
@@ -122,6 +121,10 @@ public class SntpClient {
 			long transmitTime = readTimeStamp(buffer, TRANSMIT_TIME_OFFSET);
 			long roundTripTime = responseTicks - requestTicks
 					- (transmitTime - receiveTime);
+			if (roundTripTime > 25) {
+				Log.e(TAG, "R2D2...took " + roundTripTime + " millis.");
+				throw new IOException("Took wayy too long (" + roundTripTime + " ms)");
+			}
 			// receiveTime = originateTime + transit + skew
 			// responseTime = transmitTime + transit - skew
 			// clockOffset = ((receiveTime - originateTime) + (transmitTime -
@@ -139,20 +142,20 @@ public class SntpClient {
 			// save our results - use the times on this side of the network latency
 			// (response rather than request time)
 			mNtpTime = responseTime + clockOffset;
-
-			Log.e(TAG, "R2D2...ntp appears to be received at:  " + receiveTime);
-
+			mNtpTimeReference = responseTicks;
+			mRoundTripTime = roundTripTime;
 			
 			/* my stuff */
+			Log.e(TAG, "R2D2...ntp appears to be received at:  " + receiveTime);
 			localESTIMATEDntpTime = requestTime + (roundTripTime/2);
 			myRoundtripTime = roundTripTime;
 			Log.e(TAG, "R2D2...ntp calculated 1/2 thru roundtrip is " + localESTIMATEDntpTime);
 			myRequestTime = requestTime;
+			Log.e(TAG, "R2D2 roundTripTime official = " + myRoundtripTime);
 			/* end */			
 			
-			mNtpTimeReference = responseTicks;
-			mRoundTripTime = roundTripTime;
-			Log.e(TAG, "R2D2 roundTripTime official = " + mRoundTripTime);
+
+			
 		} catch (Exception e) {
 			if (false)
 				Log.d(TAG, "R2D2....request time failed: " + e);

@@ -570,7 +570,7 @@ public class SessionActivity extends Activity {
 				// reset this flag
 				needToSetFirebasePlayTime = false;
 
-				textViewNtpPlayTime.setText("NTP play time: " + (startTime % 1000));
+				textViewNtpPlayTime.setText("NTP play time: " + (startTime % 1000000));
 				textViewSnapshotNtp.setText("Snapshot NTP: " + (x % 1000000));
 				textViewRequestTime.setText("Request time: "
 						+ (client.myRequestTime % 1000000));
