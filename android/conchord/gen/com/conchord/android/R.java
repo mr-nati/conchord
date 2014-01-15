@@ -168,14 +168,16 @@ public final class R {
         public static final int ic_launcher=0x7f020002;
     }
     public static final class id {
-        public static final int action_settings=0x7f0a0007;
+        public static final int action_settings=0x7f0a0009;
         public static final int buttonCreateSession=0x7f0a0000;
         public static final int buttonJoinSession=0x7f0a0003;
-        public static final int buttonPlay=0x7f0a0006;
+        public static final int buttonPlay=0x7f0a0008;
         public static final int editTextJoinSessionName=0x7f0a0002;
         public static final int editTextSessionName=0x7f0a0001;
         public static final int textViewMySessionID=0x7f0a0004;
-        public static final int textViewStartTimeInMillis=0x7f0a0005;
+        public static final int textViewNTPtime=0x7f0a0005;
+        public static final int textViewRoundTripTime=0x7f0a0006;
+        public static final int textViewStartTimeInMillis=0x7f0a0007;
     }
     public static final class layout {
         public static final int layout_home=0x7f030000;

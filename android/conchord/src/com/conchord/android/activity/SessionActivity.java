@@ -446,10 +446,11 @@ public class SessionActivity extends Activity {
 		// }
 		// TODO: remove
 
-		// mPlayer = new ConchordMediaPlayer(getApplicationContext(),
-		// MediaFiles.facebook_pop);
 		mPlayer = new ConchordMediaPlayer(getApplicationContext(),
-				MediaFiles.call_me_acapella);
+				MediaFiles.facebook_pop);
+
+/*		mPlayer = new ConchordMediaPlayer(getApplicationContext(),
+				MediaFiles.call_me_acapella);*/
 
 	}
 
@@ -481,12 +482,35 @@ public class SessionActivity extends Activity {
 		protected Long doInBackground(String... arg0) {
 			// TODO Auto-generated method stub
 			client = new SntpClient();
+			
+			
+			
+			while (!client.requestTime(Utils.someCaliNtpServers[0], 20)) {
+				Log.e(TAG, "R2D2...client.requestTime failed");
+				client = new SntpClient();
+			}
+			
+			Long time = client.getNtpTime() + SystemClock.elapsedRealtime()
+					- client.getNtpTimeReference();
+			Log.e(TAG, "R2D2...ntp time is " + time);
+			// Log.e(TAG, "R2D2 : time = " + System.currentTimeMillis());
+
+			// Log.e("", "R2D2: " + "ntpTime = " + ntpTime);
+			// Log.e("", "R2D2: " + "cttmillis = " +
+			// SystemClock.currentThreadTimeMillis());
+			// Log.e("", "R2D2: " + " elapsed real time " +
+			// SystemClock.elapsedRealtime());
+			// if (mPlayer.isPlaying()) Log.e("R2D2: ", "R2D2: " + "songTime = "
+			// + mPlayer.getCurrentPosition());
+
+			return time;
+			
 			/*
 			 * Log.e(TAG, "R2D2, send time = " + System.currentTimeMillis());
 			 * Log.e(TAG, "R2D2; current thread time: " +
 			 * SystemClock.currentThreadTimeMillis());
 			 */
-			if (client.requestTime(Utils.someCaliNtpServers[0], 1000)) {
+		/*	if (client.requestTime(Utils.someCaliNtpServers[0], 100)) {
 				// Log.e(TAG, "R2D2, receive time = " + System.currentTimeMillis());
 				Long time = client.getNtpTime() + SystemClock.elapsedRealtime()
 						- client.getNtpTimeReference();
@@ -503,9 +527,9 @@ public class SessionActivity extends Activity {
 
 				return time;
 			} else {
-				makeLongToast("NTP error");
+				Log.e(TAG, "R2D2...client.requestTime failed");
 				return null;
-			}
+			}*/
 		}
 
 		@Override

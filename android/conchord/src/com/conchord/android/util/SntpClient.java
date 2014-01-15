@@ -147,7 +147,7 @@ public class SntpClient {
 			Log.e(TAG, "R2D2 roundTripTime official = " + mRoundTripTime);
 		} catch (Exception e) {
 			if (false)
-				Log.d(TAG, "request time failed: " + e);
+				Log.d(TAG, "R2D2....request time failed: " + e);
 			return false;
 		} finally {
 			if (socket != null) {
