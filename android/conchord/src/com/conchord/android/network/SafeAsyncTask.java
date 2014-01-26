@@ -1,4 +1,4 @@
-package com.conchord.android.network.rest;
+package com.conchord.android.network;
 
 import java.io.InterruptedIOException;
 import java.util.ArrayList;

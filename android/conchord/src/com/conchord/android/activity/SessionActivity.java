@@ -26,7 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.conchord.android.R;
-import com.conchord.android.network.rest.SafeAsyncTask;
+import com.conchord.android.network.SafeAsyncTask;
 import com.conchord.android.util.ConchordMediaPlayer;
 import com.conchord.android.util.Constants;
 import com.conchord.android.util.MyAlarmService;
