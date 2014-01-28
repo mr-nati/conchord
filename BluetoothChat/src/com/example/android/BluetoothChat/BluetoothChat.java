@@ -16,11 +16,15 @@
 
 package com.example.android.BluetoothChat;
 
+import java.io.IOException;
+
 import android.app.ActionBar;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -79,6 +83,8 @@ public class BluetoothChat extends Activity {
 	private BluetoothAdapter mBluetoothAdapter = null;
 	// Member object for the chat services
 	private BluetoothChatService mChatService = null;
+	
+	private MediaPlayer mPlayer;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -127,6 +133,9 @@ public class BluetoothChat extends Activity {
 			if (mChatService == null)
 				setupChat();
 		}
+		
+		mPlayer = MediaPlayer.create(getApplicationContext(), R.raw.conchord__call_me_maybe_instrumental);
+		mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 	}
 
 	@Override
@@ -182,6 +191,7 @@ public class BluetoothChat extends Activity {
 	@Override
 	public synchronized void onPause() {
 		super.onPause();
+		
 		if (D)
 			Log.e(TAG, "- ON PAUSE -");
 	}
@@ -311,6 +321,7 @@ public class BluetoothChat extends Activity {
 //					String readMessage = new String(readBuf, 0, msg.arg1);
 //					mConversationArrayAdapter.add(mConnectedDeviceName + ":  "
 //							+ readMessage);
+					mPlayer.start();
 					sendAMessage("test");
 					break;
 				case MESSAGE_DEVICE_NAME:
@@ -350,8 +361,9 @@ public class BluetoothChat extends Activity {
 					// construct a string from the buffer
 					String writeMessage = new String(writeBuf);
 					mConversationArrayAdapter.add("Me:  " + writeMessage);
-					mConversationArrayAdapter.add("millis sent @ "
-							+ (System.currentTimeMillis() % 100000));
+/*					mConversationArrayAdapter.add("millis sent @ "
+							+ (System.currentTimeMillis() % 100000));*/
+					mPlayer.start();
 					break;
 				case MESSAGE_READ:
 					byte[] readBuf = (byte[]) msg.obj;
@@ -359,8 +371,8 @@ public class BluetoothChat extends Activity {
 					String readMessage = new String(readBuf, 0, msg.arg1);
 					mConversationArrayAdapter.add(mConnectedDeviceName + ":  "
 							+ readMessage);
-					mConversationArrayAdapter.add("millis received @ "
-							+ (System.currentTimeMillis() % 100000));
+		/*			mConversationArrayAdapter.add("millis received @ "
+							+ (System.currentTimeMillis() % 100000));*/
 					break;
 				case MESSAGE_DEVICE_NAME:
 					// save the connected device's name
