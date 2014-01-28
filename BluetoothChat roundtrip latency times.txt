@@ -1,0 +1,23 @@
+roundtrip times:
+40ms
+37ms
+45ms
+50ms
+77ms
+44ms
+95ms
+106ms
+89ms
+48ms
+37ms
+48ms
+41ms
+93ms
+92ms
+43ms
+47ms
+34ms
+37ms
+74ms
+
+roundtrip average time = 58.85 = 60ms
