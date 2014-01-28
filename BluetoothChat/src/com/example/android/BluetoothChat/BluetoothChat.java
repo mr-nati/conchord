@@ -83,7 +83,7 @@ public class BluetoothChat extends Activity {
 	private BluetoothAdapter mBluetoothAdapter = null;
 	// Member object for the chat services
 	private BluetoothChatService mChatService = null;
-	
+
 	private MediaPlayer mPlayer;
 
 	@Override
@@ -133,8 +133,8 @@ public class BluetoothChat extends Activity {
 			if (mChatService == null)
 				setupChat();
 		}
-		
-		mPlayer = MediaPlayer.create(getApplicationContext(), R.raw.conchord__call_me_maybe_instrumental);
+
+		mPlayer = MediaPlayer.create(getApplicationContext(), R.raw.facebook_pop);
 		mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 	}
 
@@ -191,7 +191,7 @@ public class BluetoothChat extends Activity {
 	@Override
 	public synchronized void onPause() {
 		super.onPause();
-		
+
 		if (D)
 			Log.e(TAG, "- ON PAUSE -");
 	}
@@ -286,7 +286,6 @@ public class BluetoothChat extends Activity {
 			// Toast.makeText(getApplicationContext(), "msg code = " + msg.what,
 			// Toast.LENGTH_SHORT).show();
 
-			
 			if (SDK_INT < 17) {
 				switch (msg.what) {
 				case MESSAGE_STATE_CHANGE:
@@ -308,19 +307,21 @@ public class BluetoothChat extends Activity {
 					}
 					break;
 				case MESSAGE_WRITE:
-					mConversationArrayAdapter.add("received @ " + System.currentTimeMillis()); 
+					mConversationArrayAdapter.add("received @ "
+							+ System.currentTimeMillis());
 					byte[] writeBuf = (byte[]) msg.obj;
 					// construct a string from the buffer
 					String writeMessage = new String(writeBuf);
 					mConversationArrayAdapter.add("Me:  " + writeMessage);
-					mConversationArrayAdapter.add("sending response @ " + System.currentTimeMillis());
+					mConversationArrayAdapter.add("sending response @ "
+							+ System.currentTimeMillis());
 					break;
 				case MESSAGE_READ:
-//					byte[] readBuf = (byte[]) msg.obj;
+					// byte[] readBuf = (byte[]) msg.obj;
 					// construct a string from the valid bytes in the buffer
-//					String readMessage = new String(readBuf, 0, msg.arg1);
-//					mConversationArrayAdapter.add(mConnectedDeviceName + ":  "
-//							+ readMessage);
+			//		String readMessage = new String(readBuf, 0, msg.arg1);
+					mConversationArrayAdapter.add(mConnectedDeviceName + ":  "
+							/*+ readMessage*/);
 					mPlayer.start();
 					sendAMessage("test");
 					break;
@@ -361,8 +362,14 @@ public class BluetoothChat extends Activity {
 					// construct a string from the buffer
 					String writeMessage = new String(writeBuf);
 					mConversationArrayAdapter.add("Me:  " + writeMessage);
-/*					mConversationArrayAdapter.add("millis sent @ "
-							+ (System.currentTimeMillis() % 100000));*/
+					mConversationArrayAdapter.add("millis sent @ "
+							+ (System.currentTimeMillis() % 100000));
+					try {
+						Thread.sleep(250);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					mPlayer.start();
 					break;
 				case MESSAGE_READ:
@@ -371,8 +378,8 @@ public class BluetoothChat extends Activity {
 					String readMessage = new String(readBuf, 0, msg.arg1);
 					mConversationArrayAdapter.add(mConnectedDeviceName + ":  "
 							+ readMessage);
-		/*			mConversationArrayAdapter.add("millis received @ "
-							+ (System.currentTimeMillis() % 100000));*/
+					mConversationArrayAdapter.add("millis received @ "
+							+ (System.currentTimeMillis() % 100000));
 					break;
 				case MESSAGE_DEVICE_NAME:
 					// save the connected device's name
