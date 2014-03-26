@@ -71,9 +71,9 @@ public class SessionActivity extends Activity {
 	private ArrayList<DataSnapshot> sessionUsersDataSnapshots = new ArrayList<DataSnapshot>();
 	private static Firebase sessionPlayTimeFirebase;
 
-	private static Firebase sessionCalibrateFirebase;
-	private static Firebase sessionCalibrateNtpTimeFirebase;
-	private static Firebase sessionCalibrateSongTimeFirebase;
+//	private static Firebase sessionCalibrateFirebase;
+//	private static Firebase sessionCalibrateNtpTimeFirebase;
+//	private static Firebase sessionCalibrateSongTimeFirebase;
 
 	private static Firebase sessionClosedFirebase;
 
@@ -203,11 +203,11 @@ public class SessionActivity extends Activity {
 		}
 
 		// this Firebase is for syncing
-		String sessionCalibrateUrl = Constants.sessionsUrl + sessionName + "/"
-				+ "calibrate";
-		sessionCalibrateFirebase = new Firebase(sessionCalibrateUrl);
-		sessionCalibrateFirebase
-				.addValueEventListener(sessionCalibrationListener);
+//		String sessionCalibrateUrl = Constants.sessionsUrl + sessionName + "/"
+//				+ "calibrate";
+//		sessionCalibrateFirebase = new Firebase(sessionCalibrateUrl);
+//		sessionCalibrateFirebase
+//				.addValueEventListener(sessionCalibrationListener);
 
 		// this flag says whether the session is open or closed
 		String sessionClosedFirebaseUrl = Constants.sessionsUrl + sessionName
@@ -355,6 +355,7 @@ public class SessionActivity extends Activity {
 			if (isHost || arg0.getValue() == null)
 				return;
 
+			Log.e(TAG, TAG + "nanos received playtime = " + System.nanoTime());
 			// makeShortToast(arg0.getValue().toString());
 
 			// make sure you're not the host
@@ -497,6 +498,7 @@ public class SessionActivity extends Activity {
 
 		@Override
 		protected Long doInBackground(String... arg0) {
+			
 			// TODO Auto-generated method stub
 			client = new SntpClient();
 
@@ -582,7 +584,7 @@ public class SessionActivity extends Activity {
 						+ Constants.START_TIME_DELAY);
 
 			} else if (!isHost && receivingRelativePlayTime) {
-
+				
 				long diff = timeToPlayAtInMillis - ntpTime;
 				// makeLongToast(diff + " millis b/c isHost == " + isHost);
 
@@ -617,7 +619,7 @@ public class SessionActivity extends Activity {
 				Map<String, String> toSet = new HashMap<String, String>();
 				toSet.put(Constants.KEY_NTP_TIME, "" + ntpTime);
 				toSet.put(Constants.KEY_SONG_TIME, "" + pos);
-				sessionCalibrateFirebase.setValue(toSet);
+//				sessionCalibrateFirebase.setValue(toSet);
 
 				// reset this flag
 				needToSetFirebaseCalibration = false;
@@ -703,7 +705,7 @@ public class SessionActivity extends Activity {
 				Map<String, String> toSet = new HashMap<String, String>();
 				toSet.put(Constants.KEY_NTP_TIME, "" + ntpTime);
 				toSet.put(Constants.KEY_SONG_TIME, "" + pos);
-				sessionCalibrateFirebase.setValue(toSet);
+//				sessionCalibrateFirebase.setValue(toSet);
 
 				// reset this flag
 				needToSetFirebaseCalibration = false;

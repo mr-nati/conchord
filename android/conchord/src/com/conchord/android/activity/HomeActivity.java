@@ -63,16 +63,16 @@ public class HomeActivity extends Activity {
 				if (sessionName.length() > 0) {
 
 					// Check to see if the session is unique.
-					final Firebase firebase = new Firebase(Constants.sessionsUrl
+					final Firebase firebaseCreatedSession = new Firebase(Constants.sessionsUrl
 							+ sessionName);
 
-					firebase.addValueEventListener(new ValueEventListener() {
+					firebaseCreatedSession.addValueEventListener(new ValueEventListener() {
 						@Override
 						public void onDataChange(DataSnapshot arg0) {
 							Object value = arg0.getValue();
 
 							if (value == null) {
-								editTextSessionName.setText("");
+//								editTextSessionName.setText("");
 
 								Intent intent = new Intent(getApplicationContext(),
 										SessionActivity.class);
@@ -82,12 +82,12 @@ public class HomeActivity extends Activity {
 								startActivity(intent);
 								// Because we're starting the activity, stop
 								// listening.
-								firebase.removeEventListener(this);
+								firebaseCreatedSession.removeEventListener(this);
 							} else {
 								Toast.makeText(getBaseContext(),
 										"session is not unique", Toast.LENGTH_SHORT)
 										.show();
-								firebase.removeEventListener(this);
+								firebaseCreatedSession.removeEventListener(this);
 							}
 						}
 
@@ -110,12 +110,11 @@ public class HomeActivity extends Activity {
 
 		editTextJoinSessionName = (EditText) findViewById(R.id.editTextJoinSessionName);
 		buttonJoinSession = (Button) findViewById(R.id.buttonJoinSession);
+		
 		buttonJoinSession.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				Log.d(TAG, "click");
-
 				final String sessionName = editTextJoinSessionName.getText()
 						.toString();
 
@@ -123,10 +122,10 @@ public class HomeActivity extends Activity {
 				if (sessionName.length() > 0) {
 
 					// Create the Firebase
-					final Firebase firebase = new Firebase(Constants.sessionsUrl
+					final Firebase firebaseJoinedSession = new Firebase(Constants.sessionsUrl
 							+ sessionName);
 
-					firebase.addValueEventListener(new ValueEventListener() {
+					firebaseJoinedSession.addValueEventListener(new ValueEventListener() {
 						@Override
 						public void onDataChange(DataSnapshot arg0) {
 							Object value = arg0.getValue();
@@ -141,10 +140,10 @@ public class HomeActivity extends Activity {
 									Toast.makeText(getApplicationContext(),
 											"This session is closed.", Toast.LENGTH_SHORT)
 											.show();
-									firebase.removeEventListener(this);
+									firebaseJoinedSession.removeEventListener(this);
 									return;
 								}
-								editTextJoinSessionName.setText("");
+//								editTextJoinSessionName.setText("");
 
 								// Join jam session
 								Intent intent = new Intent(getApplicationContext(),
@@ -153,19 +152,17 @@ public class HomeActivity extends Activity {
 								intent.putExtra(Constants.KEY_IS_HOST, false);
 								// intent.putExtra(Constants.KEY_CREATOR, false);
 								startActivity(intent);
-								firebase.removeEventListener(this);
+								firebaseJoinedSession.removeEventListener(this);
 							} else {
 								Toast.makeText(getApplicationContext(),
 										"Can't find this session", Toast.LENGTH_SHORT)
 										.show();
-								firebase.removeEventListener(this);
+								firebaseJoinedSession.removeEventListener(this);
 							}
 						}
 
 						@Override
-						public void onCancelled() {
-
-						}
+						public void onCancelled() {	}
 					});
 				} else {
 					Toast.makeText(getApplicationContext(),
