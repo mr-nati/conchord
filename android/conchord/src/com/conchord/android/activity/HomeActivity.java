@@ -130,10 +130,10 @@ public class HomeActivity extends Activity {
 						public void onDataChange(DataSnapshot arg0) {
 							Object value = arg0.getValue();
 
-							Log.e(TAG, arg0.child(Constants.KEY_SESSION_CLOSED)
-									.getValue().toString());
-
 							if (value != null) {
+								
+								Log.e(TAG, arg0.child(Constants.KEY_SESSION_CLOSED)
+										.getValue().toString());
 								
 								if (!arg0.child(Constants.KEY_SESSION_CLOSED)
 										.getValue().equals(false)) {

@@ -194,7 +194,10 @@ public final class R {
     public static final class raw {
         public static final int conchord__call_me_maybe_acapella=0x7f040000;
         public static final int conchord__call_me_maybe_instrumental=0x7f040001;
-        public static final int facebook_pop=0x7f040002;
+        public static final int conchord__sail__bass_and_drums=0x7f040002;
+        public static final int conchord__sail__bridge_piano_and_electric_and_vocals=0x7f040003;
+        public static final int conchord__sail__synth_and_synth_keys=0x7f040004;
+        public static final int facebook_pop=0x7f040005;
     }
     public static final class string {
         public static final int action_settings=0x7f070001;

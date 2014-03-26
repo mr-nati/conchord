@@ -23,6 +23,7 @@ import java.net.InetAddress;
 
 import android.os.SystemClock;
 import android.util.Log;
+import android.widget.Toast;
 
 /**
  * {@hide}
@@ -166,6 +167,10 @@ public class SntpClient {
 			}
 		}
 
+		Log.e(TAG, "My roundtrip time == " + myRoundtripTime);
+		if (myRoundtripTime == 0)
+			return false;
+		
 		return true;
 	}
 

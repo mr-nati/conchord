@@ -31,6 +31,9 @@ public class Utils {
 		public static final int call_me_instrumental = R.raw.conchord__call_me_maybe_instrumental;
 		public static final int call_me_acapella = R.raw.conchord__call_me_maybe_acapella;
 		public static final int facebook_pop = R.raw.facebook_pop;
+		public static final int sail_vocals_piano_electric = R.raw.conchord__sail__bridge_piano_and_electric_and_vocals;
+		public static final int sail_bass_and_drums = R.raw.conchord__sail__bass_and_drums;
+		public static final int sail_synth = R.raw.conchord__sail__synth_and_synth_keys;
 	}
 
 	public static final String[] someCaliNtpServers = { "clock.isc.org",
