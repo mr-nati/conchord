@@ -92,12 +92,7 @@ public class SessionActivity extends Activity {
 	private boolean needToSetFirebaseCalibration = false;
 	private boolean needToCalibrate = false;
 
-	private TextView textViewNtpPlayTime;
-	private TextView textViewSnapshotNtp;
-	private TextView textViewRequestTime;
-	private TextView textViewRoundtripTime;
-	private TextView textViewSnapshotLocal;
-	private TextView textViewTimeRemainingFromNtp;
+	private TextView textViewNtpPlayTime,textViewSnapshotNtp,textViewRequestTime,textViewRoundtripTime,textViewSnapshotLocal,textViewTimeRemainingFromNtp;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -259,7 +254,7 @@ public class SessionActivity extends Activity {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			ActionBar ab = getActionBar();
 			ab.setTitle(sessionName);
-			ab.setSubtitle(sessionName);
+			ab.setSubtitle("onchord");
 		} else {
 			// Even set that little grey title bar up top
 			((TextView) findViewById(android.R.id.title)).setText(sessionName);
@@ -355,7 +350,7 @@ public class SessionActivity extends Activity {
 			if (isHost || arg0.getValue() == null)
 				return;
 
-			Log.e(TAG, TAG + "nanos received playtime = " + System.nanoTime());
+	//		Log.e(TAG, TAG + "nanos received playtime = " + System.nanoTime());
 			// makeShortToast(arg0.getValue().toString());
 
 			// make sure you're not the host
@@ -364,7 +359,7 @@ public class SessionActivity extends Activity {
 
 			timeToPlayAtInMillis = Long.valueOf(arg0.getValue().toString());
 			// makeShortToast(timeToPlayAtInMillis + "");
-			Log.e(TAG, "R2D2...received play time of " + timeToPlayAtInMillis);
+	//		Log.e(TAG, "R2D2...received play time of " + timeToPlayAtInMillis);
 
 			// tell getNTPtime we are going to be receiving a local time
 			receivingRelativePlayTime = true;
@@ -507,9 +502,9 @@ public class SessionActivity extends Activity {
 				client = new SntpClient();
 			}
 
-			Long time = client.getNtpTime() + SystemClock.elapsedRealtime()
-					- client.getNtpTimeReference();
-			Log.e(TAG, "R2D2...ntp time is " + time);
+			Long time = client.getNtpTime()/* + SystemClock.elapsedRealtime()
+					- client.getNtpTimeReference()*/;
+	//		Log.e(TAG, "R2D2...ntp time is " + time);
 			// Log.e(TAG, "R2D2 : time = " + System.currentTimeMillis());
 
 			// Log.e("", "R2D2: " + "ntpTime = " + ntpTime);
@@ -555,7 +550,7 @@ public class SessionActivity extends Activity {
 			// if (mPlayer.isPlaying()) Log.e(TAG, TAG + "songTime = " +
 			// mPlayer.getCurrentPosition());
 			// long localTime = System.currentTimeMillis();
-			long pos = mPlayer.getCurrentPosition();
+	//		long pos = mPlayer.getCurrentPosition();
 
 			if (isHost && needToSetFirebasePlayTime) {
 				long startTime = ntpTime + Constants.START_TIME_DELAY;
@@ -588,7 +583,7 @@ public class SessionActivity extends Activity {
 				long diff = timeToPlayAtInMillis - ntpTime;
 				// makeLongToast(diff + " millis b/c isHost == " + isHost);
 
-				Log.e(TAG, "R2D2...millis btw ntptime and play time = " + diff);
+	//			Log.e(TAG, "R2D2...millis btw ntptime and play time = " + diff);
 
 				setAlarm(client.localESTIMATEDntpTime + diff);
 
@@ -610,7 +605,7 @@ public class SessionActivity extends Activity {
 				textViewTimeRemainingFromNtp.setText("Remaining local time: "
 						+ diff);
 
-			} else if (isHost && needToSetFirebaseCalibration) {
+			}/* else if (isHost && needToSetFirebaseCalibration) {
 				if (!mPlayer.isPlaying()) {
 					makeShortToast("the player isn't playing yet");
 				}
@@ -623,7 +618,7 @@ public class SessionActivity extends Activity {
 
 				// reset this flag
 				needToSetFirebaseCalibration = false;
-			} else if (!isHost && needToCalibrate) {
+			}*/ else if (!isHost && needToCalibrate) {
 
 				// int currentSongTime = mPlayer.getCurrentPosition();
 

@@ -22,5 +22,6 @@ public class Constants {
 	public static final int FLAG_DESTROY_SESSION_OFF = 0;
 	
 	public static final int START_TIME_DELAY = 2000;
+	public static final int JELLY_BEAN_MR1_DELAY = 180;
 	
 }

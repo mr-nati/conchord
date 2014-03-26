@@ -1,14 +1,13 @@
 package com.conchord.android.util;
 
-import com.conchord.android.activity.SessionActivity;
-
 import android.app.Service;
 import android.content.Intent;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
+import android.os.Build;
+import android.os.Handler;
 import android.os.IBinder;
-import android.widget.Toast;
+
+import com.conchord.android.R;
+import com.conchord.android.activity.SessionActivity;
 
 public class MyAlarmService extends Service {
 	@Override
@@ -28,8 +27,19 @@ public class MyAlarmService extends Service {
 	public void onStart(Intent intent, int startId) {
 		super.onStart(intent, startId);
 		
-		Toast.makeText(getBaseContext(), "onStart() @ " + System.currentTimeMillis() , Toast.LENGTH_LONG).show();
-		SessionActivity.mPlayer.play();
+//		Toast.makeText(getBaseContext(), "onStart() @ " + System.currentTimeMillis() , Toast.LENGTH_LONG).show();
+		
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+			 Handler handler = new Handler(); 
+			    handler.postDelayed(new Runnable() { 
+			         public void run() { 
+			     		SessionActivity.mPlayer.play();
+			         } 
+			    }, Constants.JELLY_BEAN_MR1_DELAY); 
+		} else {
+			SessionActivity.mPlayer.play();
+		}
+		
 	}
 	
 	@Override
