@@ -472,11 +472,11 @@ public class SessionActivity extends Activity {
 		switch (android.os.Build.VERSION.SDK_INT) {
 		case 8:	// 2.2.3
 			mPlayer = new ConchordMediaPlayer(getApplicationContext(),
-					MediaFiles.sail_synth);
+					MediaFiles.sail_bass_and_drums);
 			break;
 		case 10:	// 2.3.4
 			mPlayer = new ConchordMediaPlayer(getApplicationContext(),
-					MediaFiles.sail_bass_and_drums);
+					MediaFiles.sail_synth);
 			break;
 		case 16:	// 4.1.1
 			mPlayer = new ConchordMediaPlayer(getApplicationContext(),
