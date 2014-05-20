@@ -7,7 +7,7 @@ Conchord synchronizes multiple devices so that they play different layers to the
 
 In practice, I've seen positive results with roughly 70% accuracy, as this is a work in progress.
 
-A Youtube link of conchord in action: http://goo.gl/HSl4SC.
+A Youtube link of conchord in action: http://goo.gl/SeKCH5.  
 
 UPDATES
 =======
