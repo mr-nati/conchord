@@ -1,10 +1,5 @@
 package com.conchord.android.activity;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
-
 import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.Activity;
@@ -29,6 +24,7 @@ import com.conchord.android.R;
 import com.conchord.android.network.SafeAsyncTask;
 import com.conchord.android.util.ConchordMediaPlayer;
 import com.conchord.android.util.Constants;
+import com.conchord.android.util.L;
 import com.conchord.android.util.MyAlarmService;
 import com.conchord.android.util.Session;
 import com.conchord.android.util.SntpClient;
@@ -37,6 +33,11 @@ import com.conchord.android.util.Utils.MediaFiles;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SessionActivity extends Activity {
 
@@ -165,12 +166,15 @@ public class SessionActivity extends Activity {
 
 	}
 
+    /**
+     * This function creates a Firebase for
+     */
 	private void setupFirebase() {
 		// If this is the host, we'll create the session on Firebase
 		if (isHost) {
 			createSession(Calendar.getInstance().getTime().getMinutes());
 		} else {
-			makeShortToast("you aint no host");
+			makeShortToast("Welcome!");
 		}
 
 		String sessionFirebaseUrl = Constants.sessionsUrl + sessionName;
@@ -231,7 +235,6 @@ public class SessionActivity extends Activity {
 		}
 
 		textViewStartTime = (TextView) findViewById(R.id.textViewStartTimeInMillis);
-
 		textViewNtpPlayTime = (TextView) findViewById(R.id.textViewNTPplayTime);
 		textViewSnapshotNtp = (TextView) findViewById(R.id.textViewSnapshotNTPtime);
 		textViewRequestTime = (TextView) findViewById(R.id.textViewRequesttime);
@@ -320,8 +323,8 @@ public class SessionActivity extends Activity {
 		@Override
 		public void onDataChange(DataSnapshot arg0) {
 			if (arg0.getValue() == null) {
-				Log.e(TAG,
-						"There appear to be NO users in this session...where's the host?");
+				L.e(TAG,
+                        "There appear to be NO users in this session...where's the host?");
 			} else {
 
 				/*
@@ -329,7 +332,7 @@ public class SessionActivity extends Activity {
 				 * GET USER IDs FROM THE SNAPSHOT AS PEOPLE ENTER/EXIT
 				 */
 
-				Log.d(TAG, TAG + "There are " + arg0.getChildrenCount()
+				L.d(TAG, TAG + "There are " + arg0.getChildrenCount()
 						+ " users.");
 
 				/*
@@ -407,6 +410,31 @@ public class SessionActivity extends Activity {
 
 	};
 
+    ValueEventListener sessionHostIdListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(DataSnapshot arg0) {
+            if (arg0.getValue() != null) {
+                String hostId = arg0.getValue().toString();
+
+                if (hostId != null) {
+                    if (!hostId.equals(mySessionId) && isHost) {
+                        makeShortToast("Oooh, someone just beat you to that name! Try another one.");
+                        Log.d(TAG,TAG + "sessionFirebase.child(Constants.KEY_HOST_ID) value changed");
+                        Log.d(TAG, TAG + "arg0.getName() = " + arg0.getName());
+                        Log.d(TAG, TAG + "hostId = " + hostId + ", mySessionId = " + mySessionId);
+                        isHost = false;
+                        finish();
+                    }
+                }
+            }
+        }
+
+        @Override
+        public void onCancelled() {
+
+        }
+    };
+
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -414,41 +442,7 @@ public class SessionActivity extends Activity {
 		wl.acquire();
 
 		// Make sure you're the host.
-		sessionFirebase.child(Constants.KEY_HOST_ID).addValueEventListener(
-				new ValueEventListener() {
-					@Override
-					public void onDataChange(DataSnapshot arg0) {
-
-						if (arg0.getValue() != null) {
-
-							String hostId = arg0.getValue().toString();
-
-							if (hostId != null) {
-
-								if (!hostId.equals(mySessionId) && isHost) {
-
-									makeShortToast("Oooh, someone just beat you to that name! Try another one.");
-									Log.d(TAG,
-											TAG
-													+ "sessionFirebase.child(Constants.KEY_HOST_ID) value changed");
-									Log.d(TAG,
-											TAG + "arg0.getName() = "
-													+ arg0.getName());
-									Log.d(TAG, TAG + "hostId = " + hostId
-											+ ", mySessionId = " + mySessionId);
-									isHost = false;
-									finish();
-								}
-							}
-						}
-					}
-
-					@Override
-					public void onCancelled() {
-						// TODO Auto-generated method stub
-
-					}
-				});
+		sessionFirebase.child(Constants.KEY_HOST_ID).addValueEventListener(sessionHostIdListener);
 
 		sessionFirebase.addValueEventListener(sessionListener);
 		sessionUsersFirebase.addValueEventListener(sessionUsersListener);
@@ -796,15 +790,11 @@ public class SessionActivity extends Activity {
 			sessionUsersFirebase.child(mySessionId).removeValue();
 		}
 
-		// remove listeners
-		sessionFirebase.removeEventListener(sessionListener);
-		sessionUsersFirebase.removeEventListener(sessionUsersListener);
-		sessionPlayTimeFirebase.removeEventListener(sessionPlayTimeListener);
-
 		// TODO make sure all eventlisteners are added and removed in pause and
 		// resume
 
 		mPlayer.stop();
+        removeValueEventListeners();
 
 		super.onPause();
 	}
@@ -815,6 +805,15 @@ public class SessionActivity extends Activity {
 		wl.release();
 		finish();
 	}
+
+
+
+    private void removeValueEventListeners() {
+        sessionFirebase.removeEventListener(sessionListener);
+        sessionUsersFirebase.removeEventListener(sessionUsersListener);
+        sessionPlayTimeFirebase.removeEventListener(sessionPlayTimeListener);
+        sessionFirebase.child(Constants.KEY_HOST_ID).removeEventListener(sessionHostIdListener);
+    }
 
 	public void makeLongToast(String text) {
 		Toast.makeText(getBaseContext(), text, Toast.LENGTH_LONG).show();
@@ -830,5 +829,6 @@ public class SessionActivity extends Activity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
+
 
 }
