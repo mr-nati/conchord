@@ -11,7 +11,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
-import android.os.SystemClock;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -21,7 +20,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.conchord.android.R;
-import com.conchord.android.network.SafeAsyncTask;
 import com.conchord.android.util.ConchordMediaPlayer;
 import com.conchord.android.util.Constants;
 import com.conchord.android.util.L;
@@ -36,15 +34,13 @@ import com.firebase.client.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
 
 public class SessionActivity extends Activity {
 
 	// TODO: Need to get connections to Firebases in onResume and need to
 	// disconnect all in onPause
 
-	public static final String TAG = "R2D2:  ";
+	private static final String TAG = SessionActivity.class.getSimpleName();
 	private TextView textViewMySessionId;
 	private Button buttonPlay;
 
@@ -71,11 +67,9 @@ public class SessionActivity extends Activity {
 	private static Firebase sessionUsersFirebase;
 	private ArrayList<DataSnapshot> sessionUsersDataSnapshots = new ArrayList<DataSnapshot>();
 	private static Firebase sessionPlayTimeFirebase;
-
 	// private static Firebase sessionCalibrateFirebase;
 	// private static Firebase sessionCalibrateNtpTimeFirebase;
 	// private static Firebase sessionCalibrateSongTimeFirebase;
-
 	private static Firebase sessionClosedFirebase;
 
 	/* My session id information */
@@ -97,9 +91,139 @@ public class SessionActivity extends Activity {
 			textViewRequestTime, textViewRoundtripTime, textViewSnapshotLocal,
 			textViewTimeRemainingFromNtp;
 
-	@Override
+    ValueEventListener sessionListener = new ValueEventListener() {
+
+        @Override
+        public void onDataChange(DataSnapshot arg0) {
+            if (arg0.getValue() == null) {
+                if (!isHost)
+                    makeLongToast("The host killed the jam session!");
+                finish();
+            }
+        }
+
+        @Override
+        public void onCancelled() {
+            // TODO Auto-generated method stub
+        }
+    };
+    ValueEventListener sessionUsersListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(DataSnapshot arg0) {
+            if (arg0.getValue() == null) {
+                L.e(TAG,
+                        "There appear to be NO users in this session...where's the host?");
+            } else {
+				/*
+				 * GET BACK TO WORK RIGHT HERE, TRYING TO FIGURE OUT IF I CAN
+				 * GET USER IDs FROM THE SNAPSHOT AS PEOPLE ENTER/EXIT
+				 */
+
+                L.d(TAG, TAG + "There are " + arg0.getChildrenCount()
+                        + " users.");
+
+				/*
+				 * for (DataSnapshot x : arg0.getChildren()) { L.d(TAG,
+				 * "users child value = " + x.getValue().toString()); }
+				 */
+                // makeShortToast(arg0.getChildren() + " were just added.");
+                // makeShortToast("There are " + arg0.getChildrenCount() +
+                // " users.");
+            }
+
+        }
+
+        @Override
+        public void onCancelled() {
+            // TODO Auto-generated method stub
+
+        }
+    };
+    ValueEventListener sessionPlayTimeListener = new ValueEventListener() {
+
+        @Override
+        public void onDataChange(DataSnapshot arg0) {
+            if (isHost || arg0.getValue() == null)
+                return;
+
+            // L.e(TAG, "nanos received playtime = " +
+            // System.nanoTime());
+            // makeShortToast(arg0.getValue().toString());
+
+            // make sure you're not the host
+            // verify that it's a legit play time
+            // get ready to play
+
+            timeToPlayAtInMillis = Long.valueOf(arg0.getValue().toString());
+            // makeShortToast(timeToPlayAtInMillis + "");
+            // L.e(TAG, "received play time of " +
+            // timeToPlayAtInMillis);
+
+            // tell getNTPtime we are going to be receiving a local time
+            receivingRelativePlayTime = true;
+            getNTPtime();
+
+        }
+
+        @Override
+        public void onCancelled() {
+            // TODO Auto-generated method stub
+
+        }
+    };
+    ValueEventListener sessionCalibrationListener = new ValueEventListener() {
+
+        @Override
+        public void onDataChange(DataSnapshot arg0) {
+            if (isHost || arg0.getValue() == null)
+                return;
+
+            hostCalibrationNtpTime = Long.valueOf(arg0
+                    .child(Constants.KEY_NTP_TIME).getValue().toString());
+            hostCalibrationSongTime = Long.valueOf(arg0
+                    .child(Constants.KEY_SONG_TIME).getValue().toString());
+
+            needToCalibrate = true;
+            getNTPtime();
+        }
+
+        @Override
+        public void onCancelled() {
+            // TODO Auto-generated method stub
+
+        }
+
+    };
+    ValueEventListener sessionHostIdListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(DataSnapshot arg0) {
+            if (arg0.getValue() != null) {
+                String hostId = arg0.getValue().toString();
+
+                if (hostId != null) {
+                    if (!hostId.equals(mySessionId) && isHost) {
+                        makeShortToast("Oooh, someone just beat you to that name! Try another one.");
+                        L.d(TAG,"sessionFirebase.child(Constants.KEY_HOST_ID) value changed");
+                        L.d(TAG, "arg0.getName() = " + arg0.getName());
+                        L.d(TAG, "hostId = " + hostId + ", mySessionId = " + mySessionId);
+                        isHost = false;
+                        finish();
+                    }
+                }
+            }
+        }
+
+        @Override
+        public void onCancelled() {
+
+        }
+    };
+
+
+    @Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+        L.d(TAG, "onCreate called");
 
 		// Get the session name and whether user is host or not
 		sessionName = getIntent().getStringExtra(Constants.KEY_SESSION);
@@ -163,7 +287,6 @@ public class SessionActivity extends Activity {
 				getNTPtime();
 			}
 		});
-
 	}
 
     /**
@@ -172,9 +295,11 @@ public class SessionActivity extends Activity {
 	private void setupFirebase() {
 		// If this is the host, we'll create the session on Firebase
 		if (isHost) {
+            L.d(TAG, "Setting up Firebase as host.");
 			createSession(Calendar.getInstance().getTime().getMinutes());
 		} else {
-			makeShortToast("Welcome!");
+            L.d(TAG, "setupFirebase called as guest.");
+            makeShortToast("Welcome!");
 		}
 
 		String sessionFirebaseUrl = Constants.sessionsUrl + sessionName;
@@ -289,6 +414,8 @@ public class SessionActivity extends Activity {
 	}
 
 	public Firebase createSession(int songId) {
+        L.d(TAG, "Creating Session with songId " + songId);
+
 		// Reference to "sessions" Firebase
 		Firebase sessions = new Firebase(Constants.sessionsUrl);
 
@@ -300,140 +427,6 @@ public class SessionActivity extends Activity {
 		// Return a reference to the Firebase of this new Session
 		return sessions.push();
 	}
-
-	ValueEventListener sessionListener = new ValueEventListener() {
-
-		@Override
-		public void onDataChange(DataSnapshot arg0) {
-			if (arg0.getValue() == null) {
-				if (!isHost)
-					makeLongToast("The host killed the jam session!");
-				finish();
-			}
-		}
-
-		@Override
-		public void onCancelled() {
-			// TODO Auto-generated method stub
-		}
-	};
-
-	ValueEventListener sessionUsersListener = new ValueEventListener() {
-
-		@Override
-		public void onDataChange(DataSnapshot arg0) {
-			if (arg0.getValue() == null) {
-				L.e(TAG,
-                        "There appear to be NO users in this session...where's the host?");
-			} else {
-
-				/*
-				 * GET BACK TO WORK RIGHT HERE, TRYING TO FIGURE OUT IF I CAN
-				 * GET USER IDs FROM THE SNAPSHOT AS PEOPLE ENTER/EXIT
-				 */
-
-				L.d(TAG, TAG + "There are " + arg0.getChildrenCount()
-						+ " users.");
-
-				/*
-				 * for (DataSnapshot x : arg0.getChildren()) { Log.d(TAG, TAG +
-				 * "users child value = " + x.getValue().toString()); }
-				 */
-				// makeShortToast(arg0.getChildren() + " were just added.");
-				// makeShortToast("There are " + arg0.getChildrenCount() +
-				// " users.");
-			}
-
-		}
-
-		@Override
-		public void onCancelled() {
-			// TODO Auto-generated method stub
-
-		}
-	};
-
-	ValueEventListener sessionPlayTimeListener = new ValueEventListener() {
-
-		@Override
-		public void onDataChange(DataSnapshot arg0) {
-			if (isHost || arg0.getValue() == null)
-				return;
-
-			// Log.e(TAG, TAG + "nanos received playtime = " +
-			// System.nanoTime());
-			// makeShortToast(arg0.getValue().toString());
-
-			// make sure you're not the host
-			// verify that it's a legit play time
-			// get ready to play
-
-			timeToPlayAtInMillis = Long.valueOf(arg0.getValue().toString());
-			// makeShortToast(timeToPlayAtInMillis + "");
-			// Log.e(TAG, "R2D2...received play time of " +
-			// timeToPlayAtInMillis);
-
-			// tell getNTPtime we are going to be receiving a local time
-			receivingRelativePlayTime = true;
-			getNTPtime();
-
-		}
-
-		@Override
-		public void onCancelled() {
-			// TODO Auto-generated method stub
-
-		}
-	};
-
-	ValueEventListener sessionCalibrationListener = new ValueEventListener() {
-
-		@Override
-		public void onDataChange(DataSnapshot arg0) {
-			if (isHost || arg0.getValue() == null)
-				return;
-
-			hostCalibrationNtpTime = Long.valueOf(arg0
-					.child(Constants.KEY_NTP_TIME).getValue().toString());
-			hostCalibrationSongTime = Long.valueOf(arg0
-					.child(Constants.KEY_SONG_TIME).getValue().toString());
-
-			needToCalibrate = true;
-			getNTPtime();
-		}
-
-		@Override
-		public void onCancelled() {
-			// TODO Auto-generated method stub
-
-		}
-
-	};
-
-    ValueEventListener sessionHostIdListener = new ValueEventListener() {
-        @Override
-        public void onDataChange(DataSnapshot arg0) {
-            if (arg0.getValue() != null) {
-                String hostId = arg0.getValue().toString();
-
-                if (hostId != null) {
-                    if (!hostId.equals(mySessionId) && isHost) {
-                        makeShortToast("Oooh, someone just beat you to that name! Try another one.");
-                        Log.d(TAG,TAG + "sessionFirebase.child(Constants.KEY_HOST_ID) value changed");
-                        Log.d(TAG, TAG + "arg0.getName() = " + arg0.getName());
-                        Log.d(TAG, TAG + "hostId = " + hostId + ", mySessionId = " + mySessionId);
-                        isHost = false;
-                        finish();
-                    }
-                }
-            }
-        }
-
-        @Override
-        public void onCancelled() {
-
-        }
-    };
 
 	@Override
 	protected void onResume() {
@@ -523,14 +516,14 @@ public class SessionActivity extends Activity {
 		@Override
 		protected Long doInBackground(String... arg0) {
 
-			// TODO Auto-generated method stub
+			// Create SntpClient
 			client = new SntpClient();
 			int i = 0;
 
 			while (!client.requestTime(Utils.someCaliNtpServers[0],
 					Constants.ROUNDTRIP_TIMEOUT)
 					&& i < Constants.NUM_NTP_ATTEMPTS) {
-				Log.e(TAG, "R2D2...client.requestTime failed");
+				L.e(TAG, "client.requestTime failed");
 				client = new SntpClient();
 				i++;
 			}
@@ -539,41 +532,41 @@ public class SessionActivity extends Activity {
 											 * + SystemClock.elapsedRealtime() -
 											 * client.getNtpTimeReference()
 											 */;
-			// Log.e(TAG, "R2D2...ntp time is " + time);
-			// Log.e(TAG, "R2D2 : time = " + System.currentTimeMillis());
+			// L.e(TAG, "ntp time is " + time);
+			// Log.e(TAG, "time = " + System.currentTimeMillis());
 
-			// Log.e("", "R2D2: " + "ntpTime = " + ntpTime);
-			// Log.e("", "R2D2: " + "cttmillis = " +
+			// L.e(TAG, "ntpTime = " + ntpTime);
+			// L.e(TAG, "cttmillis = " +
 			// SystemClock.currentThreadTimeMillis());
-			// Log.e("", "R2D2: " + " elapsed real time " +
+			// L.e(TAG, "elapsed real time " +
 			// SystemClock.elapsedRealtime());
-			// if (mPlayer.isPlaying()) Log.e("R2D2: ", "R2D2: " + "songTime = "
+			// if (mPlayer.isPlaying()) L.e(TAG, "songTime = "
 			// + mPlayer.getCurrentPosition());
 
 			return time;
 
 			/*
-			 * Log.e(TAG, "R2D2, send time = " + System.currentTimeMillis());
-			 * Log.e(TAG, "R2D2; current thread time: " +
+			 * L.e(TAG, "send time = " + System.currentTimeMillis());
+			 * L.e(TAG, "current thread time: " +
 			 * SystemClock.currentThreadTimeMillis());
 			 */
 			/*
 			 * if (client.requestTime(Utils.someCaliNtpServers[0], 100)) { //
-			 * Log.e(TAG, "R2D2, receive time = " + System.currentTimeMillis());
+			 * L.e(TAG, "receive time = " + System.currentTimeMillis());
 			 * Long time = client.getNtpTime() + SystemClock.elapsedRealtime() -
-			 * client.getNtpTimeReference(); Log.e(TAG, "R2D2...ntp time is " +
-			 * time); // Log.e(TAG, "R2D2 : time = " +
+			 * client.getNtpTimeReference(); L.e(TAG, "ntp time is " +
+			 * time); // L.e(TAG, "time = " +
 			 * System.currentTimeMillis());
 			 * 
-			 * // Log.e("", "R2D2: " + "ntpTime = " + ntpTime); // Log.e("",
-			 * "R2D2: " + "cttmillis = " + //
-			 * SystemClock.currentThreadTimeMillis()); // Log.e("", "R2D2: " +
-			 * " elapsed real time " + // SystemClock.elapsedRealtime()); // if
-			 * (mPlayer.isPlaying()) Log.e("R2D2: ", "R2D2: " + "songTime = " //
+			 * // L.e(TAG, "ntpTime = " + ntpTime); // L.e(TAG,
+			 * "cttmillis = " + //
+			 * SystemClock.currentThreadTimeMillis()); // Lg.e(TAG, " elapsed real time " +
+			 * // SystemClock.elapsedRealtime()); // if
+			 * (mPlayer.isPlaying()) L.e(TAG, "songTime = " //
 			 * + mPlayer.getCurrentPosition());
 			 * 
-			 * return time; } else { Log.e(TAG,
-			 * "R2D2...client.requestTime failed"); return null; }
+			 * return time; } else { L.e(TAG,
+			 * "client.requestTime failed"); return null; }
 			 */
 		}
 
@@ -582,8 +575,8 @@ public class SessionActivity extends Activity {
 			super.onPostExecute(x);
 			ntpTime = x;
 
-			// Log.e(TAG, TAG + "ntpTime = " + ntpTime);
-			// if (mPlayer.isPlaying()) Log.e(TAG, TAG + "songTime = " +
+			// L.e(TAG, "ntpTime = " + ntpTime);
+			// if (mPlayer.isPlaying()) L.e(TAG, "songTime = " +
 			// mPlayer.getCurrentPosition());
 			// long localTime = System.currentTimeMillis();
 			// long pos = mPlayer.getCurrentPosition();
@@ -621,12 +614,12 @@ public class SessionActivity extends Activity {
 				long diff = timeToPlayAtInMillis - ntpTime;
 				// makeLongToast(diff + " millis b/c isHost == " + isHost);
 
-				// Log.e(TAG, "R2D2...millis btw ntptime and play time = " +
+				// L.e(TAG, "millis btw ntptime and play time = " +
 				// diff);
 
 				setAlarm(client.localESTIMATEDntpTime + diff);
 
-				Log.e(TAG, "R2D2...setting alarm for "
+				L.e(TAG, "setting alarm for "
 						+ (client.localESTIMATEDntpTime + diff));
 
 				// reset this flag
@@ -678,92 +671,6 @@ public class SessionActivity extends Activity {
 		}
 	}
 
-	class GetNTPTimeAsyncTask extends SafeAsyncTask<Long> {
-
-		@Override
-		public Long call() throws Exception {
-			// TODO Auto-generated method stub
-			SntpClient client = new SntpClient();
-			if (client.requestTime(Utils.someCaliNtpServers[0], 10000)) {
-
-				Long time = client.getNtpTime() + SystemClock.elapsedRealtime()
-						- client.getNtpTimeReference();
-				return time;
-			} else {
-				makeLongToast("NTP error");
-				return null;
-			}
-		}
-
-		@Override
-		protected void onException(Exception e) throws RuntimeException {
-			super.onException(e);
-			Log.e(TAG, e.getMessage());
-		}
-
-		@Override
-		protected void onSuccess(Long x) throws Exception {
-			ntpTime = x;
-			// long localTime = System.currentTimeMillis();
-			long pos = mPlayer.getCurrentPosition();
-
-			if (isHost && needToSetFirebasePlayTime) {
-				long startTime = ntpTime + Constants.START_TIME_DELAY;
-
-				// edit Firebase server
-				setFirebasePlayTime(String.valueOf(startTime));
-
-				setAlarm(startTime);
-
-				// reset this flag
-				needToSetFirebasePlayTime = false;
-
-			} else if (!isHost && receivingRelativePlayTime) {
-
-				long diff = timeToPlayAtInMillis - ntpTime;
-				makeLongToast(diff + " millis b/c isHost == " + isHost);
-
-				setAlarm(System.currentTimeMillis() + diff);
-
-				// reset this flag
-				receivingRelativePlayTime = false;
-
-			} else if (isHost && needToSetFirebaseCalibration) {
-				if (!mPlayer.isPlaying()) {
-					makeShortToast("the player isn't playing yet");
-				}
-
-				// need to set these values at once
-				Map<String, String> toSet = new HashMap<String, String>();
-				toSet.put(Constants.KEY_NTP_TIME, "" + ntpTime);
-				toSet.put(Constants.KEY_SONG_TIME, "" + pos);
-				// sessionCalibrateFirebase.setValue(toSet);
-
-				// reset this flag
-				needToSetFirebaseCalibration = false;
-			} else if (!isHost && needToCalibrate) {
-
-				// int currentSongTime = mPlayer.getCurrentPosition();
-
-				// subtract old ntp time from new one.
-				// long ntpDiff = ntpTime - hostCalibrationNtpTime;
-
-				// add that to the old song time
-				// long newSongTime = hostCalibrationSongTime + ntpDiff;
-				int offsetForProcessingTime = 100;
-
-				// should be there so skip to it
-				mPlayer.seekTo((int) (hostCalibrationSongTime + ntpTime
-						- hostCalibrationNtpTime + offsetForProcessingTime));
-
-				makeShortToast("calibrated. isHost = " + isHost);
-
-				needToCalibrate = false;
-			}
-		}
-
-	}
-
 	private void makeSure_isHost_WasPassedIn() {
 		// If the isHost bool was never passed in, kill the activity
 		if (isHost == false
@@ -806,8 +713,6 @@ public class SessionActivity extends Activity {
 		finish();
 	}
 
-
-
     private void removeValueEventListeners() {
         sessionFirebase.removeEventListener(sessionListener);
         sessionUsersFirebase.removeEventListener(sessionUsersListener);
@@ -829,6 +734,9 @@ public class SessionActivity extends Activity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
+
+
+
 
 
 }

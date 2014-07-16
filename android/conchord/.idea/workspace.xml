@@ -14,6 +14,7 @@
     </shared>
   </component>
   <component name="AndroidLogFilters">
+    <option name="TOOL_WINDOW_CUSTOM_FILTER" value="cr7" />
     <option name="TOOL_WINDOW_LOG_LEVEL" value="DEBUG" />
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="app: com.conchord.android" />
   </component>
@@ -43,7 +44,7 @@
       <file leaf-file-name="HomeActivity.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/conchord/android/activity/HomeActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3247">
+            <state vertical-scroll-proportion="0.0" vertical-offset="2924" max-vertical-offset="3621">
               <caret line="172" column="38" selection-start-line="172" selection-start-column="35" selection-end-line="172" selection-end-column="38" />
               <folding />
             </state>
@@ -53,82 +54,68 @@
       <file leaf-file-name="SessionActivity.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/conchord/android/activity/SessionActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.6286701" vertical-offset="1183" max-vertical-offset="2754">
-              <caret line="334" column="17" selection-start-line="334" selection-start-column="17" selection-end-line="334" selection-end-column="17" />
+            <state vertical-scroll-proportion="0.41968912" vertical-offset="1627" max-vertical-offset="2329">
+              <caret line="673" column="0" selection-start-line="673" selection-start-column="0" selection-end-line="673" selection-end-column="0" />
               <folding>
-                <element signature="e#2301#2353#0" expanded="false" />
+                <element signature="e#1213#1282#0" expanded="false" />
+                <element signature="class#3079:3485" expanded="false" />
+                <element signature="method#onDataChange#0;class#3079:3485" expanded="false" />
+                <element signature="method#onCancelled#0;class#3079:3485" expanded="false" />
+                <element signature="class#3537:4524" expanded="false" />
+                <element signature="method#onDataChange#0;class#3537:4524" expanded="false" />
+                <element signature="e#4214#4274#0" expanded="false" />
+                <element signature="method#onCancelled#0;class#3537:4524" expanded="false" />
+                <element signature="class#4579:5529" expanded="false" />
+                <element signature="method#onDataChange#0;class#4579:5529" expanded="false" />
+                <element signature="e#4763#4805#0" expanded="false" />
+                <element signature="e#5119#5164#0" expanded="false" />
+                <element signature="method#onCancelled#0;class#4579:5529" expanded="false" />
+                <element signature="class#5587:6213" expanded="false" />
+                <element signature="method#onDataChange#0;class#5587:6213" expanded="false" />
+                <element signature="method#onCancelled#0;class#5587:6213" expanded="false" />
+                <element signature="class#6266:7137" expanded="false" />
+                <element signature="method#onDataChange#0;class#6266:7137" expanded="false" />
+                <element signature="method#onCancelled#0;class#6266:7137" expanded="false" />
                 <element signature="method#onCreate#0;class#SessionActivity#0" expanded="false" />
-                <element signature="e#4168#4218#0" expanded="false" />
-                <element signature="class#4866:4998" expanded="false" />
-                <element signature="method#onClick#0;class#4866:4998" expanded="false" />
+                <element signature="e#8212#8262#0" expanded="false" />
+                <element signature="class#8910:9042" expanded="false" />
+                <element signature="method#onClick#0;class#8910:9042" expanded="false" />
                 <element signature="method#setupFirebase#0;class#SessionActivity#0" expanded="false" />
-                <element signature="e#6388#6419#0" expanded="false" />
+                <element signature="e#10550#10581#0" expanded="false" />
                 <element signature="method#setFirebasePlayTime#0;class#SessionActivity#0" expanded="false" />
                 <element signature="method#inflateXML#0;class#SessionActivity#0" expanded="false" />
                 <element signature="method#setupGUI#0;class#SessionActivity#0" expanded="false" />
-                <element signature="class#8169:8303" expanded="false" />
-                <element signature="method#onClick#0;class#8169:8303" expanded="false" />
-                <element signature="class#8703:9088" expanded="false" />
-                <element signature="method#onClick#0;class#8703:9088" expanded="false" />
-                <element signature="e#8776#8829#0" expanded="false" />
-                <element signature="e#8911#8968#0" expanded="false" />
+                <element signature="class#12331:12465" expanded="false" />
+                <element signature="method#onClick#0;class#12331:12465" expanded="false" />
+                <element signature="class#12865:13250" expanded="false" />
+                <element signature="method#onClick#0;class#12865:13250" expanded="false" />
+                <element signature="e#12938#12991#0" expanded="false" />
+                <element signature="e#13073#13130#0" expanded="false" />
                 <element signature="method#createSession#0;class#SessionActivity#0" expanded="false" />
-                <element signature="class#9522:9823" expanded="false" />
-                <element signature="method#onDataChange#0;class#9522:9823" expanded="false" />
-                <element signature="method#onCancelled#0;class#9522:9823" expanded="false" />
-                <element signature="e#10476#10536#0" expanded="false" />
-                <element signature="method#onCancelled#0;class#9873:10717" expanded="false" />
-                <element signature="class#10770:11551" expanded="false" />
-                <element signature="method#onDataChange#0;class#10770:11551" expanded="false" />
-                <element signature="e#10912#10962#0" expanded="false" />
-                <element signature="e#11213#11258#0" expanded="false" />
-                <element signature="method#onCancelled#0;class#10770:11551" expanded="false" />
-                <element signature="class#11607:12098" expanded="false" />
-                <element signature="method#onDataChange#0;class#11607:12098" expanded="false" />
-                <element signature="method#onCancelled#0;class#11607:12098" expanded="false" />
-                <element signature="class#12152:13047" expanded="false" />
-                <element signature="method#onDataChange#0;class#12152:13047" expanded="false" />
-                <element signature="method#onCancelled#0;class#12152:13047" expanded="false" />
                 <element signature="method#onResume#0;class#SessionActivity#0" expanded="false" />
                 <element signature="method#buildMediaPlayers#0;class#SessionActivity#0" expanded="false" />
-                <element signature="e#13498#13559#0" expanded="false" />
-                <element signature="e#14532#14593#0" expanded="false" />
+                <element signature="e#14151#14212#0" expanded="false" />
+                <element signature="e#15185#15246#0" expanded="false" />
                 <element signature="method#setAlarm#0;class#SessionActivity#0" expanded="false" />
                 <element signature="method#getNTPtime#0;class#SessionActivity#0" expanded="false" />
-                <element signature="e#15333#15406#0" expanded="false" />
+                <element signature="e#15986#16059#0" expanded="false" />
+                <element signature="class#NtpAsyncTask#0;class#SessionActivity#0" expanded="true" />
                 <element signature="method#doInBackground#0;class#NtpAsyncTask#0;class#SessionActivity#0" expanded="false" />
-                <element signature="e#16054#16098#0" expanded="false" />
+                <element signature="e#16684#16719#0" expanded="false" />
                 <element signature="method#onPostExecute#0;class#NtpAsyncTask#0;class#SessionActivity#0" expanded="false" />
-                <element signature="e#17653#17697#0" expanded="false" />
-                <element signature="e#18934#18993#0" expanded="false" />
-                <element signature="e#20368#20422#0" expanded="false" />
-                <element signature="method#call#0;class#GetNTPTimeAsyncTask#0;class#SessionActivity#0" expanded="false" />
-                <element signature="method#onException#0;class#GetNTPTimeAsyncTask#0;class#SessionActivity#0" expanded="false" />
-                <element signature="method#onSuccess#0;class#GetNTPTimeAsyncTask#0;class#SessionActivity#0" expanded="false" />
-                <element signature="e#22598#22642#0" expanded="false" />
-                <element signature="e#22758#22812#0" expanded="false" />
+                <element signature="e#18108#18144#0" expanded="false" />
+                <element signature="e#19373#19432#0" expanded="false" />
+                <element signature="e#20789#20843#0" expanded="false" />
                 <element signature="method#makeSure_isHost_WasPassedIn#0;class#SessionActivity#0" expanded="false" />
                 <element signature="method#onPause#0;class#SessionActivity#0" expanded="false" />
-                <element signature="e#23827#23873#0" expanded="false" />
-                <element signature="e#23987#24030#0" expanded="false" />
-                <element signature="e#24130#24201#0" expanded="false" />
+                <element signature="e#21858#21904#0" expanded="false" />
+                <element signature="e#22018#22061#0" expanded="false" />
+                <element signature="e#22161#22232#0" expanded="false" />
                 <element signature="method#onStop#0;class#SessionActivity#0" expanded="false" />
                 <element signature="method#removeValueEventListeners#0;class#SessionActivity#0" expanded="false" />
                 <element signature="method#makeLongToast#0;class#SessionActivity#0" expanded="false" />
                 <element signature="method#makeShortToast#0;class#SessionActivity#0" expanded="false" />
                 <element signature="method#onCreateOptionsMenu#0;class#SessionActivity#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="HostSessionActivity.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/conchord/android/activity/HostSessionActivity.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="135" max-vertical-offset="918">
-              <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
-              <folding>
-                <element signature="imports" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -922,7 +909,7 @@
     </option>
     <option name="modificationStamps">
       <map>
-        <entry key="$PROJECT_DIR$" value="4216138545295" />
+        <entry key="$PROJECT_DIR$" value="4216173515535" />
       </map>
     </option>
     <option name="projectBuildClasspath">
@@ -1188,8 +1175,8 @@
         <option value="$PROJECT_DIR$/app/src/main/java/com/conchord/android/util/SntpClient.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/conchord/android/util/BaseApplication.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/conchord/android/util/Utils.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/conchord/android/util/L.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/conchord/android/activity/HostSessionActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/conchord/android/util/L.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/conchord/android/activity/SessionActivity.java" />
       </list>
     </option>
@@ -1226,6 +1213,7 @@
     </navigator>
     <panes>
       <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -1343,48 +1331,9 @@
               <option name="myItemId" value="android" />
               <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="network" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="conchord - eclipse" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="conchord" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="android" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="activity" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -1434,19 +1383,6 @@
       <option name="PORT" value="5005" />
       <method />
     </configuration>
-    <configuration default="true" type="Applet" factoryName="Applet">
-      <module name="" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="HTML_FILE_NAME" />
-      <option name="HTML_USED" value="false" />
-      <option name="WIDTH" value="400" />
-      <option name="HEIGHT" value="300" />
-      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-      <option name="VM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <method />
-    </configuration>
     <configuration default="true" type="TestNG" factoryName="TestNG">
       <module name="" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
@@ -1472,6 +1408,19 @@
       <envs />
       <properties />
       <listeners />
+      <method />
+    </configuration>
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <module name="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
       <method />
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
@@ -1588,7 +1537,7 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.36283186" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32996207" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32885906" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3210291" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -1597,7 +1546,7 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.28492936" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32996207" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32885906" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -1630,6 +1579,90 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/conchord/android/activity/HomeActivity.java">
       <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3621">
+          <caret line="172" column="38" selection-start-line="172" selection-start-column="35" selection-end-line="172" selection-end-column="38" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/conchord/android/activity/SessionActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1183" max-vertical-offset="2754">
+          <caret line="334" column="17" selection-start-line="334" selection-start-column="17" selection-end-line="334" selection-end-column="17" />
+          <folding>
+            <element signature="e#1213#1282#0" expanded="false" />
+            <element signature="class#3079:3485" expanded="false" />
+            <element signature="method#onDataChange#0;class#3079:3485" expanded="false" />
+            <element signature="method#onCancelled#0;class#3079:3485" expanded="false" />
+            <element signature="class#3537:4524" expanded="false" />
+            <element signature="method#onDataChange#0;class#3537:4524" expanded="false" />
+            <element signature="e#4214#4274#0" expanded="false" />
+            <element signature="method#onCancelled#0;class#3537:4524" expanded="false" />
+            <element signature="class#4579:5529" expanded="false" />
+            <element signature="method#onDataChange#0;class#4579:5529" expanded="false" />
+            <element signature="e#4763#4805#0" expanded="false" />
+            <element signature="e#5119#5164#0" expanded="false" />
+            <element signature="method#onCancelled#0;class#4579:5529" expanded="false" />
+            <element signature="class#5587:6213" expanded="false" />
+            <element signature="method#onDataChange#0;class#5587:6213" expanded="false" />
+            <element signature="method#onCancelled#0;class#5587:6213" expanded="false" />
+            <element signature="class#6266:7137" expanded="false" />
+            <element signature="method#onDataChange#0;class#6266:7137" expanded="false" />
+            <element signature="method#onCancelled#0;class#6266:7137" expanded="false" />
+            <element signature="method#onCreate#0;class#SessionActivity#0" expanded="false" />
+            <element signature="e#8212#8262#0" expanded="false" />
+            <element signature="class#8910:9042" expanded="false" />
+            <element signature="method#onClick#0;class#8910:9042" expanded="false" />
+            <element signature="method#setupFirebase#0;class#SessionActivity#0" expanded="false" />
+            <element signature="e#10550#10581#0" expanded="false" />
+            <element signature="method#setFirebasePlayTime#0;class#SessionActivity#0" expanded="false" />
+            <element signature="method#inflateXML#0;class#SessionActivity#0" expanded="false" />
+            <element signature="method#setupGUI#0;class#SessionActivity#0" expanded="false" />
+            <element signature="class#12331:12465" expanded="false" />
+            <element signature="method#onClick#0;class#12331:12465" expanded="false" />
+            <element signature="class#12865:13250" expanded="false" />
+            <element signature="method#onClick#0;class#12865:13250" expanded="false" />
+            <element signature="e#12938#12991#0" expanded="false" />
+            <element signature="e#13073#13130#0" expanded="false" />
+            <element signature="method#createSession#0;class#SessionActivity#0" expanded="false" />
+            <element signature="method#onResume#0;class#SessionActivity#0" expanded="false" />
+            <element signature="method#buildMediaPlayers#0;class#SessionActivity#0" expanded="false" />
+            <element signature="e#14151#14212#0" expanded="false" />
+            <element signature="e#15185#15246#0" expanded="false" />
+            <element signature="method#setAlarm#0;class#SessionActivity#0" expanded="false" />
+            <element signature="method#getNTPtime#0;class#SessionActivity#0" expanded="false" />
+            <element signature="e#15986#16059#0" expanded="false" />
+            <element signature="class#NtpAsyncTask#0;class#SessionActivity#0" expanded="true" />
+            <element signature="method#doInBackground#0;class#NtpAsyncTask#0;class#SessionActivity#0" expanded="false" />
+            <element signature="e#16684#16719#0" expanded="false" />
+            <element signature="method#onPostExecute#0;class#NtpAsyncTask#0;class#SessionActivity#0" expanded="false" />
+            <element signature="e#18108#18144#0" expanded="false" />
+            <element signature="e#19373#19432#0" expanded="false" />
+            <element signature="e#20789#20843#0" expanded="false" />
+            <element signature="method#makeSure_isHost_WasPassedIn#0;class#SessionActivity#0" expanded="false" />
+            <element signature="method#onPause#0;class#SessionActivity#0" expanded="false" />
+            <element signature="e#21858#21904#0" expanded="false" />
+            <element signature="e#22018#22061#0" expanded="false" />
+            <element signature="e#22161#22232#0" expanded="false" />
+            <element signature="method#onStop#0;class#SessionActivity#0" expanded="false" />
+            <element signature="method#removeValueEventListeners#0;class#SessionActivity#0" expanded="false" />
+            <element signature="method#makeLongToast#0;class#SessionActivity#0" expanded="false" />
+            <element signature="method#makeShortToast#0;class#SessionActivity#0" expanded="false" />
+            <element signature="method#onCreateOptionsMenu#0;class#SessionActivity#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/conchord/android/activity/HostSessionActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="255" max-vertical-offset="952">
+          <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/conchord/android/activity/HomeActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="2924" max-vertical-offset="3621">
           <caret line="172" column="38" selection-start-line="172" selection-start-column="35" selection-end-line="172" selection-end-column="38" />
           <folding />
@@ -1641,62 +1674,60 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="782" max-vertical-offset="3672">
           <caret line="97" column="0" selection-start-line="97" selection-start-column="0" selection-end-line="97" selection-end-column="0" />
           <folding>
-            <element signature="e#2301#2353#0" expanded="false" />
+            <element signature="e#1213#1282#0" expanded="false" />
+            <element signature="class#3079:3485" expanded="false" />
+            <element signature="method#onDataChange#0;class#3079:3485" expanded="false" />
+            <element signature="method#onCancelled#0;class#3079:3485" expanded="false" />
+            <element signature="class#3537:4524" expanded="false" />
+            <element signature="method#onDataChange#0;class#3537:4524" expanded="false" />
+            <element signature="e#4214#4274#0" expanded="false" />
+            <element signature="method#onCancelled#0;class#3537:4524" expanded="false" />
+            <element signature="class#4579:5529" expanded="false" />
+            <element signature="method#onDataChange#0;class#4579:5529" expanded="false" />
+            <element signature="e#4763#4805#0" expanded="false" />
+            <element signature="e#5119#5164#0" expanded="false" />
+            <element signature="method#onCancelled#0;class#4579:5529" expanded="false" />
+            <element signature="class#5587:6213" expanded="false" />
+            <element signature="method#onDataChange#0;class#5587:6213" expanded="false" />
+            <element signature="method#onCancelled#0;class#5587:6213" expanded="false" />
+            <element signature="class#6266:7137" expanded="false" />
+            <element signature="method#onDataChange#0;class#6266:7137" expanded="false" />
+            <element signature="method#onCancelled#0;class#6266:7137" expanded="false" />
             <element signature="method#onCreate#0;class#SessionActivity#0" expanded="false" />
-            <element signature="e#4168#4218#0" expanded="false" />
-            <element signature="class#4866:4998" expanded="false" />
-            <element signature="method#onClick#0;class#4866:4998" expanded="false" />
+            <element signature="e#8212#8262#0" expanded="false" />
+            <element signature="class#8910:9042" expanded="false" />
+            <element signature="method#onClick#0;class#8910:9042" expanded="false" />
             <element signature="method#setupFirebase#0;class#SessionActivity#0" expanded="false" />
-            <element signature="e#6388#6419#0" expanded="false" />
+            <element signature="e#10550#10581#0" expanded="false" />
             <element signature="method#setFirebasePlayTime#0;class#SessionActivity#0" expanded="false" />
             <element signature="method#inflateXML#0;class#SessionActivity#0" expanded="false" />
             <element signature="method#setupGUI#0;class#SessionActivity#0" expanded="false" />
-            <element signature="class#8169:8303" expanded="false" />
-            <element signature="method#onClick#0;class#8169:8303" expanded="false" />
-            <element signature="class#8703:9088" expanded="false" />
-            <element signature="method#onClick#0;class#8703:9088" expanded="false" />
-            <element signature="e#8776#8829#0" expanded="false" />
-            <element signature="e#8911#8968#0" expanded="false" />
+            <element signature="class#12331:12465" expanded="false" />
+            <element signature="method#onClick#0;class#12331:12465" expanded="false" />
+            <element signature="class#12865:13250" expanded="false" />
+            <element signature="method#onClick#0;class#12865:13250" expanded="false" />
+            <element signature="e#12938#12991#0" expanded="false" />
+            <element signature="e#13073#13130#0" expanded="false" />
             <element signature="method#createSession#0;class#SessionActivity#0" expanded="false" />
-            <element signature="class#9522:9823" expanded="false" />
-            <element signature="method#onDataChange#0;class#9522:9823" expanded="false" />
-            <element signature="method#onCancelled#0;class#9522:9823" expanded="false" />
-            <element signature="e#10476#10536#0" expanded="false" />
-            <element signature="method#onCancelled#0;class#9873:10717" expanded="false" />
-            <element signature="class#10770:11551" expanded="false" />
-            <element signature="method#onDataChange#0;class#10770:11551" expanded="false" />
-            <element signature="e#10912#10962#0" expanded="false" />
-            <element signature="e#11213#11258#0" expanded="false" />
-            <element signature="method#onCancelled#0;class#10770:11551" expanded="false" />
-            <element signature="class#11607:12098" expanded="false" />
-            <element signature="method#onDataChange#0;class#11607:12098" expanded="false" />
-            <element signature="method#onCancelled#0;class#11607:12098" expanded="false" />
-            <element signature="class#12152:13047" expanded="false" />
-            <element signature="method#onDataChange#0;class#12152:13047" expanded="false" />
-            <element signature="method#onCancelled#0;class#12152:13047" expanded="false" />
             <element signature="method#onResume#0;class#SessionActivity#0" expanded="false" />
             <element signature="method#buildMediaPlayers#0;class#SessionActivity#0" expanded="false" />
-            <element signature="e#13498#13559#0" expanded="false" />
-            <element signature="e#14532#14593#0" expanded="false" />
+            <element signature="e#14151#14212#0" expanded="false" />
+            <element signature="e#15185#15246#0" expanded="false" />
             <element signature="method#setAlarm#0;class#SessionActivity#0" expanded="false" />
             <element signature="method#getNTPtime#0;class#SessionActivity#0" expanded="false" />
-            <element signature="e#15333#15406#0" expanded="false" />
+            <element signature="e#15986#16059#0" expanded="false" />
+            <element signature="class#NtpAsyncTask#0;class#SessionActivity#0" expanded="true" />
             <element signature="method#doInBackground#0;class#NtpAsyncTask#0;class#SessionActivity#0" expanded="false" />
-            <element signature="e#16054#16098#0" expanded="false" />
+            <element signature="e#16684#16719#0" expanded="false" />
             <element signature="method#onPostExecute#0;class#NtpAsyncTask#0;class#SessionActivity#0" expanded="false" />
-            <element signature="e#17653#17697#0" expanded="false" />
-            <element signature="e#18934#18993#0" expanded="false" />
-            <element signature="e#20368#20422#0" expanded="false" />
-            <element signature="method#call#0;class#GetNTPTimeAsyncTask#0;class#SessionActivity#0" expanded="false" />
-            <element signature="method#onException#0;class#GetNTPTimeAsyncTask#0;class#SessionActivity#0" expanded="false" />
-            <element signature="method#onSuccess#0;class#GetNTPTimeAsyncTask#0;class#SessionActivity#0" expanded="false" />
-            <element signature="e#22598#22642#0" expanded="false" />
-            <element signature="e#22758#22812#0" expanded="false" />
+            <element signature="e#18108#18144#0" expanded="false" />
+            <element signature="e#19373#19432#0" expanded="false" />
+            <element signature="e#20789#20843#0" expanded="false" />
             <element signature="method#makeSure_isHost_WasPassedIn#0;class#SessionActivity#0" expanded="false" />
             <element signature="method#onPause#0;class#SessionActivity#0" expanded="false" />
-            <element signature="e#23827#23873#0" expanded="false" />
-            <element signature="e#23987#24030#0" expanded="false" />
-            <element signature="e#24130#24201#0" expanded="false" />
+            <element signature="e#21858#21904#0" expanded="false" />
+            <element signature="e#22018#22061#0" expanded="false" />
+            <element signature="e#22161#22232#0" expanded="false" />
             <element signature="method#onStop#0;class#SessionActivity#0" expanded="false" />
             <element signature="method#removeValueEventListeners#0;class#SessionActivity#0" expanded="false" />
             <element signature="method#makeLongToast#0;class#SessionActivity#0" expanded="false" />
@@ -1767,7 +1798,7 @@
         <state vertical-scroll-proportion="0.41278064" vertical-offset="254" max-vertical-offset="986">
           <caret line="29" column="27" selection-start-line="29" selection-start-column="27" selection-end-line="29" selection-end-column="27" />
           <folding>
-            <element signature="e#0#1724#0" expanded="true" />
+            <element signature="e#0#1724#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1833,106 +1864,99 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="357" max-vertical-offset="1020">
           <caret line="41" column="17" selection-start-line="41" selection-start-column="17" selection-end-line="41" selection-end-column="17" />
           <folding>
-            <element signature="e#389#390#0" expanded="true" />
-            <element signature="e#433#434#0" expanded="true" />
-            <element signature="e#983#984#0" expanded="true" />
-            <element signature="e#1026#1027#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/conchord/android/util/L.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.41105354" vertical-offset="0" max-vertical-offset="579">
-          <caret line="14" column="13" selection-start-line="14" selection-start-column="13" selection-end-line="14" selection-end-column="13" />
-          <folding>
-            <element signature="docComment;class#L#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/conchord/android/activity/HostSessionActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="135" max-vertical-offset="918">
-          <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#389#390#0" expanded="false" />
+            <element signature="e#433#434#0" expanded="false" />
+            <element signature="e#983#984#0" expanded="false" />
+            <element signature="e#1026#1027#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/conchord/android/util/Utils.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7508834" vertical-offset="0" max-vertical-offset="566">
+        <state vertical-scroll-proportion="0.5284974" vertical-offset="0" max-vertical-offset="579">
           <caret line="40" column="0" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
           <folding>
             <element signature="method#isNetworkAvailable#0;class#Utils#0" expanded="false" />
-            <element signature="class#MediaFiles#0;class#Utils#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/conchord/android/util/L.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.2642487" vertical-offset="0" max-vertical-offset="579">
+          <caret line="19" column="19" selection-start-line="19" selection-start-column="19" selection-end-line="19" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/conchord/android/activity/HostSessionActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.2642487" vertical-offset="0" max-vertical-offset="867">
+          <caret line="14" column="0" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/conchord/android/activity/SessionActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6286701" vertical-offset="1183" max-vertical-offset="2754">
-          <caret line="334" column="17" selection-start-line="334" selection-start-column="17" selection-end-line="334" selection-end-column="17" />
+        <state vertical-scroll-proportion="0.41968912" vertical-offset="1627" max-vertical-offset="2329">
+          <caret line="673" column="0" selection-start-line="673" selection-start-column="0" selection-end-line="673" selection-end-column="0" />
           <folding>
-            <element signature="e#2301#2353#0" expanded="false" />
+            <element signature="e#1213#1282#0" expanded="false" />
+            <element signature="class#3079:3485" expanded="false" />
+            <element signature="method#onDataChange#0;class#3079:3485" expanded="false" />
+            <element signature="method#onCancelled#0;class#3079:3485" expanded="false" />
+            <element signature="class#3537:4524" expanded="false" />
+            <element signature="method#onDataChange#0;class#3537:4524" expanded="false" />
+            <element signature="e#4214#4274#0" expanded="false" />
+            <element signature="method#onCancelled#0;class#3537:4524" expanded="false" />
+            <element signature="class#4579:5529" expanded="false" />
+            <element signature="method#onDataChange#0;class#4579:5529" expanded="false" />
+            <element signature="e#4763#4805#0" expanded="false" />
+            <element signature="e#5119#5164#0" expanded="false" />
+            <element signature="method#onCancelled#0;class#4579:5529" expanded="false" />
+            <element signature="class#5587:6213" expanded="false" />
+            <element signature="method#onDataChange#0;class#5587:6213" expanded="false" />
+            <element signature="method#onCancelled#0;class#5587:6213" expanded="false" />
+            <element signature="class#6266:7137" expanded="false" />
+            <element signature="method#onDataChange#0;class#6266:7137" expanded="false" />
+            <element signature="method#onCancelled#0;class#6266:7137" expanded="false" />
             <element signature="method#onCreate#0;class#SessionActivity#0" expanded="false" />
-            <element signature="e#4168#4218#0" expanded="false" />
-            <element signature="class#4866:4998" expanded="false" />
-            <element signature="method#onClick#0;class#4866:4998" expanded="false" />
+            <element signature="e#8212#8262#0" expanded="false" />
+            <element signature="class#8910:9042" expanded="false" />
+            <element signature="method#onClick#0;class#8910:9042" expanded="false" />
             <element signature="method#setupFirebase#0;class#SessionActivity#0" expanded="false" />
-            <element signature="e#6388#6419#0" expanded="false" />
+            <element signature="e#10550#10581#0" expanded="false" />
             <element signature="method#setFirebasePlayTime#0;class#SessionActivity#0" expanded="false" />
             <element signature="method#inflateXML#0;class#SessionActivity#0" expanded="false" />
             <element signature="method#setupGUI#0;class#SessionActivity#0" expanded="false" />
-            <element signature="class#8169:8303" expanded="false" />
-            <element signature="method#onClick#0;class#8169:8303" expanded="false" />
-            <element signature="class#8703:9088" expanded="false" />
-            <element signature="method#onClick#0;class#8703:9088" expanded="false" />
-            <element signature="e#8776#8829#0" expanded="false" />
-            <element signature="e#8911#8968#0" expanded="false" />
+            <element signature="class#12331:12465" expanded="false" />
+            <element signature="method#onClick#0;class#12331:12465" expanded="false" />
+            <element signature="class#12865:13250" expanded="false" />
+            <element signature="method#onClick#0;class#12865:13250" expanded="false" />
+            <element signature="e#12938#12991#0" expanded="false" />
+            <element signature="e#13073#13130#0" expanded="false" />
             <element signature="method#createSession#0;class#SessionActivity#0" expanded="false" />
-            <element signature="class#9522:9823" expanded="false" />
-            <element signature="method#onDataChange#0;class#9522:9823" expanded="false" />
-            <element signature="method#onCancelled#0;class#9522:9823" expanded="false" />
-            <element signature="e#10476#10536#0" expanded="false" />
-            <element signature="method#onCancelled#0;class#9873:10717" expanded="false" />
-            <element signature="class#10770:11551" expanded="false" />
-            <element signature="method#onDataChange#0;class#10770:11551" expanded="false" />
-            <element signature="e#10912#10962#0" expanded="false" />
-            <element signature="e#11213#11258#0" expanded="false" />
-            <element signature="method#onCancelled#0;class#10770:11551" expanded="false" />
-            <element signature="class#11607:12098" expanded="false" />
-            <element signature="method#onDataChange#0;class#11607:12098" expanded="false" />
-            <element signature="method#onCancelled#0;class#11607:12098" expanded="false" />
-            <element signature="class#12152:13047" expanded="false" />
-            <element signature="method#onDataChange#0;class#12152:13047" expanded="false" />
-            <element signature="method#onCancelled#0;class#12152:13047" expanded="false" />
             <element signature="method#onResume#0;class#SessionActivity#0" expanded="false" />
             <element signature="method#buildMediaPlayers#0;class#SessionActivity#0" expanded="false" />
-            <element signature="e#13498#13559#0" expanded="false" />
-            <element signature="e#14532#14593#0" expanded="false" />
+            <element signature="e#14151#14212#0" expanded="false" />
+            <element signature="e#15185#15246#0" expanded="false" />
             <element signature="method#setAlarm#0;class#SessionActivity#0" expanded="false" />
             <element signature="method#getNTPtime#0;class#SessionActivity#0" expanded="false" />
-            <element signature="e#15333#15406#0" expanded="false" />
+            <element signature="e#15986#16059#0" expanded="false" />
+            <element signature="class#NtpAsyncTask#0;class#SessionActivity#0" expanded="true" />
             <element signature="method#doInBackground#0;class#NtpAsyncTask#0;class#SessionActivity#0" expanded="false" />
-            <element signature="e#16054#16098#0" expanded="false" />
+            <element signature="e#16684#16719#0" expanded="false" />
             <element signature="method#onPostExecute#0;class#NtpAsyncTask#0;class#SessionActivity#0" expanded="false" />
-            <element signature="e#17653#17697#0" expanded="false" />
-            <element signature="e#18934#18993#0" expanded="false" />
-            <element signature="e#20368#20422#0" expanded="false" />
-            <element signature="method#call#0;class#GetNTPTimeAsyncTask#0;class#SessionActivity#0" expanded="false" />
-            <element signature="method#onException#0;class#GetNTPTimeAsyncTask#0;class#SessionActivity#0" expanded="false" />
-            <element signature="method#onSuccess#0;class#GetNTPTimeAsyncTask#0;class#SessionActivity#0" expanded="false" />
-            <element signature="e#22598#22642#0" expanded="false" />
-            <element signature="e#22758#22812#0" expanded="false" />
+            <element signature="e#18108#18144#0" expanded="false" />
+            <element signature="e#19373#19432#0" expanded="false" />
+            <element signature="e#20789#20843#0" expanded="false" />
             <element signature="method#makeSure_isHost_WasPassedIn#0;class#SessionActivity#0" expanded="false" />
             <element signature="method#onPause#0;class#SessionActivity#0" expanded="false" />
-            <element signature="e#23827#23873#0" expanded="false" />
-            <element signature="e#23987#24030#0" expanded="false" />
-            <element signature="e#24130#24201#0" expanded="false" />
+            <element signature="e#21858#21904#0" expanded="false" />
+            <element signature="e#22018#22061#0" expanded="false" />
+            <element signature="e#22161#22232#0" expanded="false" />
             <element signature="method#onStop#0;class#SessionActivity#0" expanded="false" />
             <element signature="method#removeValueEventListeners#0;class#SessionActivity#0" expanded="false" />
             <element signature="method#makeLongToast#0;class#SessionActivity#0" expanded="false" />
