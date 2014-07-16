@@ -46,8 +46,10 @@ public class HomeActivity extends Activity {
 
 		// Check if we have a user ID for the device **Isn't unique yet**
 		if (!userIdExists()) {
-			setUserID(android.os.Build.MODEL);
-		}
+			storeUserID(android.os.Build.MODEL);
+		} else {
+            Log.d(TAG, "User id exists: \"" + prefs.getString(Constants.KEY_HOST_ID, "") + "\".");
+        }
 	}
 
 	private void setupGUI() {
@@ -74,15 +76,17 @@ public class HomeActivity extends Activity {
 							if (value == null) {
 //								editTextSessionName.setText("");
 
+                                // Because we're starting the activity, stop
+                                // listening.
+                                firebaseCreatedSession.removeEventListener(this);
+
 								Intent intent = new Intent(getApplicationContext(),
 										SessionActivity.class);
 								intent.putExtra(Constants.KEY_SESSION, sessionName);
 								intent.putExtra(Constants.KEY_IS_HOST, true);
 								// intent.putExtra(Constants.KEY_CREATOR, true);
 								startActivity(intent);
-								// Because we're starting the activity, stop
-								// listening.
-								firebaseCreatedSession.removeEventListener(this);
+
 							} else {
 								Toast.makeText(getBaseContext(),
 										"session is not unique", Toast.LENGTH_SHORT)
@@ -173,10 +177,11 @@ public class HomeActivity extends Activity {
 
 	}
 
-	private void setUserID(String userId) {
+	private void storeUserID(String userId) {
 		SharedPreferences.Editor prefsEditor = prefs.edit();
 		prefsEditor.putString(Constants.KEY_HOST_ID, userId);
 		prefsEditor.commit();
+        Log.d(TAG, "Storing user id \"" + userId + "\" in prefs.");
 	}
 
 	private boolean userIdExists() {

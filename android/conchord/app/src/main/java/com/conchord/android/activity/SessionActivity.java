@@ -1,10 +1,5 @@
 package com.conchord.android.activity;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
-
 import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.Activity;
@@ -37,6 +32,11 @@ import com.conchord.android.util.Utils.MediaFiles;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SessionActivity extends Activity {
 
@@ -407,6 +407,31 @@ public class SessionActivity extends Activity {
 
 	};
 
+    ValueEventListener sessionHostIdListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(DataSnapshot arg0) {
+            if (arg0.getValue() != null) {
+                String hostId = arg0.getValue().toString();
+
+                if (hostId != null) {
+                    if (!hostId.equals(mySessionId) && isHost) {
+                        makeShortToast("Oooh, someone just beat you to that name! Try another one.");
+                        Log.d(TAG,TAG + "sessionFirebase.child(Constants.KEY_HOST_ID) value changed");
+                        Log.d(TAG, TAG + "arg0.getName() = " + arg0.getName());
+                        Log.d(TAG, TAG + "hostId = " + hostId + ", mySessionId = " + mySessionId);
+                        isHost = false;
+                        finish();
+                    }
+                }
+            }
+        }
+
+        @Override
+        public void onCancelled() {
+
+        }
+    };
+
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -414,41 +439,7 @@ public class SessionActivity extends Activity {
 		wl.acquire();
 
 		// Make sure you're the host.
-		sessionFirebase.child(Constants.KEY_HOST_ID).addValueEventListener(
-				new ValueEventListener() {
-					@Override
-					public void onDataChange(DataSnapshot arg0) {
-
-						if (arg0.getValue() != null) {
-
-							String hostId = arg0.getValue().toString();
-
-							if (hostId != null) {
-
-								if (!hostId.equals(mySessionId) && isHost) {
-
-									makeShortToast("Oooh, someone just beat you to that name! Try another one.");
-									Log.d(TAG,
-											TAG
-													+ "sessionFirebase.child(Constants.KEY_HOST_ID) value changed");
-									Log.d(TAG,
-											TAG + "arg0.getName() = "
-													+ arg0.getName());
-									Log.d(TAG, TAG + "hostId = " + hostId
-											+ ", mySessionId = " + mySessionId);
-									isHost = false;
-									finish();
-								}
-							}
-						}
-					}
-
-					@Override
-					public void onCancelled() {
-						// TODO Auto-generated method stub
-
-					}
-				});
+		sessionFirebase.child(Constants.KEY_HOST_ID).addValueEventListener(sessionHostIdListener);
 
 		sessionFirebase.addValueEventListener(sessionListener);
 		sessionUsersFirebase.addValueEventListener(sessionUsersListener);
@@ -814,7 +805,18 @@ public class SessionActivity extends Activity {
 		super.onStop();
 		wl.release();
 		finish();
+
+        removeValueEventListeners();
+
 	}
+
+    private void removeValueEventListeners() {
+
+        sessionFirebase.removeEventListener(sessionListener);
+        sessionUsersFirebase.removeEventListener(sessionUsersListener);
+        sessionPlayTimeFirebase.removeEventListener(sessionPlayTimeListener);
+        sessionFirebase.child(Constants.KEY_HOST_ID).removeEventListener(sessionHostIdListener);
+    }
 
 	public void makeLongToast(String text) {
 		Toast.makeText(getBaseContext(), text, Toast.LENGTH_LONG).show();
@@ -830,5 +832,6 @@ public class SessionActivity extends Activity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
+
 
 }
