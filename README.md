@@ -16,6 +16,6 @@ UPDATE: I've come to a place where I'm unable to move forward with conchord in t
 
 However, I've been able to unsatisfactorily synchronize 2 (or more) devices to play a single note closely enough in time so that the human ear can't really tell. Although I was using a common NTP server to help synchronize the varying system times on different devices, the fact that I'm unable to predict the request/response latency time makes the NTP timestamps almost worthless by the time they get to each device. I've brought up the issue in a stackexchange post here: http://goo.gl/77Bif3. I'm going to move on to a different project for now as I look around for a high-speed (low latency) means of device-to-device communication. 
 
-EVEN NEWER UPDATE: Perhaps there's some merit in pursuing Bluetooth 4.0?? (Thanks to Joseph Afework)
+EVEN NEWER UPDATE: Perhaps there's some merit in pursuing Bluetooth 4.0?? (Thanks to [Joseph Afework](https://github.com/Commander147))
 
 LATEST UPDATE: Nope. BLuetooth LE still isn't good enough :(
