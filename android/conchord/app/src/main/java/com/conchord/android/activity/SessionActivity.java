@@ -24,6 +24,7 @@ import com.conchord.android.R;
 import com.conchord.android.network.SafeAsyncTask;
 import com.conchord.android.util.ConchordMediaPlayer;
 import com.conchord.android.util.Constants;
+import com.conchord.android.util.L;
 import com.conchord.android.util.MyAlarmService;
 import com.conchord.android.util.Session;
 import com.conchord.android.util.SntpClient;
@@ -165,12 +166,15 @@ public class SessionActivity extends Activity {
 
 	}
 
+    /**
+     * This function creates a Firebase for
+     */
 	private void setupFirebase() {
 		// If this is the host, we'll create the session on Firebase
 		if (isHost) {
 			createSession(Calendar.getInstance().getTime().getMinutes());
 		} else {
-			makeShortToast("you aint no host");
+			makeShortToast("Welcome!");
 		}
 
 		String sessionFirebaseUrl = Constants.sessionsUrl + sessionName;
@@ -231,7 +235,6 @@ public class SessionActivity extends Activity {
 		}
 
 		textViewStartTime = (TextView) findViewById(R.id.textViewStartTimeInMillis);
-
 		textViewNtpPlayTime = (TextView) findViewById(R.id.textViewNTPplayTime);
 		textViewSnapshotNtp = (TextView) findViewById(R.id.textViewSnapshotNTPtime);
 		textViewRequestTime = (TextView) findViewById(R.id.textViewRequesttime);
@@ -320,8 +323,8 @@ public class SessionActivity extends Activity {
 		@Override
 		public void onDataChange(DataSnapshot arg0) {
 			if (arg0.getValue() == null) {
-				Log.e(TAG,
-						"There appear to be NO users in this session...where's the host?");
+				L.e(TAG,
+                        "There appear to be NO users in this session...where's the host?");
 			} else {
 
 				/*
@@ -329,7 +332,7 @@ public class SessionActivity extends Activity {
 				 * GET USER IDs FROM THE SNAPSHOT AS PEOPLE ENTER/EXIT
 				 */
 
-				Log.d(TAG, TAG + "There are " + arg0.getChildrenCount()
+				L.d(TAG, TAG + "There are " + arg0.getChildrenCount()
 						+ " users.");
 
 				/*
@@ -787,15 +790,11 @@ public class SessionActivity extends Activity {
 			sessionUsersFirebase.child(mySessionId).removeValue();
 		}
 
-		// remove listeners
-		sessionFirebase.removeEventListener(sessionListener);
-		sessionUsersFirebase.removeEventListener(sessionUsersListener);
-		sessionPlayTimeFirebase.removeEventListener(sessionPlayTimeListener);
-
 		// TODO make sure all eventlisteners are added and removed in pause and
 		// resume
 
 		mPlayer.stop();
+        removeValueEventListeners();
 
 		super.onPause();
 	}
@@ -805,13 +804,11 @@ public class SessionActivity extends Activity {
 		super.onStop();
 		wl.release();
 		finish();
-
-        removeValueEventListeners();
-
 	}
 
-    private void removeValueEventListeners() {
 
+
+    private void removeValueEventListeners() {
         sessionFirebase.removeEventListener(sessionListener);
         sessionUsersFirebase.removeEventListener(sessionUsersListener);
         sessionPlayTimeFirebase.removeEventListener(sessionPlayTimeListener);
