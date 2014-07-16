@@ -143,6 +143,12 @@ int dimen activity_vertical_margin 0x7f060001
 int drawable change_dot_org_logo 0x7f020000
 int drawable conchord_logo 0x7f020001
 int drawable ic_launcher 0x7f020002
+int drawable teddy_bear_1 0x7f020003
+int drawable teddy_bear_2 0x7f020004
+int drawable teddy_bear_3 0x7f020005
+int drawable teddy_bear_4 0x7f020006
+int drawable teddy_bear_5 0x7f020007
+int drawable teddy_bear_6 0x7f020008
 int id action_settings 0x7f0a000d
 int id buttonCreateSession 0x7f0a0000
 int id buttonJoinSession 0x7f0a0003

@@ -3,8 +3,8 @@ conchord
 
 An app that allows for multiple devices to jam together!
 
-Conchord synchronizes multiple devices so that they play different layers to the same song. The devices communicate with a shared NTP server in order to synchronize their device clocks while using Firebase to pass information relating to the song being played between them.
-
+Conchord synchronizes multiple devices so that they play different layers to the same song.<!-- The devices communicate with a shared NTP server in order to synchronize their device clocks while using Firebase to pass information relating to the song being played between them.
+-->
 In practice, I've seen positive results with roughly 70% accuracy, as this is a work in progress.
 
 A Youtube link of conchord in action: http://goo.gl/SeKCH5.  

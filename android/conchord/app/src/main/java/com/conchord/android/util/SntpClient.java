@@ -16,14 +16,13 @@ package com.conchord.android.util;
  * limitations under the License.
  */
 
+import android.os.SystemClock;
+import android.util.Log;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-
-import android.os.SystemClock;
-import android.util.Log;
-import android.widget.Toast;
 
 /**
  * {@hide}
@@ -124,7 +123,7 @@ public class SntpClient {
 					- (transmitTime - receiveTime);
 			if (roundTripTime > 25) {
 				Log.e(TAG, "R2D2...took " + roundTripTime + " millis.");
-				throw new IOException("Took wayy too long (" + roundTripTime + " ms)");
+				throw new IOException("Took wayyy too long (" + roundTripTime + " ms)");
 			}
 			// receiveTime = originateTime + transit + skew
 			// responseTime = transmitTime + transit - skew
@@ -147,15 +146,13 @@ public class SntpClient {
 			mRoundTripTime = roundTripTime;
 			
 			/* my stuff */
-			Log.e(TAG, "R2D2...ntp appears to be received at:  " + receiveTime);
+			Log.d(TAG, "R2D2...ntp appears to be received at:  " + receiveTime);
 			localESTIMATEDntpTime = requestTime + (roundTripTime/2);
 			myRoundtripTime = roundTripTime;
-			Log.e(TAG, "R2D2...ntp calculated 1/2 thru roundtrip is " + localESTIMATEDntpTime);
+			Log.d(TAG, "R2D2...ntp calculated 1/2 thru roundtrip is " + localESTIMATEDntpTime);
 			myRequestTime = requestTime;
-			Log.e(TAG, "R2D2 roundTripTime official = " + myRoundtripTime);
-			/* end */			
-			
-
+			Log.d(TAG, "R2D2 roundTripTime official = " + myRoundtripTime);
+			/* end */
 			
 		} catch (Exception e) {
 			if (false)

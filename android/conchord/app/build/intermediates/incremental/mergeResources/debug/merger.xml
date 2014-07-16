@@ -1,14 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merger version="2" >
 
-    <dataSet config="21.0.0-rc1" >
-        <source path="C:\Users\NATI\workspace\conchord\android\conchord\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.0-rc1\res" />
+    <dataSet config="20.0.0" >
+        <source path="C:\Users\NATI\workspace\conchord\android\conchord\build\intermediates\exploded-aar\com.android.support\support-v4\20.0.0\res" />
     </dataSet>
     <dataSet config="main" >
         <source path="C:\Users\NATI\workspace\conchord\android\conchord\app\src\main\res" >
             <file
                 name="conchord_logo"
                 path="C:\Users\NATI\workspace\conchord\android\conchord\app\src\main\res\drawable\conchord_logo.png"
+                qualifiers=""
+                type="drawable" />
+            <file
+                name="teddy_bear_1"
+                path="C:\Users\NATI\workspace\conchord\android\conchord\app\src\main\res\drawable\teddy_bear_1.png"
+                qualifiers=""
+                type="drawable" />
+            <file
+                name="teddy_bear_2"
+                path="C:\Users\NATI\workspace\conchord\android\conchord\app\src\main\res\drawable\teddy_bear_2.png"
+                qualifiers=""
+                type="drawable" />
+            <file
+                name="teddy_bear_3"
+                path="C:\Users\NATI\workspace\conchord\android\conchord\app\src\main\res\drawable\teddy_bear_3.png"
+                qualifiers=""
+                type="drawable" />
+            <file
+                name="teddy_bear_4"
+                path="C:\Users\NATI\workspace\conchord\android\conchord\app\src\main\res\drawable\teddy_bear_4.png"
+                qualifiers=""
+                type="drawable" />
+            <file
+                name="teddy_bear_5"
+                path="C:\Users\NATI\workspace\conchord\android\conchord\app\src\main\res\drawable\teddy_bear_5.png"
+                qualifiers=""
+                type="drawable" />
+            <file
+                name="teddy_bear_6"
+                path="C:\Users\NATI\workspace\conchord\android\conchord\app\src\main\res\drawable\teddy_bear_6.png"
                 qualifiers=""
                 type="drawable" />
             <file
