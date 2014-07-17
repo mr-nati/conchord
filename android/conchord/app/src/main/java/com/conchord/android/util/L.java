@@ -19,6 +19,6 @@ public class L {
     public static void d(String TAG, String string) {
         Log.d(TAG, filter_string + string);
     }
-    public static void e(String TAG, String string) { Log.d(TAG, filter_string + string); }
+    public static void e(String TAG, String string) { Log.e(TAG, filter_string + string); }
 
 }

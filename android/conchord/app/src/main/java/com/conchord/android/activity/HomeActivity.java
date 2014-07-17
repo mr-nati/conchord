@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -14,6 +13,7 @@ import android.widget.Toast;
 
 import com.conchord.android.R;
 import com.conchord.android.util.Constants;
+import com.conchord.android.util.L;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.ValueEventListener;
@@ -48,7 +48,7 @@ public class HomeActivity extends Activity {
 		if (!userIdExists()) {
 			storeUserID(android.os.Build.MODEL);
 		} else {
-            Log.d(TAG, "User id exists: \"" + prefs.getString(Constants.KEY_HOST_ID, "") + "\".");
+            L.d(TAG, "User id exists: \"" + prefs.getString(Constants.KEY_HOST_ID, "") + "\".");
         }
 	}
 
@@ -136,7 +136,7 @@ public class HomeActivity extends Activity {
 
 							if (value != null) {
 								
-								Log.e(TAG, arg0.child(Constants.KEY_SESSION_CLOSED)
+								L.e(TAG, arg0.child(Constants.KEY_SESSION_CLOSED)
 										.getValue().toString());
 								
 								if (!arg0.child(Constants.KEY_SESSION_CLOSED)
@@ -181,7 +181,7 @@ public class HomeActivity extends Activity {
 		SharedPreferences.Editor prefsEditor = prefs.edit();
 		prefsEditor.putString(Constants.KEY_HOST_ID, userId);
 		prefsEditor.commit();
-        Log.d(TAG, "Storing user id \"" + userId + "\" in prefs.");
+        L.d(TAG, "Storing user id \"" + userId + "\" in prefs.");
 	}
 
 	private boolean userIdExists() {

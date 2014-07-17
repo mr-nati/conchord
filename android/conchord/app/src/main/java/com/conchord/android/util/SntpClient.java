@@ -19,7 +19,6 @@ package com.conchord.android.util;
 import android.os.SystemClock;
 import android.util.Log;
 
-import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -121,23 +120,13 @@ public class SntpClient {
 			long transmitTime = readTimeStamp(buffer, TRANSMIT_TIME_OFFSET);
 			long roundTripTime = responseTicks - requestTicks
 					- (transmitTime - receiveTime);
-			if (roundTripTime > 25) {
-				Log.e(TAG, "R2D2...took " + roundTripTime + " millis.");
-				throw new IOException("Took wayyy too long (" + roundTripTime + " ms)");
+
+			if (roundTripTime > Constants.ROUNDTRIP_TIMEOUT) {
+				Log.e(TAG, "roundTripTime took " + roundTripTime + " millis.");
+				return false;
 			}
-			// receiveTime = originateTime + transit + skew
-			// responseTime = transmitTime + transit - skew
-			// clockOffset = ((receiveTime - originateTime) + (transmitTime -
-			// responseTime))/2
-			// = ((originateTime + transit + skew - originateTime) +
-			// (transmitTime - (transmitTime + transit - skew)))/2
-			// = ((transit + skew) + (transmitTime - transmitTime - transit +
-			// skew))/2
-			// = (transit + skew - transit + skew)/2
-			// = (2 * skew)/2 = skew
+
 			long clockOffset = ((receiveTime - originateTime) + (transmitTime - responseTime)) / 2;
-			// if (false) Log.d(TAG, "round trip: " + roundTripTime + " ms");
-			// if (false) Log.d(TAG, "clock offset: " + clockOffset + " ms");
 
 			// save our results - use the times on this side of the network latency
 			// (response rather than request time)
@@ -146,17 +135,17 @@ public class SntpClient {
 			mRoundTripTime = roundTripTime;
 			
 			/* my stuff */
-			Log.d(TAG, "R2D2...ntp appears to be received at:  " + receiveTime);
+			L.d(TAG, "ntp appears to be received at:  " + receiveTime);
 			localESTIMATEDntpTime = requestTime + (roundTripTime/2);
 			myRoundtripTime = roundTripTime;
-			Log.d(TAG, "R2D2...ntp calculated 1/2 thru roundtrip is " + localESTIMATEDntpTime);
+			L.d(TAG, "ntp calculated 1/2 thru roundtrip is " + localESTIMATEDntpTime);
 			myRequestTime = requestTime;
-			Log.d(TAG, "R2D2 roundTripTime official = " + myRoundtripTime);
+			L.d(TAG, "roundTripTime official = " + roundTripTime);
 			/* end */
 			
 		} catch (Exception e) {
 			if (false)
-				Log.d(TAG, "R2D2....request time failed: " + e);
+				L.e(TAG, "request time failed: " + e);
 			return false;
 		} finally {
 			if (socket != null) {
@@ -164,7 +153,7 @@ public class SntpClient {
 			}
 		}
 
-		Log.e(TAG, "My roundtrip time == " + myRoundtripTime);
+		L.d(TAG, "My roundtrip time == " + myRoundtripTime);
 		if (myRoundtripTime == 0)
 			return false;
 		

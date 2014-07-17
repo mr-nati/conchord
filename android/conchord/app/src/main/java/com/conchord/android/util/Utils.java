@@ -1,8 +1,11 @@
 package com.conchord.android.util;
 
 import android.content.Context;
+import android.content.Intent;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.provider.Settings;
 
 import com.conchord.android.R;
 
@@ -21,6 +24,15 @@ public class Utils {
 
 		return activeNetworkInfo != null;
 	}
+
+	 private void makeSureGPSisEnabledOnDevice(Context context) {
+         LocationManager locMngr = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+         boolean enabled = locMngr.isProviderEnabled(locMngr.GPS_PROVIDER);
+         if (!enabled) {
+             Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+             context.startActivity(intent);
+         }
+     }
 
 	public class MediaFiles {
 		public static final int call_me_instrumental = R.raw.conchord__call_me_maybe_instrumental;

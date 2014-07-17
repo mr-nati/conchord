@@ -1,7 +1,6 @@
 package com.conchord.android.util;
 
 public class Constants {
-
 	
 	public static final String firebaseUrl = "https://conchord-app.firebaseio.com/";
 	public static final String sessionsUrl = firebaseUrl + "sessions/";
@@ -23,7 +22,7 @@ public class Constants {
 	
 	public static final int START_TIME_DELAY = 3000;
 	public static final int MOTOROLA_DELAY = 180;
-	public static final int ROUNDTRIP_TIMEOUT = 35;
-	public static final int NUM_NTP_ATTEMPTS = 20;
+	public static final int ROUNDTRIP_TIMEOUT = 18;
+	public static final int NUM_NTP_ATTEMPTS = 50;
 	
 }
