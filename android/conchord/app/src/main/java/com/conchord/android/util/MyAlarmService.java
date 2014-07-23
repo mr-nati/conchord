@@ -31,9 +31,6 @@ public class MyAlarmService extends Service {
 		String manufacturer = android.os.Build.MANUFACTURER;
         Log.d(TAG, "Manufacturer = " + manufacturer);
 
-        /*
-
-         */
 		if (manufacturer.toLowerCase().equals("Motorola".toLowerCase())) {
 			Handler handler = new Handler();
 			handler.postDelayed(new Runnable() {

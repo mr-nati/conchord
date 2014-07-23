@@ -6,6 +6,7 @@ import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.provider.Settings;
+import android.widget.Toast;
 
 import com.conchord.android.R;
 
@@ -49,5 +50,9 @@ public class Utils {
 			"usno.pa-x.dec.com", "nist1-la.WiTime.net",
 			"time.no-such-agency.net", "gps.layer42.net"
     };
+
+    public static void makeShortToast(Context context, String text) {
+        Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
+    }
 
 }

@@ -39,6 +39,11 @@
             android:launchMode="singleInstance"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name="com.conchord.android.activity.HostSessionActivity"
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
 
         <service android:name="com.conchord.android.util.MyAlarmService" />
     </application>

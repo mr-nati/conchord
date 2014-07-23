@@ -68,7 +68,7 @@ public class SessionActivity extends Activity {
 	private static Firebase sessionClosedFirebase;
 
 	/* My session id information */
-	private String mySessionId;
+	private String mySessionId;/**/
 	private Firebase mySessionUserFirebase;
 
 	private boolean isHost = false;
