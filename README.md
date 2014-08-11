@@ -8,7 +8,7 @@ Conchord synchronizes multiple devices so that they play different layers to the
 In practice, I've seen positive results with roughly 70% accuracy, as this is a work in progress.
 
 A Youtube link of conchord in action: http://goo.gl/SeKCH5.  
-
+<!--
 UPDATES
 =======
 
@@ -19,3 +19,4 @@ However, I've been able to unsatisfactorily synchronize 2 (or more) devices to p
 EVEN NEWER UPDATE: Perhaps there's some merit in pursuing Bluetooth 4.0?? (Thanks to [Joseph Afework](https://github.com/Commander147))
 
 LATEST UPDATE: Nope. BLuetooth LE still isn't good enough :(
+-->
