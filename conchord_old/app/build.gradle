@@ -1,0 +1,27 @@
+apply plugin: 'android'
+
+android {
+    compileSdkVersion 18
+    buildToolsVersion "19.1.0"
+
+    defaultConfig {
+//        packageName "com.conchord.android"
+        applicationId "com.conchord.android"
+        minSdkVersion 8
+        targetSdkVersion 17
+    }
+
+    buildTypes {
+        release {
+            runProguard false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+    }
+}
+
+dependencies {
+    compile('com.android.support:support-v4:+') {
+        exclude group: 'com.android.support', module:'support-v4'
+    }
+    compile files('libs/firebase-client-jvm-LATEST.jar')
+}

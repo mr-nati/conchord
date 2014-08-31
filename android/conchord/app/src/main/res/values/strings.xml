@@ -2,7 +2,13 @@
 <resources>
 
     <string name="app_name">conchord</string>
-    <string name="action_settings">Settings</string>
+    <string name="title_activity_home">HomeActivity</string>
     <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- HomeActivity -->
+    <string name="button_create">Create session</string>
+    <string name="button_join">Join session</string>
+
 
 </resources>
