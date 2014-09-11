@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -18,7 +19,6 @@ import android.widget.TextView;
 import com.conchord.android.R;
 import com.conchord.android.util.ConchordMediaPlayer;
 import com.conchord.android.util.Constants;
-import com.conchord.android.util.L;
 import com.conchord.android.util.MyAlarmService;
 import com.conchord.android.util.Session;
 import com.conchord.android.util.SntpClient;
@@ -86,7 +86,7 @@ public class HostSessionActivity extends Activity {
         @Override
         public void onDataChange(DataSnapshot arg0) {
             if (arg0.getValue() == null) {
-                L.e(TAG,
+                Log.e(TAG,
                         "There appear to be NO users in this session...where's the host?");
             } else {
 				/*
@@ -94,11 +94,11 @@ public class HostSessionActivity extends Activity {
 				 * GET USER IDs FROM THE SNAPSHOT AS PEOPLE ENTER/EXIT
 				 */
 
-                L.d(TAG, TAG + "There are " + arg0.getChildrenCount()
+                Log.d(TAG, TAG + "There are " + arg0.getChildrenCount()
                         + " users.");
 
 				/*
-				 * for (DataSnapshot x : arg0.getChildren()) { L.d(TAG,
+				 * for (DataSnapshot x : arg0.getChildren()) { Log.d(TAG,
 				 * "users child value = " + x.getValue().toString()); }
 				 */
                 // Utils.makeShortToast(arg0.getChildren() + " were just added.");
@@ -123,9 +123,9 @@ public class HostSessionActivity extends Activity {
                 if (hostId != null) {
                     if (!hostId.equals(mySessionId)) {
                         Utils.makeShortToast(getApplicationContext(), "Oooh, someone just beat you to that name! Try another one.");
-                        L.d(TAG,"sessionFirebase.child(Constants.KEY_HOST_ID) value changed");
-                        L.d(TAG, "arg0.getName() = " + arg0.getName());
-                        L.d(TAG, "hostId = " + hostId + ", mySessionId = " + mySessionId);
+                        Log.d(TAG,"sessionFirebase.child(Constants.KEY_HOST_ID) value changed");
+                        Log.d(TAG, "arg0.getName() = " + arg0.getName());
+                        Log.d(TAG, "hostId = " + hostId + ", mySessionId = " + mySessionId);
                         finish();
                     }
                 }
@@ -145,7 +145,7 @@ public class HostSessionActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        L.d(TAG, "onCreate called");
+        Log.d(TAG, "onCreate called");
 
         // Get the session name
         sessionName = getIntent().getStringExtra(Constants.KEY_SESSION);
@@ -176,7 +176,7 @@ public class HostSessionActivity extends Activity {
 
     private void setupFirebase() {
         // If this is the host, we'll create the session on Firebase
-        L.d(TAG, "Setting up Firebase as host.");
+        Log.d(TAG, "Setting up Firebase as host.");
         createSession(Calendar.getInstance().getTime().getMinutes());
 
 
@@ -251,7 +251,7 @@ public class HostSessionActivity extends Activity {
     }
 
     public Firebase createSession(int songId) {
-        L.d(TAG, "Creating Session with songId " + songId);
+        Log.d(TAG, "Creating Session with songId " + songId);
 
         // Reference to "sessions" Firebase
         Firebase sessions = new Firebase(Constants.sessionsUrl);
@@ -332,19 +332,19 @@ public class HostSessionActivity extends Activity {
             while (!client.requestTime(Utils.someCaliNtpServers[0],
                     Constants.ROUNDTRIP_TIMEOUT)
                     && i < Constants.NUM_NTP_ATTEMPTS) {
-                L.e(TAG, "client.requestTime failed with " + client.myRoundtripTime);
+                Log.e(TAG, "client.requestTime failed with " + client.myRoundtripTime);
                 client = new SntpClient();
                 i++;
             }
 
             Long time = client.getNtpTime();
-            L.d(TAG, "ntp time is " + time);
-            L.d(TAG, "time = " + System.currentTimeMillis());
+            Log.d(TAG, "ntp time is " + time);
+            Log.d(TAG, "time = " + System.currentTimeMillis());
 
-            L.d(TAG, "ntpTime = " + ntpTime);
-            L.d(TAG, "currentthreadtimemillis = " + SystemClock.currentThreadTimeMillis());
-            L.d(TAG, "elapsed real time " + SystemClock.elapsedRealtime());
-            if (mPlayer.isPlaying()) L.d(TAG, "songTime = " + mPlayer.getCurrentPosition());
+            Log.d(TAG, "ntpTime = " + ntpTime);
+            Log.d(TAG, "currentthreadtimemillis = " + SystemClock.currentThreadTimeMillis());
+            Log.d(TAG, "elapsed real time " + SystemClock.elapsedRealtime());
+            if (mPlayer.isPlaying()) Log.d(TAG, "songTime = " + mPlayer.getCurrentPosition());
 
             return time;
         }
@@ -357,8 +357,8 @@ public class HostSessionActivity extends Activity {
 
             ntpTime = x;
 
-            L.d(TAG, "ntpTime = " + ntpTime);
-            // if (mPlayer.isPlaying()) L.e(TAG, "songTime = " +
+            Log.d(TAG, "ntpTime = " + ntpTime);
+            // if (mPlayer.isPlaying()) Log.e(TAG, "songTime = " +
             // mPlayer.getCurrentPosition());
             // long localTime = System.currentTimeMillis();
             // long pos = mPlayer.getCurrentPosition();
@@ -412,13 +412,13 @@ public class HostSessionActivity extends Activity {
     @Override
     protected void onStart() {
         super.onStart();
-        L.d(TAG, "onStart called");
+        Log.d(TAG, "onStart called");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        L.d(TAG, "onResume called");
+        Log.d(TAG, "onResume called");
 
         wl.acquire();
 
@@ -430,7 +430,7 @@ public class HostSessionActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
-        L.d(TAG, "onPause called");
+        Log.d(TAG, "onPause called");
         // TODO notifications on data removed won't happen if I remove these first
         removeValueEventListeners();
         sessionFirebase.getParent().child(sessionName).removeValue();
@@ -440,7 +440,7 @@ public class HostSessionActivity extends Activity {
     @Override
     protected void onStop() {
         super.onStop();
-        L.d(TAG, "onStop called");
+        Log.d(TAG, "onStop called");
         wl.release();
         finish();
     }

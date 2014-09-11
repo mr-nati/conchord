@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -13,16 +14,10 @@ import android.widget.Toast;
 
 import com.conchord.android.R;
 import com.conchord.android.util.Constants;
-import com.conchord.android.util.L;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.ValueEventListener;
 
-/*
- * TODO: I shouldn't force the vertical orientation in the app manifest but 
- * should instead put all the data i want to persist through orientation 
- * changes into a Fragment: http://goo.gl/X53ni0, http://goo.gl/VA7GH
- */
 public class HomeActivity extends Activity {
 
 	private static final String TAG = HomeActivity.class.getSimpleName();
@@ -48,7 +43,7 @@ public class HomeActivity extends Activity {
 		if (!userIdExists()) {
 			storeUserID(android.os.Build.MODEL);
 		} else {
-            L.d(TAG, "User id exists: \"" + prefs.getString(Constants.KEY_HOST_ID, "") + "\".");
+            Log.d(TAG, "User id exists: \"" + prefs.getString(Constants.KEY_HOST_ID, "") + "\".");
         }
 	}
 
@@ -76,8 +71,7 @@ public class HomeActivity extends Activity {
 							if (value == null) {
 //								editTextSessionName.setText("");
 
-                                // Because we're starting the activity, stop
-                                // listening.
+                                // Because we're starting the activity, stop listening.
                                 firebaseCreatedSession.removeEventListener(this);
 
 								Intent intent = new Intent(getApplicationContext(),
@@ -104,7 +98,6 @@ public class HomeActivity extends Activity {
 					buttonCreateSession.setEnabled(false);
 
 				} else {
-					// toast saying no length
 					Toast.makeText(getBaseContext(),
 							"Give a valid length session name", Toast.LENGTH_SHORT)
 							.show();
@@ -114,7 +107,6 @@ public class HomeActivity extends Activity {
 
 		editTextJoinSessionName = (EditText) findViewById(R.id.editTextJoinSessionName);
 		buttonJoinSession = (Button) findViewById(R.id.buttonJoinSession);
-		
 		buttonJoinSession.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -136,7 +128,7 @@ public class HomeActivity extends Activity {
 
 							if (value != null) {
 								
-								L.e(TAG, arg0.child(Constants.KEY_SESSION_CLOSED)
+								Log.e(TAG, arg0.child(Constants.KEY_SESSION_CLOSED)
 										.getValue().toString());
 								
 								if (!arg0.child(Constants.KEY_SESSION_CLOSED)
@@ -181,7 +173,7 @@ public class HomeActivity extends Activity {
 		SharedPreferences.Editor prefsEditor = prefs.edit();
 		prefsEditor.putString(Constants.KEY_HOST_ID, userId);
 		prefsEditor.commit();
-        L.d(TAG, "Storing user id \"" + userId + "\" in prefs.");
+        Log.d(TAG, "Storing user id \"" + userId + "\" in prefs.");
 	}
 
 	private boolean userIdExists() {

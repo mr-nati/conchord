@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -22,7 +23,6 @@ import android.widget.Toast;
 import com.conchord.android.R;
 import com.conchord.android.util.ConchordMediaPlayer;
 import com.conchord.android.util.Constants;
-import com.conchord.android.util.L;
 import com.conchord.android.util.MyAlarmService;
 import com.conchord.android.util.Session;
 import com.conchord.android.util.SntpClient;
@@ -104,7 +104,7 @@ public class SessionActivity extends Activity {
         @Override
         public void onDataChange(DataSnapshot arg0) {
             if (arg0.getValue() == null) {
-                L.e(TAG,
+                Log.e(TAG,
                         "There appear to be NO users in this session...where's the host?");
             } else {
 				/*
@@ -112,11 +112,11 @@ public class SessionActivity extends Activity {
 				 * GET USER IDs FROM THE SNAPSHOT AS PEOPLE ENTER/EXIT
 				 */
 
-                L.d(TAG, TAG + "There are " + arg0.getChildrenCount()
+                Log.d(TAG, TAG + "There are " + arg0.getChildrenCount()
                         + " users.");
 
 				/*
-				 * for (DataSnapshot x : arg0.getChildren()) { L.d(TAG,
+				 * for (DataSnapshot x : arg0.getChildren()) { Log.d(TAG,
 				 * "users child value = " + x.getValue().toString()); }
 				 */
                 // makeShortToast(arg0.getChildren() + " were just added.");
@@ -139,7 +139,7 @@ public class SessionActivity extends Activity {
             if (isHost || arg0.getValue() == null)
                 return;
 
-            // L.e(TAG, "nanos received playtime = " +
+            // Log.e(TAG, "nanos received playtime = " +
             // System.nanoTime());
             // makeShortToast(arg0.getValue().toString());
 
@@ -149,7 +149,7 @@ public class SessionActivity extends Activity {
 
             timeToPlayAtInMillis = Long.valueOf(arg0.getValue().toString());
             // makeShortToast(timeToPlayAtInMillis + "");
-            // L.e(TAG, "received play time of " +
+            // Log.e(TAG, "received play time of " +
             // timeToPlayAtInMillis);
 
             // tell getNTPtime we are going to be receiving a local time
@@ -173,9 +173,9 @@ public class SessionActivity extends Activity {
                 if (hostId != null) {
                     if (!hostId.equals(mySessionId) && isHost) {
                         makeShortToast("Oooh, someone just beat you to that name! Try another one.");
-                        L.d(TAG,"sessionFirebase.child(Constants.KEY_HOST_ID) value changed");
-                        L.d(TAG, "arg0.getName() = " + arg0.getName());
-                        L.d(TAG, "hostId = " + hostId + ", mySessionId = " + mySessionId);
+                        Log.d(TAG,"sessionFirebase.child(Constants.KEY_HOST_ID) value changed");
+                        Log.d(TAG, "arg0.getName() = " + arg0.getName());
+                        Log.d(TAG, "hostId = " + hostId + ", mySessionId = " + mySessionId);
                         isHost = false;
                         finish();
                     }
@@ -193,7 +193,7 @@ public class SessionActivity extends Activity {
     @Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-        L.d(TAG, "onCreate called");
+        Log.d(TAG, "onCreate called");
 
 		// Get the session name and whether user is host or not
 		sessionName = getIntent().getStringExtra(Constants.KEY_SESSION);
@@ -257,10 +257,10 @@ public class SessionActivity extends Activity {
 	private void setupFirebase() {
 		// If this is the host, we'll create the session on Firebase
 		if (isHost) {
-            L.d(TAG, "Setting up Firebase as host.");
+            Log.d(TAG, "Setting up Firebase as host.");
 			createSession(Calendar.getInstance().getTime().getMinutes());
 		} else {
-            L.d(TAG, "setupFirebase called as guest.");
+            Log.d(TAG, "setupFirebase called as guest.");
             makeShortToast("Welcome!");
 		}
 
@@ -362,7 +362,7 @@ public class SessionActivity extends Activity {
 	}
 
 	public Firebase createSession(int songId) {
-        L.d(TAG, "Creating Session with songId " + songId);
+        Log.d(TAG, "Creating Session with songId " + songId);
 
 		// Reference to "sessions" Firebase
 		Firebase sessions = new Firebase(Constants.sessionsUrl);
@@ -456,19 +456,19 @@ public class SessionActivity extends Activity {
 			while (!client.requestTime(Utils.someCaliNtpServers[0],
 					Constants.ROUNDTRIP_TIMEOUT)
 					&& i < Constants.NUM_NTP_ATTEMPTS) {
-				L.e(TAG, "client.requestTime failed with " + client.myRoundtripTime);
+				Log.e(TAG, "client.requestTime failed with " + client.myRoundtripTime);
 				client = new SntpClient();
 				i++;
 			}
 
 			Long time = client.getNtpTime();
-			L.d(TAG, "ntp time is " + time);
-			L.d(TAG, "time = " + System.currentTimeMillis());
+			Log.d(TAG, "ntp time is " + time);
+			Log.d(TAG, "time = " + System.currentTimeMillis());
 
-			L.d(TAG, "ntpTime = " + ntpTime);
-			L.d(TAG, "currentthreadtimemillis = " + SystemClock.currentThreadTimeMillis());
-			L.d(TAG, "elapsed real time " + SystemClock.elapsedRealtime());
-			if (mPlayer.isPlaying()) L.d(TAG, "songTime = " + mPlayer.getCurrentPosition());
+			Log.d(TAG, "ntpTime = " + ntpTime);
+			Log.d(TAG, "currentthreadtimemillis = " + SystemClock.currentThreadTimeMillis());
+			Log.d(TAG, "elapsed real time " + SystemClock.elapsedRealtime());
+			if (mPlayer.isPlaying()) Log.d(TAG, "songTime = " + mPlayer.getCurrentPosition());
 
 			return time;
 		}
@@ -481,8 +481,8 @@ public class SessionActivity extends Activity {
 
 			ntpTime = x;
 
-			L.d(TAG, "ntpTime = " + ntpTime);
-			// if (mPlayer.isPlaying()) L.e(TAG, "songTime = " +
+			Log.d(TAG, "ntpTime = " + ntpTime);
+			// if (mPlayer.isPlaying()) Log.e(TAG, "songTime = " +
 			// mPlayer.getCurrentPosition());
 			// long localTime = System.currentTimeMillis();
 			// long pos = mPlayer.getCurrentPosition();
@@ -515,11 +515,11 @@ public class SessionActivity extends Activity {
 
 				long diff = timeToPlayAtInMillis - ntpTime;
 
-				L.d(TAG, "millis btw ntptime and play time = " + diff);
+				Log.d(TAG, "millis btw ntptime and play time = " + diff);
 
 				setAlarm(client.localESTIMATEDntpTime + diff);
 
-				L.d(TAG, "setting alarm for " + (client.localESTIMATEDntpTime + diff));
+				Log.d(TAG, "setting alarm for " + (client.localESTIMATEDntpTime + diff));
 
 				// reset this flag
 				receivingRelativePlayTime = false;
@@ -543,7 +543,7 @@ public class SessionActivity extends Activity {
 		// If the isHost bool was never passed in, kill the activity
 		if (isHost == false
 				&& getIntent().getBooleanExtra(Constants.KEY_IS_HOST, true)) {
-			L.e(TAG, "There's an issue with the \"isHost\" boolean flag.");
+			Log.e(TAG, "There's an issue with the \"isHost\" boolean flag.");
 			Toast.makeText(getApplicationContext(),
 					"Fatal error: \"isHost\" boolean was not passed in",
 					Toast.LENGTH_LONG).show();

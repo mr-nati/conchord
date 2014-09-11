@@ -135,17 +135,17 @@ public class SntpClient {
 			mRoundTripTime = roundTripTime;
 			
 			/* my stuff */
-			L.d(TAG, "ntp appears to be received at:  " + receiveTime);
+			Log.d(TAG, "ntp appears to be received at:  " + receiveTime);
 			localESTIMATEDntpTime = requestTime + (roundTripTime/2);
 			myRoundtripTime = roundTripTime;
-			L.d(TAG, "ntp calculated 1/2 thru roundtrip is " + localESTIMATEDntpTime);
+			Log.d(TAG, "ntp calculated 1/2 thru roundtrip is " + localESTIMATEDntpTime);
 			myRequestTime = requestTime;
-			L.d(TAG, "roundTripTime official = " + roundTripTime);
+			Log.d(TAG, "roundTripTime official = " + roundTripTime);
 			/* end */
 			
 		} catch (Exception e) {
 			if (false)
-				L.e(TAG, "request time failed: " + e);
+				Log.e(TAG, "request time failed: " + e);
 			return false;
 		} finally {
 			if (socket != null) {
@@ -153,7 +153,7 @@ public class SntpClient {
 			}
 		}
 
-		L.d(TAG, "My roundtrip time == " + myRoundtripTime);
+		Log.d(TAG, "My roundtrip time == " + myRoundtripTime);
 		if (myRoundtripTime == 0)
 			return false;
 		
