@@ -6,4 +6,7 @@
     <!-- HomeActivity -->
     <dimen name="app_title_size">58dp</dimen>
 
+    <dimen name="edit_text_size">30dp</dimen>
+    <integer name="max_session_id_length">3</integer>
+
 </resources>

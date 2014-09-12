@@ -9,6 +9,7 @@
     <!-- HomeActivity -->
     <string name="button_create">Create session</string>
     <string name="button_join">Join session</string>
+    <string name="editText_enter_keyboard_text">JOIN</string>
 
 
 </resources>

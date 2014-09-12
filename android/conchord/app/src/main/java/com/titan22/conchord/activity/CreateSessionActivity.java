@@ -1,4 +1,4 @@
-package com.titan22.conchord;
+package com.titan22.conchord.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
