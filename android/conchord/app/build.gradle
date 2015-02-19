@@ -6,14 +6,14 @@ android {
 
     defaultConfig {
         applicationId "com.titan22.conchord"
-        minSdkVersion 18
+        minSdkVersion 14
         targetSdkVersion 19
         versionCode 1
         versionName "1.0"
     }
     buildTypes {
         release {
-            runProguard false
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }

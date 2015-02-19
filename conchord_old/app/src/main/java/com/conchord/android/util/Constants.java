@@ -21,7 +21,7 @@ public class Constants {
 	public static final int FLAG_DESTROY_SESSION_OFF = 0;
 	
 	public static final int START_TIME_DELAY = 3000;
-	public static final int MOTOROLA_DELAY = 180;
+	public static final int MOTOROLA_DELAY = 190;
 	public static final int ROUNDTRIP_TIMEOUT = 18;
 	public static final int NUM_NTP_ATTEMPTS = 50;
 	

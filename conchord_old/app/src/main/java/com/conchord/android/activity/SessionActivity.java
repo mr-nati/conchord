@@ -404,7 +404,7 @@ public class SessionActivity extends Activity {
 		// }
 		// TODO: remove
 
-		switch (android.os.Build.VERSION.SDK_INT) {
+		/*switch (android.os.Build.VERSION.SDK_INT) {
 		case 8:	// 2.2.3
 			mPlayer = new ConchordMediaPlayer(getApplicationContext(),
 					MediaFiles.sail_bass_and_drums);
@@ -425,7 +425,9 @@ public class SessionActivity extends Activity {
 			mPlayer = new ConchordMediaPlayer(getApplicationContext(),
 					MediaFiles.sail_bass_and_drums);
 			break;
-		}
+		}*/
+        mPlayer = new ConchordMediaPlayer(getApplicationContext(),
+                MediaFiles.facebook_pop);
 	}
 
 	private void setAlarm(long time) {
