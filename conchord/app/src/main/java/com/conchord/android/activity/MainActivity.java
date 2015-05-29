@@ -1,28 +1,45 @@
 package com.conchord.android.activity;
 
+import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.conchord.android.connection.datastore.DatastoreConnection;
+import com.conchord.android.connection.datastore.FirebaseConnection;
+import com.conchord.android.fragment.HomeFragment;
 import com.conchord.titan22.android.R;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements HomeFragment.OnFragmentInteractionListener{
+
+    private static final String TAG = MainActivity.class.getSimpleName();
+
+    DatastoreConnection dbConn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // set up datastore connection
+        dbConn = new FirebaseConnection(getApplicationContext());
+
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, new PlaceholderFragment())
                     .commit();
         }
+    }
+
+    public void createButton(View v) {
+        dbConn.createSession();
     }
 
 
@@ -46,6 +63,11 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+        Log.d(TAG, "onFragmentInteraction called with uri " + uri);
     }
 
     /**
