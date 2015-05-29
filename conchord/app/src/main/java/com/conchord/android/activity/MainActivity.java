@@ -21,25 +21,34 @@ public class MainActivity extends ActionBarActivity implements HomeFragment.OnFr
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    DatastoreConnection dbConn;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // set up datastore connection
-        dbConn = new FirebaseConnection(getApplicationContext());
+        // Check that the activity is using the layout version with
+        // the container FrameLayout
+        if (findViewById(R.id.container) != null) {
 
-        if (savedInstanceState == null) {
+            // However, if we're being restored from a previous state,
+            // then we don't need to do anything and should return or else
+            // we could end up with overlapping fragments.
+            if (savedInstanceState != null) {
+                return;
+            }
+
+            // Create a new Fragment to be placed in the activity layout
+            HomeFragment homeFragment = new HomeFragment();
+
+            // In case this activity was started with special instructions from an
+            // Intent, pass the Intent's extras to the fragment as arguments
+        //    homeFragment.setArguments(getIntent().getExtras());
+
+            // Add the fragment to the 'fragment_container' FrameLayout
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
-                    .commit();
+                    .add(R.id.container, homeFragment).commit();
         }
-    }
 
-    public void createButton(View v) {
-        dbConn.createSession();
     }
 
 
@@ -70,19 +79,4 @@ public class MainActivity extends ActionBarActivity implements HomeFragment.OnFr
         Log.d(TAG, "onFragmentInteraction called with uri " + uri);
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            return rootView;
-        }
-    }
 }
