@@ -7,6 +7,10 @@ import com.firebase.client.Firebase;
 
 import com.conchord.android.utils.Constants;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 /**
  * Created by ntessema on 5/25/15.
  */
@@ -35,7 +39,10 @@ public class FirebaseConnection implements DatastoreConnection {
                 + Constants.FIREBASE_USERS_SUFFIX);
         myUserFirebase = usersFirebase.push();
 
-        myUserFirebase.child("test").setValue("test");
+        long yourmilliseconds = System.currentTimeMillis();
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm");
+        Date resultdate = new Date(yourmilliseconds);
+        myUserFirebase.child("time").setValue(sdf.format(resultdate));
 
         return new Device(myUserFirebase.getKey());
     }

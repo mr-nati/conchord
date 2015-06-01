@@ -6,7 +6,7 @@
     <Button
         android:id="@+id/buttonCreateSession"
         android:layout_width="230dp"
-        android:layout_height="40dp"
+        android:layout_height="80dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:layout_marginBottom="10dp"
@@ -42,7 +42,7 @@
     <Button
         android:id="@+id/buttonJoinSession"
         android:layout_width="230dp"
-        android:layout_height="40dp"
+        android:layout_height="80dp"
         android:layout_below="@id/editTextJoinSessionName"
         android:layout_centerHorizontal="true"
         android:text="Join Session"

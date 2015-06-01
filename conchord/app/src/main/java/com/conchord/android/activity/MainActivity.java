@@ -14,10 +14,14 @@ import android.view.ViewGroup;
 import com.conchord.android.connection.datastore.DatastoreConnection;
 import com.conchord.android.connection.datastore.FirebaseConnection;
 import com.conchord.android.fragment.HomeFragment;
+import com.conchord.android.fragment.LobbyFragment;
+import com.conchord.android.fragment.PlayFragment;
 import com.conchord.titan22.android.R;
 
 
-public class MainActivity extends ActionBarActivity implements HomeFragment.OnFragmentInteractionListener{
+public class MainActivity extends ActionBarActivity implements HomeFragment.OnFragmentInteractionListener,
+                                                                LobbyFragment.OnFragmentInteractionListener,
+                                                                PlayFragment.OnFragmentInteractionListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -50,7 +54,6 @@ public class MainActivity extends ActionBarActivity implements HomeFragment.OnFr
         }
 
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
